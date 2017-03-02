@@ -23,7 +23,7 @@ public class Activator extends AbstractUIPlugin implements IPropertyChangeListen
 	// The shared instance
 	private static Activator plugin;
 	
-	private ListenerList listeners = new ListenerList();
+	private ListenerList<IPropertyChangeListener> listeners = new ListenerList<IPropertyChangeListener>();
 	
 	public Activator() {}
 
