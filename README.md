@@ -1,4 +1,4 @@
-o3smeasures
+o3smeasures [![Build Status](https://travis-ci.org/mariazevedo88/o3smeasures-tool.svg?branch=master)](https://travis-ci.org/mariazevedo88/o3smeasures-tool)
 ===========
 
 Plug-in for Eclipse to measure software internal quality. It was developed as part of my dissertation entitled
