@@ -204,6 +204,7 @@
 		<mkdir dir="${build.result.folder}"/>
 		<antcall target="zip.src.zip"/>
 	</target>
+	
 	<target name="zip.src.zip">
 		<zip destfile="${build.result.folder}/src.zip" filesonly="false" whenempty="skip" update="false">
 			<fileset dir="src/">
@@ -211,6 +212,7 @@
 			</fileset>
 		</zip>
 	</target>
+	
 	<target name="copy.src.zip">
 		<copy todir="${source.destination.folder}/" failonerror="true" overwrite="true">
 			<fileset dir="src/">
@@ -218,7 +220,7 @@
 			</fileset>
 		</copy>
 	</target>
-
+	
 	<target name="build.jars" depends="init" description="Compile classes and build nested jars for the plug-in: O3SMeasures.">
 		<delete file="${compilation.problem.marker}" quiet="true"/>
 		<available property="@dot" file="${build.result.folder}/@dot"/>
@@ -359,5 +361,9 @@
 	<target name="apitools.generation" if="generateAPIDescription">
 		<apitooling.apigeneration  projectName="${projectName}" project="${projectLocation}" binary="${binary.folders}" target="${target.folder}" extramanifests="${extraManifests}" allownonapiproject="${allowNonApiProject}"		/>
 	</target>
+	
+	<target name="test">
+        <mkdir dir="${version}/test"/>
+    </target>
 
 </project>
