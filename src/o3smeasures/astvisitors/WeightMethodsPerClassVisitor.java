@@ -94,7 +94,7 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	 * where weights are unspecified complexity factors.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param node
+	 * @param itItem
 	 */
 	@SuppressWarnings("unchecked")
 	private void checkStatementsInMethodsDeclaration(Object itItem) {

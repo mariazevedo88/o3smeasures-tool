@@ -125,7 +125,7 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	 * @since 13/07/2014
 	 * @param methodsWithDirectConn
 	 * @param itMethods
-	 * @return List<MethodDeclaration> 
+	 * @return List 
 	 */
 	private List<MethodDeclaration> getNumberOfDirectConnections(List<MethodDeclaration> methodsWithDirectConn,
 			Iterator<MethodDeclaration> itMethods) {

@@ -45,7 +45,7 @@ public class ASTSession {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param unit
-	 * @return Map<ITypeRoot, CompilationUnit>
+	 * @return CompilationUnit
 	 */
 	public CompilationUnit get(ITypeRoot unit){
 		return units.get(unit);
@@ -57,7 +57,7 @@ public class ASTSession {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param unit
-	 * @return true/false
+	 * @return boolean
 	 */
 	public boolean contains(ITypeRoot unit){
 		return units.containsKey(unit);

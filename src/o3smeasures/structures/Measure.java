@@ -55,7 +55,7 @@ public abstract class Measure {
 	 * Method to get all granularities.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return List<Granularity>
+	 * @return List
 	 */
 	public List<Granularity> getAllApplicableGranularities(){
 		return applicableGranularities;
@@ -209,6 +209,7 @@ public abstract class Measure {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param value
+	 * @param className
 	 */
 	public abstract void setMaxValue(double value, String className);
 	
@@ -224,7 +225,7 @@ public abstract class Measure {
 	 * Method to get if the measure is enable on the plugin.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param value
+	 * @return boolean
 	 */
 	public abstract boolean isEnable();
 
@@ -232,7 +233,7 @@ public abstract class Measure {
 	 * Method to set if the measure is enable on the plugin.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param value
+	 * @param isEnable
 	 */
 	public abstract void setEnable(boolean isEnable);
 

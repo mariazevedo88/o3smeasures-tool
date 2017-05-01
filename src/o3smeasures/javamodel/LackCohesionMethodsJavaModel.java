@@ -226,7 +226,6 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	 * Method to check with methods are connected components, according to Hitz and Montazeri definition.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param methods
 	 * @return Double
 	 */
 	private Double calculateLCOM4Value(){

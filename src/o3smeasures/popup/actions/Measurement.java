@@ -20,9 +20,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
- * Class that implements the IObjectActionDelegate interface for an object 
+ * Class that extends the AbstractHandler interface for an object 
  * action that is contributed into a popup menu for a view or editor.
- * @see IObjectActionDelegate
+ * @see AbstractHandler
  *  
  * @author Mariana Azevedo
  * @since 13/07/2014
@@ -114,7 +114,7 @@ public class Measurement extends AbstractHandler {
 	 * Method to get the shell instance.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param event
+	 * @return Shell
 	 */
 	public Shell getShell() {
 		return shell;
@@ -124,7 +124,7 @@ public class Measurement extends AbstractHandler {
 	 * Method to set the shell instance.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param event
+	 * @param shell
 	 */
 	public void setShell(Shell shell) {
 		this.shell = shell;
