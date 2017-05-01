@@ -48,7 +48,6 @@ public class ItemMeasured {
 	 * Method to get the name of the item measured.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param
 	 * @return String
 	 */
 	public String getName(){
@@ -59,7 +58,6 @@ public class ItemMeasured {
 	 * Method to get the parent of the item measured.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param
 	 * @return ItemMeasured
 	 */
 	public ItemMeasured getParent(){
@@ -80,7 +78,7 @@ public class ItemMeasured {
 	 * Method to get the children of the item measured.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return List<ItemMeasured>
+	 * @return List
 	 */
 	public List<ItemMeasured> getChildren(){
 		return children;
@@ -190,7 +188,7 @@ public class ItemMeasured {
 	 * Method to set the class with the max value of the item measured.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param max
+	 * @param classWithMaxValue
 	 */
 	public void setClassWithMax(String classWithMaxValue){
 		this.classWithMaxValue = classWithMaxValue;

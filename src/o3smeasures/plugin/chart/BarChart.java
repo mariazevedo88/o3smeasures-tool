@@ -96,7 +96,7 @@ public class BarChart {
 
 	/**
 	 * Method to populate a bar chart
-	 * @param boxDataset
+	 * @param barDataset
 	 */
 	private void populateProjectDataset(DefaultCategoryDataset barDataset) {
 		for (Factor factor : factorsMap.values()) {

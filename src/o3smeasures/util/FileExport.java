@@ -74,7 +74,7 @@ public class FileExport {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param itemMeasured
-	 * @return List<String[]>
+	 * @return List
 	 */
 	private List<String[]> populateItems(ItemMeasured itemMeasured){
 		
@@ -141,7 +141,7 @@ public class FileExport {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param outputFile
-	 * @param item
+	 * @param itemMeasured
 	 */
 	public void createXMLFile (String outputFile, ItemMeasured itemMeasured){
 		

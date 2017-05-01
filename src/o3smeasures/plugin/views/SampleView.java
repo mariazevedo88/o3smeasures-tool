@@ -58,7 +58,6 @@ public class SampleView extends ViewPart {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param selection
-	 * @return
 	 */
 	public void showSelection(ISelection selection) {
 
@@ -75,7 +74,6 @@ public class SampleView extends ViewPart {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param elem
-	 * @return
 	 */
 	private void createProjectModel(IJavaElement elem) {
 		if (elem != null) {
@@ -96,7 +94,6 @@ public class SampleView extends ViewPart {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param project
-	 * @return
 	 */
 	private void createViews(final IProject project) {
 		if (project.isOpen()) {
@@ -123,7 +120,6 @@ public class SampleView extends ViewPart {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param parent
-	 * @returns
 	 */
 	public void createPartControl(Composite parent) {
 				
@@ -227,8 +223,6 @@ public class SampleView extends ViewPart {
 	 * of Eclipse IDE and selecting the "Measure" option with the right mouse button.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param
-	 * @return
 	 */
 	private void createMenuManager() {
 		
@@ -279,19 +273,15 @@ public class SampleView extends ViewPart {
 	 * Method that pass the focus request to the viewer's control.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param
-	 * @return
 	 */
 	public void setFocus() {
 		viewer.getControl().setFocus();
 	}
 	
 	/**
-	 * Method to create the project's content provider
+	 * Class to create the project's content provider
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param
-	 * @return
 	 */
 	private class MyContentProvider implements ITreeContentProvider {
 		public void dispose() {}

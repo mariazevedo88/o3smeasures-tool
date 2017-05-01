@@ -14,8 +14,7 @@ public interface IJavaModel<T> {
 	 * structure
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param measure
-	 * @param item
+	 * @param unit
 	 */
 	public void calculateValue(T unit); 
 	
