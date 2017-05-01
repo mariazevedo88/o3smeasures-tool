@@ -42,7 +42,7 @@ public class ResponseForClass extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Response For Class";
+		return "Response for Class";
 	}
 
 	/**

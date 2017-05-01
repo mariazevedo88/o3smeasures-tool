@@ -38,7 +38,7 @@ public class CyclomaticComplexity extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Cyclomatic complexity";
+		return "Cyclomatic Complexity";
 	}
 
 	/**

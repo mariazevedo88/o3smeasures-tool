@@ -22,7 +22,7 @@ import org.jfree.experimental.chart.swt.ChartComposite;
 public class PieChartView extends ViewPart {
 	public static final String ID = "o3smeasures.plugin.views.PieChartView";
 	private ChartComposite view;
-	private JFreeChart jFreechart;
+	private JFreeChart jFreeChart;
 	
 
 	/**
@@ -33,10 +33,10 @@ public class PieChartView extends ViewPart {
 	 */
 	public void showPieChart(ItemMeasured itemMeasured) {
 		PieChart pieChart = new PieChart();
-		JFreeChart jFreechart = pieChart.createPieChart(itemMeasured);
+		JFreeChart jFreeChart = pieChart.createPieChart(itemMeasured);
 		
-		view.setChart(jFreechart);
-		setPieChart(jFreechart);
+		view.setChart(jFreeChart);
+		setPieChart(jFreeChart);
 	}
 	
 	/**
@@ -46,6 +46,7 @@ public class PieChartView extends ViewPart {
 	 * @since 13/07/2014
 	 * @param parent
 	 */
+	@Override
 	public void createPartControl(Composite parent) {
 		view = new ChartComposite(parent, SWT.NONE, getPieChart(), true);
 		view.pack();
@@ -57,6 +58,7 @@ public class PieChartView extends ViewPart {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
+	@Override
 	public void setFocus() {
 		view.setFocus();
 		view.update();
@@ -68,7 +70,7 @@ public class PieChartView extends ViewPart {
 	 * @since 13/07/2014
 	 */
 	private void setPieChart(JFreeChart jFreechart){
-		this.jFreechart = jFreechart;
+		this.jFreeChart = jFreechart;
 	}
 	
 	/**
@@ -77,7 +79,7 @@ public class PieChartView extends ViewPart {
 	 * @since 13/07/2014
 	 */
 	private JFreeChart getPieChart(){
-		return jFreechart;
+		return jFreeChart;
 	}
 	
 }

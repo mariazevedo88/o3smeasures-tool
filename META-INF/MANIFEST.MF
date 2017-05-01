@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: O3SMeasures
 Bundle-SymbolicName: O3SMeasures;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.1.0
 Bundle-Vendor: Mariana Azevedo
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
@@ -25,8 +25,11 @@ Export-Package: o3smeasures.astvisitors,
  o3smeasures.plugin.views,
  o3smeasures.popup.actions,
  o3smeasures.preferences,
+ o3smeasures.statistic,
+ o3smeasures.statistic.generic,
  o3smeasures.structures,
- o3smeasures.util
+ o3smeasures.util,
+ org.jfree.chart.axis
 Bundle-ClassPath: lib/jcommon-1.0.16.jar,
  lib/jcommon-1.0.17.jar,
  lib/jfreechart-1.0.14-swt.jar,

@@ -47,7 +47,7 @@ public class PieChart {
 			
 		}
 			
-		JFreeChart pieChart = ChartFactory.createPieChart("Project's measures " + projectName,
+		JFreeChart pieChart = ChartFactory.createPieChart3D("Project's measures " + projectName,
 			PieChartDataset,
 			false,
 			true,
