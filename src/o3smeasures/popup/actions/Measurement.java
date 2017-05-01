@@ -2,6 +2,8 @@ package o3smeasures.popup.actions;
 
 import java.lang.reflect.InvocationTargetException;
 
+import o3smeasures.plugin.views.FactorsView;
+import o3smeasures.plugin.views.IndicatorsView;
 import o3smeasures.plugin.views.PieChartView;
 import o3smeasures.plugin.views.SampleView;
 
@@ -85,13 +87,26 @@ public class Measurement extends AbstractHandler {
 		ISelection sel = HandlerUtil.getActiveWorkbenchWindow(event).getSelectionService().getSelection();
         IStructuredSelection selection = (IStructuredSelection) sel;
     	
-        SampleView view = (SampleView)HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(SampleView.ID);
-    	PieChartView pieChartView = (PieChartView)HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(PieChartView.ID);
-    	
-    	view.showSelection(selection);
-    	
+        //Load Diagnostic View
+        SampleView view = (SampleView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(SampleView.ID);
+        view.showSelection(selection);
+
+        //Load 3D Pie Chart View
+        PieChartView pieChartView = (PieChartView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(PieChartView.ID);
     	if (pieChartView != null) {
     		pieChartView.showPieChart(view.getItemMeasured());
+    	}
+    	
+    	//Load Factors View
+    	FactorsView factorsView = (FactorsView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(FactorsView.ID);
+    	if (factorsView != null){
+    		factorsView.showFactorChart(view.getItemMeasured());
+    	}
+
+    	//Load Indicators View
+    	IndicatorsView indicatorsView = (IndicatorsView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(IndicatorsView.ID);
+    	if (indicatorsView != null){
+    		indicatorsView.showIndicatorChart(view.getItemMeasured());
     	}
 	}
 	

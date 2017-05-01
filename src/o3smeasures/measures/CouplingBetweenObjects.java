@@ -42,7 +42,7 @@ public class CouplingBetweenObjects extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Coupling between objects";
+		return "Coupling between Objects";
 	}
 
 	/**

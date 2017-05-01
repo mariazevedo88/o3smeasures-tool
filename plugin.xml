@@ -51,6 +51,16 @@
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
          </view>
+         <view id="o3smeasures.plugin.views.FactorsView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+         <view id="o3smeasures.plugin.views.IndicatorsView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
       </perspectiveExtension>
     </extension>
     
@@ -60,13 +70,25 @@
               class="o3smeasures.plugin.views.SampleView"
               icon="icons/eclipse16.gif"
               id="o3smeasures.plugin.views.SampleView"
-              name="O3SMeasures Diagnostic">
+              name="O3SMeasures Diagnostic View">
 	    </view>
       	<view category="o3smeasures"
               class="o3smeasures.plugin.views.PieChartView"
               icon="icons/eclipse16.gif"
               id="o3smeasures.plugin.views.PieChartView"
-              name="O3SMeasures PieChart">
+              name="O3SMeasures PieChart View">
+      	</view>
+  		<view category="o3smeasures"
+          	  class="o3smeasures.plugin.views.FactorsView"
+          	  icon="icons/eclipse16.gif"
+          	  id="o3smeasures.plugin.views.FactorsView"
+          	  name="O3SMeasures Factors View">
+      	</view>
+      	<view category="o3smeasures"
+              class="o3smeasures.plugin.views.IndicatorsView"
+              icon="icons/eclipse16.gif"
+              id="o3smeasures.plugin.views.IndicatorsView"
+              name="O3SMeasures Indicators View">
       	</view>
    </extension>
    <extension
