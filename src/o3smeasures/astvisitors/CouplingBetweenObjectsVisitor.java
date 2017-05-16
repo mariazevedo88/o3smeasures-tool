@@ -1,6 +1,8 @@
 package o3smeasures.astvisitors;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -57,22 +59,14 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	 * @since 13/07/2014
 	 * @param unit
 	 */
+	@SuppressWarnings("unchecked")
 	private void calculateClazzUsed(CompilationUnit unit){
-		for (Object type :unit.types()){
-			if (type instanceof TypeDeclaration){
-				
-				MethodDeclaration [] methods = ((TypeDeclaration) type).getMethods();
-				
-				for (MethodDeclaration method: methods){
-					
-					Block firstMethodBody = method.getBody();
-					
-					if (firstMethodBody != null){
-					
-						checkMethodStatements(method, firstMethodBody);
-					}
-				}
-			}
+		
+		Object typeDeclaration = unit.types().stream().filter(type -> type instanceof TypeDeclaration).collect(Collectors.toList());
+		MethodDeclaration [] methods = ((List<TypeDeclaration>) typeDeclaration).get(0).getMethods();
+		for (MethodDeclaration method: methods){
+			Block firstMethodBody = method.getBody();
+			Optional.of(firstMethodBody).ifPresent(m -> checkMethodStatements(method, firstMethodBody));
 		}
 	}
 

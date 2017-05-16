@@ -20,6 +20,9 @@ import o3smeasures.measures.WeightMethodsPerClass;
 import o3smeasures.structures.ItemMeasured;
 import o3smeasures.structures.Measure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
@@ -34,23 +37,24 @@ import org.eclipse.core.runtime.CoreException;
 public class Application {
 
 	private MeasureBuilder builder;
-	private Measure[] measures = {
-			new NumberOfClasses(),	
-			new LinesOfCode(),
-			new NumberOfMethods(),
-			new NumberOfAttributes(),
-			new CyclomaticComplexity(),
-			new WeightMethodsPerClass(),
-			new DepthOfInheritanceTree(),
-			new NumberOfChildren(),
-			new CouplingBetweenObjects(),
-			new FanOut(),
-			new ResponseForClass(),
-			new LackCohesionMethods(),
-			new LackCohesionMethodsTwo(),
-			new LackCohesionMethodsFour(),
-			new TightClassCohesion(),
-			new LooseClassCohesion()};
+//	private Measure[] measures = {
+//			new NumberOfClasses(),	
+//			new LinesOfCode(),
+//			new NumberOfMethods(),
+//			new NumberOfAttributes(),
+//			new CyclomaticComplexity(),
+//			new WeightMethodsPerClass(),
+//			new DepthOfInheritanceTree(),
+//			new NumberOfChildren(),
+//			new CouplingBetweenObjects(),
+//			new FanOut(),
+//			new ResponseForClass(),
+//			new LackCohesionMethods(),
+//			new LackCohesionMethodsTwo(),
+//			new LackCohesionMethodsFour(),
+//			new TightClassCohesion(),
+//			new LooseClassCohesion()};
+	private List<Measure> measures;
 	
 	/**
 	 * Method that executes the project's measurement
@@ -62,13 +66,32 @@ public class Application {
 	 */
 	public ItemMeasured execute (IProject project) throws CoreException{
 		builder = new MeasureBuilder();
-		for (Measure m : measures){
-			builder.addMeasure(m);
-		}
+		createMeasureArray();
+		measures.forEach(measure -> builder.addMeasure(measure));
 		return builder.execute(project);
 	}
 	
-	public Measure[] getMeasures(){
+	public List<Measure> getMeasures(){
 		return measures;
+	}
+	
+	private void createMeasureArray(){
+		measures = new ArrayList<Measure>();
+		measures.add(new NumberOfClasses());
+		measures.add(new LinesOfCode());
+		measures.add(new NumberOfMethods());
+		measures.add(new NumberOfAttributes());
+		measures.add(new CyclomaticComplexity());
+		measures.add(new WeightMethodsPerClass());
+		measures.add(new DepthOfInheritanceTree());
+		measures.add(new NumberOfChildren());
+		measures.add(new CouplingBetweenObjects());
+		measures.add(new FanOut());
+		measures.add(new ResponseForClass());
+		measures.add(new LackCohesionMethods());
+		measures.add(new LackCohesionMethodsTwo());
+		measures.add(new LackCohesionMethodsFour());
+		measures.add(new TightClassCohesion());
+		measures.add(new LooseClassCohesion());
 	}
 }
