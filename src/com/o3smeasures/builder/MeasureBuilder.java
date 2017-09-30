@@ -77,5 +77,4 @@ public class MeasureBuilder {
 		}
 		return root;
 	}
-
 }

@@ -21,6 +21,7 @@ import com.o3smeasures.measures.enumeration.O3SMeasuresConfigurationEnum;
 import com.o3smeasures.statistic.Factor;
 import com.o3smeasures.statistic.Indicator;
 import com.o3smeasures.structures.ItemMeasured;
+import com.o3smeasures.util.exception.FactorNotFoundException;
 
 /**
  * Class that implements a Bar chart with the results of the items measured in 
@@ -115,9 +116,9 @@ public class BarChart {
 	 * Method to populate a line chart
 	 * 
 	 * @param lineDataset
-	 * @throws Exception 
+	 * @throws FactorNotFoundException 
 	 */
-	private void populateFactorDataset (DefaultCategoryDataset lineDataset) throws Exception {
+	private void populateFactorDataset (DefaultCategoryDataset lineDataset) throws FactorNotFoundException {
 		for (Factor factor : factorsMap.values()) {
 			
 			for (Indicator indicator : factor.getIndicators()){
@@ -132,9 +133,9 @@ public class BarChart {
 	 * Method to create the factor's objects
 	 * 
 	 * @param itemsMeasured
-	 * @throws Exception
+	 * @throws FactorNotFoundException
 	 */
-	private void createFactors(ItemMeasured itemsMeasured) throws Exception {
+	private void createFactors(ItemMeasured itemsMeasured) throws FactorNotFoundException {
 		
 		if (itemsMeasured != null) {
 			List<ItemMeasured> items = itemsMeasured.getChildren();

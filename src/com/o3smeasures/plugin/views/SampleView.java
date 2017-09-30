@@ -102,20 +102,20 @@ public class SampleView extends ViewPart {
 	 */
 	private void createViews(final IProject project) {
 		if (project.isOpen()) {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					try {
-						itemsMeasured = createModel(project);
-						if (itemsMeasured != null) {
-							viewer.setInput(itemsMeasured);
-							viewer.refresh(true);
-						}
-					} catch (CoreException exception) {
-						logger.error(exception);
+			
+			Runnable buildViews = () -> {
+				try {
+					itemsMeasured = createModel(project);
+					if (itemsMeasured != null) {
+						viewer.setInput(itemsMeasured);
+						viewer.refresh(true);
 					}
+				} catch (CoreException exception) {
+					logger.error(exception);
 				}
-
-			});
+			};
+			
+			Display.getDefault().asyncExec(buildViews);
 		}
 	}
 

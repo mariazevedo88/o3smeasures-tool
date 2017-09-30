@@ -16,6 +16,7 @@ import com.o3smeasures.measures.enumeration.O3SMeasuresConfigurationEnum;
 import com.o3smeasures.statistic.Factor;
 import com.o3smeasures.statistic.Indicator;
 import com.o3smeasures.structures.ItemMeasured;
+import com.o3smeasures.util.exception.FactorNotFoundException;
 
 /**
  * Class that implements a Box and Whisker chart with the results of the items measured in 
@@ -99,9 +100,9 @@ public class BoxAndWhiskerChart {
 	 * Method to create the factor's objects
 	 * 
 	 * @param itemsMeasured
-	 * @throws Exception
+	 * @throws FactorNotFoundException
 	 */
-	private void createFactors(ItemMeasured itemsMeasured) throws Exception {
+	private void createFactors(ItemMeasured itemsMeasured) throws FactorNotFoundException {
 		
 		if (itemsMeasured != null) {
 			List<ItemMeasured> items = itemsMeasured.getChildren();

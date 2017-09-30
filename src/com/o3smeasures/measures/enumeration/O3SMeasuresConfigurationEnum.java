@@ -1,5 +1,7 @@
 package com.o3smeasures.measures.enumeration;
 
+import com.o3smeasures.util.exception.FactorNotFoundException;
+
 /**
  * Enum to describe measure's configurations. See reference here: http://repositorio.ufla.br/handle/1/10561
  * @author Mariana Azevedo
@@ -59,13 +61,13 @@ public enum O3SMeasuresConfigurationEnum {
 		return weight;
 	}
 
-	public static O3SMeasuresConfigurationEnum searchByValue (String value) throws Exception {
+	public static O3SMeasuresConfigurationEnum searchByValue (String value) throws FactorNotFoundException {
 		for (O3SMeasuresConfigurationEnum measureConf : values()) {
 			if (measureConf.getMeasure().equals(value)) {
 				return measureConf;
 			}
 		}
-		throw new Exception("Invalid factor: " + value);
+		throw new FactorNotFoundException("Invalid factor: " + value);
 	}
 
 }

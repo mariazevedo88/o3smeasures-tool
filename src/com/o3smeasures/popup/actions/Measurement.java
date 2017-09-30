@@ -48,17 +48,16 @@ public class Measurement extends AbstractHandler {
         
         ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
 		try {
+			
+			Runnable update = () -> updateViews(event);
+			
 			dialog.run(true, true, new IRunnableWithProgress(){
 			    public void run(IProgressMonitor monitor) {
 			    	monitor.beginTask("Measuring", 16);
 			    	for (int i = 0; i < 16; i++){
 				    	
 			    		monitor.subTask("Getting measure values " + (i+1) + " of "+ 16 + "...");
-			    		Display.getDefault().syncExec(new Runnable() {
-				    	    public void run() {
-				    	    	updateViews(event);
-				    	    }
-				    	});
+			    		Display.getDefault().syncExec(update);
 			    		monitor.worked(1);
 			    		
 			    		if(monitor.isCanceled()){

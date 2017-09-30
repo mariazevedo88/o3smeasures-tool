@@ -45,7 +45,7 @@ public class FileExport {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
-	private void setFolderPath(){
+	private static void setFolderPath(){
 		
 		IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
 		String preferenceValue = prefStore.getString("PATH");
@@ -109,20 +109,15 @@ public class FileExport {
 		setFolderPath();		
 		populateHeader();
 		
-		FileWriter fileWriter = null;
-		CSVPrinter csvOutput = null;
+		File file = new File(tempFolderPath + outputFile + ".csv");
+		if (!file.exists()){
+			boolean isFileCreated = file.createNewFile();
+			logger.info("File created " + isFileCreated);
+		}
 		
-	    try {
+	    try (FileWriter fileWriter = new FileWriter(file, true);
+	    	 CSVPrinter csvOutput = new CSVPrinter(fileWriter, CSVFormat.DEFAULT)) {
 	    	
-	    	File file = new File(tempFolderPath + outputFile + ".csv");
-	    	if (!file.exists()){
-	    		boolean isFileCreated = file.createNewFile();
-	    		logger.info("File created " + isFileCreated);
-	    	}
-	    	
-    		fileWriter = new FileWriter(file, true);
-    		
-    		csvOutput = new CSVPrinter(fileWriter, CSVFormat.DEFAULT);
     		csvOutput.printRecords(headerItems);
     		List<String[]> it = populateItems(item);
     		csvOutput.printRecords(it);
@@ -132,10 +127,7 @@ public class FileExport {
 	    }catch (IOException exception) {
 	    	JOptionPane.showMessageDialog(null, "Error in CsvFileWriter!");
 	    	logger.error(exception);
-		} finally {
-    		if (fileWriter != null) fileWriter.close();
-    		if (csvOutput != null) csvOutput.close();
-	    }
+		} 
 	}
 	
 	/**
@@ -149,16 +141,13 @@ public class FileExport {
 	public void createXMLFile (String outputFile, ItemMeasured itemMeasured) throws IOException{
 		
 		setFolderPath();
-    	FileWriter fileWriter = null;
 
-    	try {
-    		File file = new File(tempFolderPath + outputFile + ".xml");
-    		if (!file.exists()){
-    			boolean isFileCreated = file.createNewFile();
-	    		logger.info("File created " + isFileCreated);
-    		}
-    		
-			fileWriter = new FileWriter(file, true);
+    	File file = new File(tempFolderPath + outputFile + ".xml");
+		if (!file.exists()){
+			boolean isFileCreated = file.createNewFile();
+    		logger.info("File created " + isFileCreated);
+		}
+		try (FileWriter fileWriter = new FileWriter(file, true)) {
 			
 			XmlConfiguration config = new XmlConfiguration();
 			config.getSimpleTypeConverterProvider().registerConverterType(Double.class, JSefaConverter.class);
@@ -178,8 +167,6 @@ public class FileExport {
 			
 		}catch (IOException exception) {
 			logger.error(exception);
-		}finally {
-			if (fileWriter != null) fileWriter.close();
 		}
 	}
 	
