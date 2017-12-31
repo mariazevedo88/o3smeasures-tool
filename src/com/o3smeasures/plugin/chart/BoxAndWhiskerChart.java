@@ -111,14 +111,7 @@ public class BoxAndWhiskerChart {
 				
 				String factorName = O3SMeasuresConfigurationEnum.searchByValue(item.getName()).getFactor();
 				if (!factorName.equals("None") && !factorName.equals("High Cohesion of Methods")){
-					Factor factor = factorsMap.get(factorName);
-					
-					if (factor == null){
-						factor = new Factor();
-						factor.setName(factorName);
-						factor.setDescription(factorName);
-						factorsMap.put(factorName, factor);
-					}
+					Factor factor = factorsMap.computeIfAbsent(factorName, f -> new Factor(factorName, factorName, 0));
 					factor.getIndicators().add(new Indicator(item, 0.0));
 				}
 			}

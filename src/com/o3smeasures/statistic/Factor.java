@@ -17,7 +17,14 @@ public class Factor {
 	private int numberOfIndicators;
 	
 	public Factor(){
-		indicators = new ArrayList<>();
+		this.indicators = new ArrayList<>();
+	}
+	
+	public Factor(String name, String description, int numberOfIndicators) {
+		this.name = name;
+		this.description = description;
+		this.numberOfIndicators = numberOfIndicators;
+		this.indicators = new ArrayList<>();
 	}
 	
 	public String getName() {

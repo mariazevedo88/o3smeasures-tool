@@ -144,15 +144,7 @@ public class BarChart {
 				
 				String factorName = O3SMeasuresConfigurationEnum.searchByValue(item.getName()).getFactor();
 				if (!factorName.equals("None") && !factorName.equals("High Cohesion of Methods")){
-					Factor factor = factorsMap.get(factorName);
-					
-					if (factor == null){
-						factor = new Factor();
-						factor.setName(factorName);
-						factor.setDescription(factorName);
-						factor.setNumberOfIndicators(0);
-						factorsMap.put(factorName, factor);
-					}
+					Factor factor = factorsMap.computeIfAbsent(factorName, f -> new Factor(factorName, factorName, 0));
 					factor.getIndicators().add(new Indicator(item, 0.0));
 					factor.setNumberOfIndicators(factor.getNumberOfIndicators()+1);
 				}
