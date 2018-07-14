@@ -34,7 +34,7 @@ public abstract class Measure {
 	
 	public Measure(){
 		applicableGranularities = new ArrayList<>(4);
-		parser = ASTParser.newParser(AST.JLS9);
+		parser = ASTParser.newParser(AST.JLS10);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setResolveBindings(true);
 	}

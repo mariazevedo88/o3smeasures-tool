@@ -69,7 +69,7 @@ public class JavaParser {
 		 ASTSession.getInstance().reset();
 		 
 		 if (cacheParser) {
-		   astParser = ASTParser.newParser(AST.JLS9);
+		   astParser = ASTParser.newParser(AST.JLS10);
            astParser.setKind(ASTParser.K_COMPILATION_UNIT);
    		   astParser.setResolveBindings(true);
            char[] source = getFileContent(fileInputStream);

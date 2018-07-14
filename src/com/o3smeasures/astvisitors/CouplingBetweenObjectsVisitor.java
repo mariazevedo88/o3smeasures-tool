@@ -63,10 +63,12 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	private void calculateClazzUsed(CompilationUnit unit){
 		
 		Object typeDeclaration = unit.types().stream().filter(type -> type instanceof TypeDeclaration).collect(Collectors.toList());
-		MethodDeclaration [] methods = ((List<TypeDeclaration>) typeDeclaration).get(0).getMethods();
-		for (MethodDeclaration method: methods){
-			Block firstMethodBody = method.getBody();
-			Optional.ofNullable(firstMethodBody).ifPresent(m -> checkMethodStatements(method, firstMethodBody));
+		if(!((List<TypeDeclaration>) typeDeclaration).isEmpty()){
+			MethodDeclaration [] methods = ((List<TypeDeclaration>) typeDeclaration).get(0).getMethods();
+			for (MethodDeclaration method: methods){
+				Block firstMethodBody = method.getBody();
+				Optional.ofNullable(firstMethodBody).ifPresent(m -> checkMethodStatements(method, firstMethodBody));
+			}
 		}
 	}
 

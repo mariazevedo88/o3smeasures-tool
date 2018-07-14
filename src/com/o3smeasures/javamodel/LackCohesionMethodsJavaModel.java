@@ -151,6 +151,7 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	 * @since 13/07/2014
 	 * @param methods
 	 */
+	@SuppressWarnings("deprecation")
 	private void checkMethodsWithSharedAttributes(IMethod[] methods){
 		
 		IScanner scanner = null;
