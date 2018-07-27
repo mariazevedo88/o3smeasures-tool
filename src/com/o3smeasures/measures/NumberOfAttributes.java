@@ -1,6 +1,7 @@
 package com.o3smeasures.measures;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.astvisitors.NumberOfAttributesVisitor;
@@ -142,7 +143,17 @@ public class NumberOfAttributes extends Measure{
 
 		setCalculatedValue(getNumberOfAttributes(visitor));
 		setMeanValue(getCalculatedValue());
-		setMaxValue(getCalculatedValue(), parse.getJavaElement().getElementName());
+		
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
 	}
 	
 	/**

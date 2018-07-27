@@ -5,6 +5,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.astvisitors.CouplingBetweenObjectsVisitor;
@@ -160,7 +161,17 @@ public class CouplingBetweenObjects extends Measure{
 
 		setCalculatedValue(getCouplingBetweenObjectsValue(visitor));
 		setMeanValue(getCalculatedValue());
-		setMaxValue(getCalculatedValue(), parse.getJavaElement().getElementName());
+		
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
 	}
 	
 	/**

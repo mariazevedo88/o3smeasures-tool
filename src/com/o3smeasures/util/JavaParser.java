@@ -63,7 +63,7 @@ public class JavaParser {
 	  * @return CompilationUnit
 	  * @throws ParseException
 	  */
-	 public static CompilationUnit parseAST(FileInputStream fileInputStream){
+	 public static CompilationUnit parseAST(FileInputStream fileInputStream, String className){
 		
 		 CompilationUnit cUnit = null; 
 		 ASTSession.getInstance().reset();
@@ -73,10 +73,11 @@ public class JavaParser {
            astParser.setKind(ASTParser.K_COMPILATION_UNIT);
    		   astParser.setResolveBindings(true);
            char[] source = getFileContent(fileInputStream);
-           
 	       astParser.setSource(source);
+	       astParser.setUnitName(className);
 	       cUnit = (CompilationUnit) astParser.createAST(null);
         }
+		 
 		astParser = null; 
         
         return cUnit;
@@ -93,8 +94,8 @@ public class JavaParser {
 	  */
 	 public static ICompilationUnit parseJDT(File file){
 		
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IPath path = Path.fromOSString(file.getAbsolutePath());
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IFile source = workspace.getRoot().getFileForLocation(path);
 		return (ICompilationUnit) JavaCore.create(source);
 	 }
@@ -140,7 +141,7 @@ public class JavaParser {
         FileInputStream inputStream = new FileInputStream(javaFile);
         try {
         	logger.info("The class '"+className+"' has: ");
-        	cUnit = parseAST(inputStream);
+        	cUnit = parseAST(inputStream, className);
         } finally {
             inputStream.close();
         }
