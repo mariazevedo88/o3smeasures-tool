@@ -166,7 +166,7 @@ public class SampleView extends ViewPart {
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() == null) {
+				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
 					return formatter.format(((ItemMeasured) element).getMax());
 				}
 				return "";
@@ -177,7 +177,7 @@ public class SampleView extends ViewPart {
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() == null) {
+				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
 					return ((ItemMeasured) element).getClassWithMax();
 				}
 				return "";

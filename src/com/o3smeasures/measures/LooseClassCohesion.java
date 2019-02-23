@@ -72,7 +72,7 @@ public class LooseClassCohesion extends Measure{
 	 */
 	@Override
 	public double getMaxValue() {
-		return 0d;
+		return max;
 	}
 
 	/**
