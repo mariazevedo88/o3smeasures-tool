@@ -139,52 +139,32 @@ public class SampleView extends ViewPart {
 				return element.toString();
 			}
 		});
-
+		
 		column = fulfillColumn(100, "Value");
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof ItemMeasured) {
-					return formatter.format(((ItemMeasured)element).getValue());
-				}
-				return "";
-			}
-		});
+		createLabelProviderValueColumn(column);
 		
 		column = fulfillColumn(100, "Mean Value per Class");
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof ItemMeasured) {
-					return formatter.format(((ItemMeasured)element).getMean());
-				}
-				return "";
-			}
-		});
+		createLabelProviderMeanColumn(column);
+		
+		column = fulfillColumn(100, "Min Value");
+		createLabelProviderMinColumn(column);
 		
 		column = fulfillColumn(100, "Max Value");
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
-					return formatter.format(((ItemMeasured) element).getMax());
-				}
-				return "";
-			}
-		});
+		createLabelProviderMaxColumn(column);
 		
 		column = fulfillColumn(100, "Resource with Max Value");
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
-					return ((ItemMeasured) element).getClassWithMax();
-				}
-				return "";
-			}
-		});
-
+		createLabelProviderResourceMaxValueColumn(column);
+		
 		column = fulfillColumn(100, "Description");
+		createLabelProviderDescriptionColumn(column);
+
+		viewer.setContentProvider(new MyContentProvider());
+		
+		createMenuManager();
+	}
+	
+	private void createLabelProviderDescriptionColumn(TreeViewerColumn column) {
+		
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -194,11 +174,68 @@ public class SampleView extends ViewPart {
 				return "";
 			}
 		});
-		
-		viewer.setContentProvider(new MyContentProvider());
-		
-		createMenuManager();
 	}
+
+	private void createLabelProviderResourceMaxValueColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
+					return ((ItemMeasured) element).getClassWithMax();
+				}
+				return "";
+			}
+		});
+	}
+
+	private void createLabelProviderMaxColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
+					return formatter.format(((ItemMeasured) element).getMax());
+				}
+				return "";
+			}
+		});
+	}
+
+	private void createLabelProviderMinColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
+					return formatter.format(((ItemMeasured) element).getMin());
+				}
+				return "";
+			}
+		});
+	}
+
+	private void createLabelProviderMeanColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof ItemMeasured) {
+					return formatter.format(((ItemMeasured)element).getMean());
+				}
+				return "";
+			}
+		});
+	}
+
+	private void createLabelProviderValueColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof ItemMeasured) {
+					return formatter.format(((ItemMeasured)element).getValue());
+				}
+				return "";
+			}
+		});
+	}
+
 
 	/**
 	 * Method to fulfill column basic informations

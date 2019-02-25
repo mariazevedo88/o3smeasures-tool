@@ -5,6 +5,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.astvisitors.LooseClassCohesionVisitor;
+import com.o3smeasures.measures.enumeration.MeasuresEnum;
 import com.o3smeasures.structures.Measure;
 
 /**
@@ -21,14 +22,16 @@ public class LooseClassCohesion extends Measure{
 	private double value;
 	private double mean;
 	private double max;
+	private double min;
 	private String classWithMaxValue;
 	private boolean isEnable;
-
+	
 	public LooseClassCohesion(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
+		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
 		addApplicableGranularity(Granularity.CLASS);
@@ -39,7 +42,7 @@ public class LooseClassCohesion extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Loose Class Cohesion";
+		return MeasuresEnum.LCC.getName();
 	}
 
 	/**
@@ -47,7 +50,7 @@ public class LooseClassCohesion extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return "LCC";
+		return MeasuresEnum.LCC.getAcronym();
 	}
 
 	/**
@@ -64,7 +67,7 @@ public class LooseClassCohesion extends Measure{
 	 */
 	@Override
 	public double getMinValue() {
-		return 0d;
+		return min;
 	}
 
 	/**
@@ -129,7 +132,6 @@ public class LooseClassCohesion extends Measure{
 	@Override
 	public void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
-		
 	}
 
 	/**
@@ -156,6 +158,7 @@ public class LooseClassCohesion extends Measure{
 		}
 		
 		setMaxValue(getCalculatedValue(), elementName);
+		setMinValue(getCalculatedValue());
 	}
 	
 	/**
@@ -206,4 +209,10 @@ public class LooseClassCohesion extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
 }

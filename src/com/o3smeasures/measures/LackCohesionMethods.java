@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.javamodel.LackCohesionMethodsJavaModel;
+import com.o3smeasures.measures.enumeration.MeasuresEnum;
 import com.o3smeasures.structures.Measure;
 
 /**
@@ -19,14 +20,16 @@ public class LackCohesionMethods extends Measure{
 	private double value;
 	private double mean;
 	private double max;
+	private double min;
 	private String classWithMaxValue;
 	private boolean isEnable;
-
+	
 	public LackCohesionMethods(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
+		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
 		addApplicableGranularity(Granularity.CLASS);
@@ -37,7 +40,7 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Lack of Cohesion of Methods";
+		return MeasuresEnum.LCOM.getName();
 	}
 
 	/**
@@ -45,7 +48,7 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return "LCOM";
+		return MeasuresEnum.LCOM.getAcronym();
 	}
 
 	/**
@@ -61,7 +64,7 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public double getMinValue() {
-		return 0d;
+		return min;
 	}
 
 	/**
@@ -142,6 +145,7 @@ public class LackCohesionMethods extends Measure{
 		setCalculatedValue(lcomJavaModel.getLcomValue());
 		setMeanValue(getCalculatedValue());
 		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		setMinValue(getCalculatedValue());
 	}
 	
 	/**
@@ -179,5 +183,12 @@ public class LackCohesionMethods extends Measure{
 	@Override
 	public void setClassWithMaxValue(String value) {
 		this.classWithMaxValue = value;
+	}
+
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
 	}
 }

@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.astvisitors.ResponseForClassVisitor;
+import com.o3smeasures.measures.enumeration.MeasuresEnum;
 import com.o3smeasures.structures.Measure;
 
 /**
@@ -28,14 +29,16 @@ public class ResponseForClass extends Measure{
 	private double value;
 	private double mean;
 	private double max;
+	private double min;
 	private String classWithMaxValue;
 	private boolean isEnable;
-
+	
 	public ResponseForClass(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
+		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
 		addApplicableGranularity(Granularity.CLASS);
@@ -46,7 +49,7 @@ public class ResponseForClass extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Response for Class";
+		return MeasuresEnum.RFC.getName();
 	}
 
 	/**
@@ -54,7 +57,7 @@ public class ResponseForClass extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return "RFC";
+		return MeasuresEnum.RFC.getAcronym();
 	}
 
 	/**
@@ -74,7 +77,7 @@ public class ResponseForClass extends Measure{
 	 */
 	@Override
 	public double getMinValue() {
-		return 0d;
+		return min;
 	}
 
 	/**
@@ -178,6 +181,7 @@ public class ResponseForClass extends Measure{
 		}
 		
 		setMaxValue(getCalculatedValue(), elementName);
+		setMinValue(getCalculatedValue());
 	}
 	
 	/**
@@ -228,4 +232,10 @@ public class ResponseForClass extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
 }

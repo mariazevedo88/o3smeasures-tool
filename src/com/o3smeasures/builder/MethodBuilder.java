@@ -46,6 +46,7 @@ public class MethodBuilder implements IBuilder{
 					item.addValue(measure.getCalculatedValue());
 					item.addMean(measure.getMeanValue());
 					item.setMax(measure.getMaxValue());
+					item.setMin(measure.getMinValue());
 					item.setClassWithMax(measure.getClassWithMaxValue());
 					item.addChild(methodItem);				
 				}

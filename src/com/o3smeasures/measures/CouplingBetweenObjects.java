@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.astvisitors.CouplingBetweenObjectsVisitor;
+import com.o3smeasures.measures.enumeration.MeasuresEnum;
 import com.o3smeasures.structures.Measure;
 
 /**
@@ -28,14 +29,16 @@ public class CouplingBetweenObjects extends Measure{
 	private double value;
 	private double mean;
 	private double max;
+	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;	
-
+	private boolean isEnable;
+	
 	public CouplingBetweenObjects(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
+		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
 		addApplicableGranularity(Granularity.CLASS);
@@ -46,7 +49,7 @@ public class CouplingBetweenObjects extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Coupling between Objects";
+		return MeasuresEnum.CBO.getName();
 	}
 
 	/**
@@ -54,7 +57,7 @@ public class CouplingBetweenObjects extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return "CBO";
+		return MeasuresEnum.CBO.getAcronym();
 	}
 
 	/**
@@ -71,7 +74,7 @@ public class CouplingBetweenObjects extends Measure{
 	 */
 	@Override
 	public double getMinValue() {
-		return 0d;
+		return min;
 	}
 
 	/**
@@ -136,7 +139,6 @@ public class CouplingBetweenObjects extends Measure{
 	@Override
 	public void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
-		
 	}
 
 	/**
@@ -172,6 +174,7 @@ public class CouplingBetweenObjects extends Measure{
 		}
 		
 		setMaxValue(getCalculatedValue(), elementName);
+		setMinValue(getCalculatedValue());
 	}
 	
 	/**
@@ -222,4 +225,10 @@ public class CouplingBetweenObjects extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
 }

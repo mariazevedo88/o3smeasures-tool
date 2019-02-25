@@ -5,6 +5,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.astvisitors.FanOutVisitor;
+import com.o3smeasures.measures.enumeration.MeasuresEnum;
 import com.o3smeasures.structures.Measure;
 
 /**
@@ -21,14 +22,16 @@ public class FanOut extends Measure{
 	private double value;
 	private double mean;
 	private double max;
+	private double min;
 	private String classWithMaxValue;
 	private boolean isEnable;
-
+	
 	public FanOut(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
+		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
 		addApplicableGranularity(Granularity.PACKAGE);
@@ -39,7 +42,7 @@ public class FanOut extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Fan-out";
+		return MeasuresEnum.FAN_OUT.getName();
 	}
 
 	/**
@@ -47,7 +50,7 @@ public class FanOut extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return "FOUT";
+		return MeasuresEnum.FAN_OUT.getAcronym();
 	}
 
 	/**
@@ -63,7 +66,7 @@ public class FanOut extends Measure{
 	 */
 	@Override
 	public double getMinValue() {
-		return 0d;
+		return min;
 	}
 
 	/**
@@ -128,7 +131,6 @@ public class FanOut extends Measure{
 	@Override
 	public void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
-		
 	}
 
 	/**
@@ -155,6 +157,7 @@ public class FanOut extends Measure{
 		}
 		
 		setMaxValue(getCalculatedValue(), elementName);
+		setMinValue(getCalculatedValue());
 	}
 	
 	/**
@@ -205,4 +208,10 @@ public class FanOut extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
 }

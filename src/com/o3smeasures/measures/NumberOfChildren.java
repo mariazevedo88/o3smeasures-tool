@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.javamodel.NumberOfChildrenJavaModel;
+import com.o3smeasures.measures.enumeration.MeasuresEnum;
 import com.o3smeasures.structures.Measure;
 
 /**
@@ -20,14 +21,16 @@ public class NumberOfChildren extends Measure{
 	private double value;
 	private double mean;
 	private double max;
+	private double min;
 	private String classWithMaxValue;
 	private boolean isEnable;
-
+	
 	public NumberOfChildren(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
+		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
 		addApplicableGranularity(Granularity.CLASS);
@@ -38,7 +41,7 @@ public class NumberOfChildren extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Number of Children";
+		return MeasuresEnum.NOC.getName();
 	}
 
 	/**
@@ -46,7 +49,7 @@ public class NumberOfChildren extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return "NOC";
+		return MeasuresEnum.NOC.getAcronym();
 	}
 
 	/**
@@ -62,7 +65,7 @@ public class NumberOfChildren extends Measure{
 	 */
 	@Override
 	public double getMinValue() {
-		return 0d;
+		return min;
 	}
 
 	/**
@@ -142,6 +145,7 @@ public class NumberOfChildren extends Measure{
 		setCalculatedValue(Math.abs(nocJavaModel.getNocValue()));
 		setMeanValue(getCalculatedValue());
 		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		setMinValue(getCalculatedValue());
 	}
 	
 	/**
@@ -181,4 +185,10 @@ public class NumberOfChildren extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
 }

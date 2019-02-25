@@ -25,8 +25,10 @@ public class ItemMeasured {
 	@XmlElement(pos = 3)
 	private Double mean;
 	@XmlElement(pos = 4)
-	private Double max;
+	private Double min;
 	@XmlElement(pos = 5)
+	private Double max;
+	@XmlElement(pos = 6)
 	private String classWithMaxValue;
 	private ItemMeasured parent;
 	private List<ItemMeasured> children;
@@ -41,11 +43,13 @@ public class ItemMeasured {
 		this.value    = 0d;
 		this.mean     = 0d;
 		this.max      = 0d;
+		this.min      = 0d;
 		this.classWithMaxValue = "";
 	}
 
 	/**
 	 * Method to get the name of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return String
@@ -56,6 +60,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to get the parent of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return ItemMeasured
@@ -66,6 +71,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to set the parent of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param item
@@ -76,6 +82,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to get the children of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return List
@@ -86,6 +93,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to add a child in a list of item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param item
@@ -96,6 +104,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to get the value of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -106,6 +115,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to set the value of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param value
@@ -116,6 +126,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to add a value in the list of item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param value
@@ -126,6 +137,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to get the mean of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -136,6 +148,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to set the mean of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param mean
@@ -146,6 +159,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to add the mean in the list of item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param mean
@@ -156,6 +170,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to get the max value of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -166,6 +181,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to set the max value of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param max
@@ -176,6 +192,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to get the class with the max value of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -186,6 +203,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to set the class with the max value of the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param classWithMaxValue
@@ -196,6 +214,7 @@ public class ItemMeasured {
 	
 	/**
 	 * Method to get the measure represented by the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return Measure
@@ -206,12 +225,35 @@ public class ItemMeasured {
 
 	/**
 	 * Method to set the measure represented by the item measured.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param measure
 	 */
 	public void setMeasure(Measure measure) {
 		this.measure = measure;
+	}
+	
+	/**
+	 * Method to get the min value of the item measured.
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/02/2019
+	 * @return double
+	 */
+	public double getMin() {
+		return min;
+	}
+
+	/**
+	 * Method to set the min value of the item measured.
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/02/2019
+	 * @param measure
+	 */
+	public void setMin(double min) {
+		this.min = min;
 	}
 
 	/**

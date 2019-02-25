@@ -57,6 +57,7 @@ public class ClassBuilder implements IBuilder{
 				classItem.addValue(measure.getCalculatedValue());
 				classItem.addMean(measure.getMeanValue());
 				classItem.setMax(measure.getMaxValue());
+				classItem.setMin(measure.getMinValue());
 				classItem.setClassWithMax(measure.getClassWithMaxValue());
 				
 				if (measure.isApplicableGranularity(Granularity.METHOD)) {
@@ -64,11 +65,13 @@ public class ClassBuilder implements IBuilder{
 					item.addValue(classItem.getValue());
 					item.addMean(classItem.getMean());
 					item.setMax(classItem.getMax());
+					item.setMin(classItem.getMin());
 					item.setClassWithMax(classItem.getClassWithMax());
 				} else {
 					item.addValue(measure.getCalculatedValue());
 					item.addMean(measure.getMeanValue());
 					item.setMax(measure.getMaxValue());
+					item.setMin(measure.getMinValue());
 					item.setClassWithMax(measure.getClassWithMaxValue());
 				}
 				item.addChild(classItem);

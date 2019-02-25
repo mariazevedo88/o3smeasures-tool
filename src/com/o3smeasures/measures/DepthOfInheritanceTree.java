@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.javamodel.DepthOfInheritanceTreeJavaModel;
+import com.o3smeasures.measures.enumeration.MeasuresEnum;
 import com.o3smeasures.structures.Measure;
 
 /**
@@ -20,6 +21,7 @@ public class DepthOfInheritanceTree extends Measure{
 	private double value;
 	private double mean;
 	private double max;
+	private double min;
 	private String classWithMaxValue;
 	private boolean isEnable;	
 
@@ -28,6 +30,7 @@ public class DepthOfInheritanceTree extends Measure{
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
+		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
 		addApplicableGranularity(Granularity.PACKAGE);
@@ -38,7 +41,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return "Depth of Inheritance Tree";
+		return MeasuresEnum.DIT.getName();
 	}
 
 	/**
@@ -46,7 +49,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return "DIT";
+		return MeasuresEnum.DIT.getAcronym();
 	}
 
 	/**
@@ -62,7 +65,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public double getMinValue() {
-		return 0d;
+		return min;
 	}
 
 	/**
@@ -127,7 +130,6 @@ public class DepthOfInheritanceTree extends Measure{
 	@Override
 	public void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
-		
 	}
 
 	/**
@@ -143,6 +145,7 @@ public class DepthOfInheritanceTree extends Measure{
 		setCalculatedValue(Math.abs(ditJavaModel.getDitValue()));
 		setMeanValue(getCalculatedValue());
 		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		setMinValue(getCalculatedValue());
 	}
 
 	/**
@@ -182,4 +185,10 @@ public class DepthOfInheritanceTree extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
 }

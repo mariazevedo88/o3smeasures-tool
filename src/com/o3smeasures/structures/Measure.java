@@ -41,6 +41,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to apply the granularity in a measure.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param granularity
@@ -53,6 +54,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get all granularities.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return List
@@ -63,6 +65,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to verify the measurs granularities.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param granularity
@@ -75,6 +78,7 @@ public abstract class Measure {
 	/** 
 	 * Reads a ICompilationUnit and creates the AST DOM for manipulating the 
 	 * java source file.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param <T>
@@ -110,6 +114,7 @@ public abstract class Measure {
 
 	/**
 	 * Method to get the measure's name.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return String
@@ -118,6 +123,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get the measure's acronym.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return String
@@ -126,6 +132,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get the measure's description.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return String
@@ -134,6 +141,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get the measure's property.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return String
@@ -142,6 +150,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get the measure's minimum value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -150,6 +159,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get the measure's maximum value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -158,6 +168,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get the measure's maximum value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -166,6 +177,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get the measure's mean value (average value).
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -174,6 +186,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get the measure's reference value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -182,6 +195,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get the measure's calculated value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return double
@@ -190,6 +204,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to set the measure's calculated value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param value
@@ -198,6 +213,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to set the measure's mean value (average value).
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param value
@@ -206,6 +222,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to set the measure's max value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param value
@@ -214,7 +231,17 @@ public abstract class Measure {
 	public abstract void setMaxValue(double value, String className);
 	
 	/**
+	 * Method to set the measure's max value.
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/02/2019
+	 * @param value
+	 */
+	public abstract void setMinValue(double value);
+	
+	/**
 	 * Method to set the measure's class with the max value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param value
@@ -223,6 +250,7 @@ public abstract class Measure {
 	
 	/**
 	 * Method to get if the measure is enable on the plugin.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return boolean
@@ -231,14 +259,16 @@ public abstract class Measure {
 
 	/**
 	 * Method to set if the measure is enable on the plugin.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param isEnable
 	 */
 	public abstract void setEnable(boolean isEnable);
-
+	
 	/**
 	 * Method to create the AST for the ICompilationUnits.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param unit

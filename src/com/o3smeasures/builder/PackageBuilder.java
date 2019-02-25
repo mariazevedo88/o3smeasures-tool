@@ -60,6 +60,7 @@ public class PackageBuilder implements IBuilder{
 					addClassBuilder(measure, myPackage, packageMeasured);
 					item.addChild(packageMeasured);
 					item.setMax(packageMeasured.getMax());
+					item.setMin(packageMeasured.getMin());
 					item.setClassWithMax(packageMeasured.getClassWithMax());
 					item.addValue(packageMeasured.getValue());
 					item.addMean(packageMeasured.getMean());
