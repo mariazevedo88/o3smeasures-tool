@@ -1,4 +1,6 @@
-# o3smeasures [![Build Status](https://travis-ci.org/mariazevedo88/o3smeasures-tool.svg?branch=master)](https://travis-ci.org/mariazevedo88/o3smeasures-tool)
+# o3smeasures 
+
+[![Build Status](https://travis-ci.org/mariazevedo88/o3smeasures-tool.svg?branch=master)](https://travis-ci.org/mariazevedo88/o3smeasures-tool) ![GitHub repo size](https://img.shields.io/github/repo-size/mariazevedo88/o3smeasures-tool.svg) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/mariazevedo88/o3smeasures-tool.svg) ![GitHub language count](https://img.shields.io/github/languages/count/mariazevedo88/o3smeasures-tool.svg) ![GitHub top language](https://img.shields.io/github/languages/top/mariazevedo88/o3smeasures-tool.svg) ![GitHub](https://img.shields.io/github/license/mariazevedo88/o3smeasures-tool.svg) ![GitHub All Releases](https://img.shields.io/github/downloads/mariazevedo88/o3smeasures-tool/total.svg) ![GitHub last commit](https://img.shields.io/github/last-commit/mariazevedo88/o3smeasures-tool.svg) 
 
 Plug-in for Eclipse to measure software internal quality. It was developed as part of my dissertation entitled
 "Um Estudo Quantitativo para Caracterização da Qualidade Interna de Sistemas de Software Orientados a Objetos Open-Source"
@@ -37,3 +39,7 @@ The o3smeasures views can be enabled by the eclipse menu <b>Window</b> -> <b>Sho
 ## Exporting files
 
 To export the measurement results in the O3SMeasures Diagnostic view, with the right mouse button in the view, select the option <b>Export to CSV file</b> to export in the .csv format or <b>Export to XML file</b> to export in the .xml format.
+
+## Contributing
+
+[![](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/images/0)](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/links/0)[![](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/images/1)](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/links/1)[![](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/images/2)](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/links/2)[![](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/images/3)](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/links/3)[![](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/images/4)](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/links/4)[![](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/images/5)](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/links/5)[![](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/images/6)](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/links/6)[![](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/images/7)](https://sourcerer.io/fame/mariazevedo88/mariazevedo88/o3smeasures-tool/links/7)
