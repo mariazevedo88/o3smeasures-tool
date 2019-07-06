@@ -33,6 +33,7 @@ public class ClassBuilder implements IBuilder{
 	 * in order to analyze methods
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param measure
 	 * @param myClass
 	 * @param item
@@ -52,28 +53,36 @@ public class ClassBuilder implements IBuilder{
 			for (ICompilationUnit unit : myPackage.getCompilationUnits()) {
 
 				classItem = new ItemMeasured(unit.getElementName(), item);
-				measure.measure(unit);
-				
-				classItem.addValue(measure.getCalculatedValue());
-				classItem.addMean(measure.getMeanValue());
-				classItem.setMax(measure.getMaxValue());
-				classItem.setMin(measure.getMinValue());
-				classItem.setClassWithMax(measure.getClassWithMaxValue());
 				
 				if (measure.isApplicableGranularity(Granularity.METHOD)) {
+					
 					addMethodsBuilder(measure, unit, classItem);
-					item.addValue(classItem.getValue());
+					
+					item.setMax(measure.getMaxValue());
+					item.setMin(measure.getMinValue());
+					item.setClassWithMax(measure.getClassWithMaxValue());
+
 					item.addMean(classItem.getMean());
-					item.setMax(classItem.getMax());
-					item.setMin(classItem.getMin());
-					item.setClassWithMax(classItem.getClassWithMax());
+					item.addValue(classItem.getValue());
+					
 				} else {
+					
+					measure.measure(unit);
+
 					item.addValue(measure.getCalculatedValue());
 					item.addMean(measure.getMeanValue());
 					item.setMax(measure.getMaxValue());
 					item.setMin(measure.getMinValue());
 					item.setClassWithMax(measure.getClassWithMaxValue());
+					
+					classItem.addValue(item.getValue());
+					classItem.addMean(item.getMean());
 				}
+				
+				classItem.setMax(item.getMax());
+				classItem.setMin(item.getMin());
+				classItem.setClassWithMax(item.getClassWithMax());
+				
 				item.addChild(classItem);
 			}
 			

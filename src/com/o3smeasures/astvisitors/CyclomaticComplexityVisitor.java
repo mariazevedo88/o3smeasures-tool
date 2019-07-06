@@ -5,13 +5,22 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionMethodReference;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.LambdaExpression;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SwitchCase;
 import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
@@ -19,7 +28,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 /**
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the CC (Cyclomatic Complexity) 
- * measure.
+ * measure, excluding getters and setters invocation.
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
@@ -28,14 +37,19 @@ import org.eclipse.jdt.core.dom.WhileStatement;
  */
 public class CyclomaticComplexityVisitor extends ASTVisitor{
 
+	private static CyclomaticComplexityVisitor instance;
+
 	private Double cyclomaticComplexityIndex;
 	private Double sumCyclomaticComplexity;
-	private static CyclomaticComplexityVisitor instance;
+	private boolean isFirstVisitingPerMethod;
+	
+	private String methodName;
 	
 	public CyclomaticComplexityVisitor(){
 		super();
-		cyclomaticComplexityIndex = 0d;
-		sumCyclomaticComplexity = 0d;
+		this.cyclomaticComplexityIndex = 0d;
+		this.sumCyclomaticComplexity = 0d;
+		this.isFirstVisitingPerMethod = true;
 	}
 	
 	public static CyclomaticComplexityVisitor getInstance(){
@@ -50,9 +64,13 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(CatchClause node) {
-		cyclomaticComplexityIndex++;
-		sumCyclomaticComplexity++;
-		return true;
+		if(isSameMethod(node)) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			isFirstVisitingPerMethod = false;
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -60,10 +78,13 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(ForStatement node) {
-		cyclomaticComplexityIndex++;
-		sumCyclomaticComplexity++;
-		inspectExpression(node.getExpression());
-		return true;
+		if(isSameMethod(node)) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			inspectExpression(node.getExpression());
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -71,10 +92,17 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(IfStatement node) {
-		cyclomaticComplexityIndex++;
-		sumCyclomaticComplexity++;
-		inspectExpression(node.getExpression());
-		return true;
+		if(isSameMethod(node)) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			if(node.getElseStatement() != null) {
+				cyclomaticComplexityIndex++;
+				sumCyclomaticComplexity++;
+			}
+			inspectExpression(node.getExpression());
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -82,10 +110,13 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(WhileStatement node) {
-		cyclomaticComplexityIndex++;
-		sumCyclomaticComplexity++;
-		inspectExpression(node.getExpression());
-		return true;
+		if(isSameMethod(node)) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			inspectExpression(node.getExpression());
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -93,9 +124,13 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(TryStatement node) {
-		cyclomaticComplexityIndex++;
-		sumCyclomaticComplexity++;
-		return true;
+		if(isSameMethod(node)) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			isFirstVisitingPerMethod = false;
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -103,10 +138,13 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(ConditionalExpression node) {
-		cyclomaticComplexityIndex++;
-		sumCyclomaticComplexity++;
-		inspectExpression(node.getExpression());
-		return true;
+		if(isSameMethod(node)) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			inspectExpression(node.getExpression());
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -114,9 +152,10 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(SwitchCase node) {
-		if (!node.isDefault()){
+		if (!node.isDefault() && isSameMethod(node)){
 			cyclomaticComplexityIndex++;
 			sumCyclomaticComplexity++;
+			isFirstVisitingPerMethod = false;
 		}
 		return true;
 	}
@@ -126,10 +165,13 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(DoStatement node) {
-		cyclomaticComplexityIndex++;
-		sumCyclomaticComplexity++;
-		inspectExpression(node.getExpression());
-		return true;
+		if(isSameMethod(node)) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			inspectExpression(node.getExpression());
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -137,9 +179,85 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(ExpressionStatement node) {
-		cyclomaticComplexityIndex++;
-		sumCyclomaticComplexity++;
-		inspectExpression(node.getExpression());
+		if(isFirstVisitingPerMethod && isSameMethod(node)) {
+			if(node.getExpression() instanceof MethodInvocation) {
+				cyclomaticComplexityIndex++;	
+				sumCyclomaticComplexity++;
+				isFirstVisitingPerMethod = false;
+				return true;
+			}else {
+				inspectExpression(node.getExpression());
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * McCabe CC is computed as method level.
+	 * @see ASTVisitor#visit(AnonymousClassDeclaration)
+	 */
+	@Override
+	public boolean visit(AnonymousClassDeclaration node) {
+		return false;
+	}
+
+	/**
+	 * McCabe CC is computed as method level.
+	 * @see ASTVisitor#visit(AnnotationTypeDeclaration)
+	 */
+	@Override
+	public boolean visit(AnnotationTypeDeclaration node) {
+		return false;
+	}
+
+	/**
+	 * McCabe CC is computed as method level.
+	 * @see ASTVisitor#visit(EnumDeclaration)
+	 */
+	@Override
+	public boolean visit(EnumDeclaration node) {
+		return false; 
+	}
+	
+	/**
+	 * @see ASTVisitor#visit(ExpressionMethodReference)
+	 */
+	@Override
+	public boolean visit(ExpressionMethodReference node) {
+		if(isSameMethod(node)) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			isFirstVisitingPerMethod = false;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @see ASTVisitor#visit(LambdaExpression)
+	 */
+	@Override
+	public boolean visit(LambdaExpression node) {
+		if(isSameMethod(node)) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			isFirstVisitingPerMethod = false;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @see ASTVisitor#visit(ReturnStatement)
+	 */
+	@Override
+	public boolean visit(ReturnStatement node) {
+		if(isSameMethod(node) && node.getExpression() instanceof MethodInvocation) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			isFirstVisitingPerMethod = false;
+			return true;
+		}
 		return false;
 	}
 	
@@ -147,6 +265,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 * Method to inspect logical expressions in source code
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param exprs
 	 */
 	private void inspectExpression(Expression exprs) {
@@ -155,21 +274,25 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 			char[] chars = expression.toCharArray();
 			for (int i = 0; i < chars.length-1; i++) {
 				char next = chars[i];
-				if ((next == '&' || next == '|')&&(next == chars[i+1])) {
+				if ((next == '&' || next == '|' || next == '?' || next == ':') && (next == chars[i+1])) {
 					cyclomaticComplexityIndex++;
 					sumCyclomaticComplexity++;
+					isFirstVisitingPerMethod = false;
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Method that returns the cyclomatic complexity index in a class
+	 * Method that returns the cyclomatic complexity index in a class. For a single routine 
+	 * in the method, cyclomaticComplexityIndex is always equal to 1.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return
+	 * 
+	 * @return Double
 	 */
 	public Double getCyclomaticComplexityIndex(){
+		if(cyclomaticComplexityIndex == 0d) cyclomaticComplexityIndex++;
 		return new BigDecimal(cyclomaticComplexityIndex, new MathContext(2, RoundingMode.UP)).doubleValue();
 	}
 	
@@ -181,15 +304,85 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	public void cleanVariables(){
 		this.cyclomaticComplexityIndex = 0d;
 		this.sumCyclomaticComplexity = 0d;
+		this.isFirstVisitingPerMethod = true;
 	}
 	
 	/**
-	 * Method that returns the sum of all complexities
+	 * Method that returns the sum of all complexities. For a single routine 
+	 * in the method, sumCyclomaticComplexity is always equal to 1.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return
+	 * 
+	 * @return Double
 	 */
 	public Double getAllCyclomaticComplexity() {
+		if(sumCyclomaticComplexity == 0d) sumCyclomaticComplexity++;
 		return sumCyclomaticComplexity;
 	}
+
+	/**
+	 * Method to set the name of the method evaluated.
+	 * @author Mariana Azevedo
+	 * @since 06/07/2019
+	 * 
+	 * @param methodName
+	 */
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+	
+	/**
+	 * Method to check whether the evaluated Statement is of the 
+	 * same builder method or is of a class.
+	 * @author Mariana Azevedo
+	 * @since 06/07/2019
+	 * 
+	 * @param node
+	 * @return boolean
+	 */
+	private boolean isSameMethod(Statement node) {
+		if(node.getParent().getParent() instanceof MethodDeclaration) {
+			return ((MethodDeclaration) node.getParent().getParent())
+					.getName().toString().equals(methodName);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Method to check whether the evaluated CatchClause is of the 
+	 * same builder method or is of a class.
+	 * @author Mariana Azevedo
+	 * @since 06/07/2019
+	 * 
+	 * @param node
+	 * @return boolean
+	 */
+	private boolean isSameMethod(CatchClause node) {
+		if(node.getParent().getParent() instanceof MethodDeclaration) {
+			return ((MethodDeclaration) node.getParent().getParent())
+					.getName().toString().equals(methodName);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Method to check whether the evaluated expression is of the 
+	 * same builder method or is of a class.
+	 * @author Mariana Azevedo
+	 * @since 06/07/2019
+	 * 
+	 * @param node
+	 * @return boolean
+	 */
+	private boolean isSameMethod(Expression node) {
+		if(node.getParent().getParent() instanceof MethodDeclaration) {
+			return ((MethodDeclaration) node.getParent().getParent())
+					.getName().toString().equals(methodName);
+		}
+		
+		return false;
+	}
+	
 }

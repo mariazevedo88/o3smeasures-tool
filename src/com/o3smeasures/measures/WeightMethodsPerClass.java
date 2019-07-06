@@ -34,7 +34,7 @@ public class WeightMethodsPerClass extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		addApplicableGranularity(Granularity.METHOD);
 	}
 	
 	/**

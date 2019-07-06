@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -69,7 +70,7 @@ public class JavaParser {
 		 ASTSession.getInstance().reset();
 		 
 		 if (cacheParser) {
-		   astParser = ASTParser.newParser(AST.JLS10);
+		   astParser = ASTParser.newParser(AST.JLS11);
            astParser.setKind(ASTParser.K_COMPILATION_UNIT);
    		   astParser.setResolveBindings(true);
            char[] source = getFileContent(fileInputStream);
@@ -111,7 +112,7 @@ public class JavaParser {
 	    StringBuilder strBuilder = new StringBuilder();
 	    Reader reader;
 		try {
-			reader = new InputStreamReader(fileInputStream, "UTF-8");
+			reader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
 			char[] buffer = new char[1024];
 			int charAmount = reader.read(buffer);
 			while(charAmount > 0) {

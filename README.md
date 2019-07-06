@@ -14,7 +14,7 @@ In the plug-in development, we used the Eclipse IDE 4.4 (Luna), the Java Develop
 ## Dependencies
 
 - Java 8
-- Eclipse IDE 4.4 (Luna) or higher
+- Eclipse IDE Mars or higher
 - junit 4 (4.11.0)
 - org.eclipse.ui
 - org.eclipse.core.resources
