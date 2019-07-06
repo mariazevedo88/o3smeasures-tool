@@ -2,6 +2,7 @@ package com.o3smeasures.measures;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.internal.core.SourceMethod;
 
 import com.o3smeasures.astvisitors.ClassVisitor;
 import com.o3smeasures.astvisitors.CyclomaticComplexityVisitor;
@@ -17,6 +18,7 @@ import com.o3smeasures.structures.Measure;
  * @since 13/07/2014
  *
  */
+@SuppressWarnings("restriction")
 public class CyclomaticComplexity extends Measure{
 
 	private double value;
@@ -28,10 +30,10 @@ public class CyclomaticComplexity extends Measure{
 	
 	public CyclomaticComplexity(){
 		super();
-		this.value = 0d;
-		this.mean = 0d;
-		this.max = 0d;
-		this.min = 0d;
+		this.value = 1d;
+		this.mean = 1d;
+		this.max = 1d;
+		this.min = 1d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;
 		addApplicableGranularity(Granularity.METHOD);
@@ -91,7 +93,7 @@ public class CyclomaticComplexity extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 0d;
+		return 1d;
 	}
 
 	/**
@@ -142,6 +144,7 @@ public class CyclomaticComplexity extends Measure{
 		
 		CompilationUnit parse = parse(unit);
 		CyclomaticComplexityVisitor visitor = CyclomaticComplexityVisitor.getInstance();
+		visitor.setMethodName(((SourceMethod)unit).getElementName());
 		visitor.cleanVariables();
 		parse.accept(visitor);
 		
@@ -212,7 +215,7 @@ public class CyclomaticComplexity extends Measure{
 
 	@Override
 	public void setMinValue(double value) {
-		if (min > value || min == 0d){
+		if (min > value || min == 1d){
 			this.min = value;
 		}
 	}

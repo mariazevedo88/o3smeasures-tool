@@ -33,6 +33,7 @@ public class ClassBuilder implements IBuilder{
 	 * in order to analyze methods
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param measure
 	 * @param myClass
 	 * @param item
@@ -61,8 +62,8 @@ public class ClassBuilder implements IBuilder{
 					item.setMin(measure.getMinValue());
 					item.setClassWithMax(measure.getClassWithMaxValue());
 
-					item.setMean(classItem.getMean());
-					item.setValue(classItem.getValue());
+					item.addMean(classItem.getMean());
+					item.addValue(classItem.getValue());
 					
 				} else {
 					
