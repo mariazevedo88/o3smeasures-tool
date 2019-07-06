@@ -35,20 +35,21 @@ public class MethodBuilder implements IBuilder{
 	public void build(Measure measure, ItemMeasured item) {
 		try {
 			for (IType unit : myClass.getAllTypes()) {
+				
 				for (IMethod method : unit.getMethods()) {
-
+					
 					ItemMeasured methodItem = new ItemMeasured(method.getElementName(), item);
 					measure.measure(method);
 					
 					methodItem.setValue(measure.getCalculatedValue());
 					methodItem.setMean(measure.getMeanValue());
-					
-					item.addValue(measure.getCalculatedValue());
-					item.addMean(measure.getMeanValue());
-					item.setMax(measure.getMaxValue());
-					item.setMin(measure.getMinValue());
+
 					item.setClassWithMax(measure.getClassWithMaxValue());
-					item.addChild(methodItem);				
+					item.setMax(methodItem.getMax());
+					item.setMin(methodItem.getMin());
+					item.addValue(methodItem.getValue());
+					item.addMean(methodItem.getMean());
+					item.addChild(methodItem);		
 				}
 			}
 		} catch (JavaModelException exception) {

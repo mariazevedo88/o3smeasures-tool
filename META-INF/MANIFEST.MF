@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: O3SMeasures
 Bundle-SymbolicName: O3SMeasures;singleton:=true
-Bundle-Version: 1.2.0
+Bundle-Version: 1.2.5
 Bundle-Vendor: Mariana Azevedo
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Activator: com.o3smeasures.plugin.Activator
 Bundle-ActivationPolicy: lazy
-Export-Package: com.o3smeasures.astvisitors,
+Export-Package: com.keypoint,
+ com.o3smeasures.astvisitors,
  com.o3smeasures.builder,
  com.o3smeasures.builder.generic,
  com.o3smeasures.javamodel,
@@ -29,7 +30,24 @@ Export-Package: com.o3smeasures.astvisitors,
  com.o3smeasures.statistic.generic,
  com.o3smeasures.structures,
  com.o3smeasures.util,
- org.jfree.chart.axis
+ org.jfree,
+ org.jfree.base,
+ org.jfree.base.config,
+ org.jfree.base.log,
+ org.jfree.base.modules,
+ org.jfree.chart.axis,
+ org.jfree.date,
+ org.jfree.io,
+ org.jfree.layout,
+ org.jfree.resources,
+ org.jfree.text,
+ org.jfree.threads,
+ org.jfree.ui,
+ org.jfree.ui.about,
+ org.jfree.ui.about.resources,
+ org.jfree.ui.action,
+ org.jfree.ui.tabbedui,
+ org.jfree.util
 Bundle-ClassPath: lib/jcommon-1.0.16.jar,
  lib/jcommon-1.0.17.jar,
  lib/jfreechart-1.0.14-swt.jar,

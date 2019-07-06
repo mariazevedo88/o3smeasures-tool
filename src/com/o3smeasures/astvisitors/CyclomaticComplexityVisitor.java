@@ -5,21 +5,27 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SwitchCase;
 import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
+import com.o3smeasures.measures.enumeration.ExpressionsEnum;
+
 /**
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the CC (Cyclomatic Complexity) 
- * measure.
+ * measure, excluding getters and setters invocation.
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
@@ -31,11 +37,14 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	private Double cyclomaticComplexityIndex;
 	private Double sumCyclomaticComplexity;
 	private static CyclomaticComplexityVisitor instance;
+	private boolean isFirstVisitingPerMethod;
 	
 	public CyclomaticComplexityVisitor(){
 		super();
-		cyclomaticComplexityIndex = 0d;
-		sumCyclomaticComplexity = 0d;
+		this.cyclomaticComplexityIndex = 0d;
+		this.sumCyclomaticComplexity = 0d;
+		this.isFirstVisitingPerMethod = true;
+		
 	}
 	
 	public static CyclomaticComplexityVisitor getInstance(){
@@ -52,6 +61,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	public boolean visit(CatchClause node) {
 		cyclomaticComplexityIndex++;
 		sumCyclomaticComplexity++;
+		isFirstVisitingPerMethod = false;
 		return true;
 	}
 	
@@ -95,6 +105,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	public boolean visit(TryStatement node) {
 		cyclomaticComplexityIndex++;
 		sumCyclomaticComplexity++;
+		isFirstVisitingPerMethod = false;
 		return true;
 	}
 	
@@ -117,6 +128,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 		if (!node.isDefault()){
 			cyclomaticComplexityIndex++;
 			sumCyclomaticComplexity++;
+			isFirstVisitingPerMethod = false;
 		}
 		return true;
 	}
@@ -137,10 +149,48 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(ExpressionStatement node) {
-		cyclomaticComplexityIndex++;
-		sumCyclomaticComplexity++;
-		inspectExpression(node.getExpression());
+		if(isFirstVisitingPerMethod) {
+			if(node.getExpression() instanceof MethodInvocation) {
+				Expression expression = node.getExpression();
+				if(!expression.toString().contains(ExpressionsEnum.SETTER_METHOD.getExpression()) 
+					&& !expression.toString().contains(ExpressionsEnum.GETTER_METHOD.getExpression())) {
+					cyclomaticComplexityIndex++;	
+					sumCyclomaticComplexity++;
+					isFirstVisitingPerMethod = false;
+					return true;
+				}
+			}else {
+				inspectExpression(node.getExpression());
+			}
+		}
 		return false;
+	}
+	
+	/**
+	 * McCabe CC is computed as method level.
+	 * @see ASTVisitor#visit(AnonymousClassDeclaration)
+	 */
+	@Override
+	public boolean visit(AnonymousClassDeclaration node) {
+		return false;
+	}
+
+	/**
+	 * McCabe CC is computed as method level.
+	 * @see ASTVisitor#visit(AnnotationTypeDeclaration)
+	 */
+	@Override
+	public boolean visit(AnnotationTypeDeclaration node) {
+		return false;
+	}
+
+	/**
+	 * McCabe CC is computed as method level.
+	 * @see ASTVisitor#visit(EnumDeclaration)
+	 */
+	@Override
+	public boolean visit(EnumDeclaration node) {
+		return false; 
 	}
 	
 	/**
@@ -155,9 +205,10 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 			char[] chars = expression.toCharArray();
 			for (int i = 0; i < chars.length-1; i++) {
 				char next = chars[i];
-				if ((next == '&' || next == '|')&&(next == chars[i+1])) {
+				if ((next == '&' || next == '|' || next == '?' || next == ':') && (next == chars[i+1])) {
 					cyclomaticComplexityIndex++;
 					sumCyclomaticComplexity++;
+					isFirstVisitingPerMethod = false;
 				}
 			}
 		}
@@ -181,6 +232,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	public void cleanVariables(){
 		this.cyclomaticComplexityIndex = 0d;
 		this.sumCyclomaticComplexity = 0d;
+		this.isFirstVisitingPerMethod = true;
 	}
 	
 	/**

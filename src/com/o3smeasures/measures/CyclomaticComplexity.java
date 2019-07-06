@@ -24,7 +24,7 @@ public class CyclomaticComplexity extends Measure{
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;	
+	private boolean isEnable;
 	
 	public CyclomaticComplexity(){
 		super();
@@ -33,8 +33,8 @@ public class CyclomaticComplexity extends Measure{
 		this.max = 0d;
 		this.min = 0d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		this.isEnable = true;
+		addApplicableGranularity(Granularity.METHOD);
 	}
 	
 	/**
@@ -216,4 +216,5 @@ public class CyclomaticComplexity extends Measure{
 			this.min = value;
 		}
 	}
+	
 }
