@@ -86,17 +86,17 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 			
 			if ((iFields != null && iMethods != null) && (iFields.length > 1 && iMethods.length > 1)) {
 				for (IField field: iFields){
-					sharedAttributesPerMethods.put(field.getElementName(), new HashSet<String>());
-					nonSharedAttributesPerMethods.put(field.getElementName(), new HashSet<String>());
+					sharedAttributesPerMethods.put(field.getElementName(), new HashSet<>());
+					nonSharedAttributesPerMethods.put(field.getElementName(), new HashSet<>());
 				}
 				for (IMethod method: iMethods){
-					connectedComponents.put(method.getElementName(), new HashSet<String>());
+					connectedComponents.put(method.getElementName(), new HashSet<>());
 				}
 				checkMethodsWithSharedAttributes(iMethods);
 				
-				if (LCOMType.LCOM.toString() == getLcomType()){
+				if (LCOMType.LCOM.toString().equals(getLcomType())){
 					setLcomValue(calculateLCOMValue());
-				}else if (LCOMType.LCOM2.toString() == getLcomType()){
+				}else if (LCOMType.LCOM2.toString().equals(getLcomType())){
 					setLcom2Value(calculateLCOM2Value());
 				}else{
 					setLcom4Value(calculateLCOM4Value());
@@ -117,7 +117,7 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	 */
 	private void addMethods(String field, String method){
 		Set<String> sharedMethods = null;
-		if (LCOMType.LCOM.toString() == getLcomType() || LCOMType.LCOM2.toString() == getLcomType()){
+		if (LCOMType.LCOM.toString().equals(getLcomType()) || LCOMType.LCOM2.toString().equals(getLcomType())){
 			if(sharedAttributesPerMethods.containsKey(field)){
 				sharedMethods = sharedAttributesPerMethods.get(field);
 				addMethod(method, sharedMethods);
@@ -168,12 +168,9 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 						addMethods(new String(scanner.getCurrentTokenSource()), methodName);
 					}
 				}
-			} catch (JavaModelException exception1) {
-				logger.error(exception1);
-			} catch (InvalidInputException exception2) {
-				logger.error(exception2);
+			} catch (JavaModelException | InvalidInputException ex) {
+				logger.error(ex);
 			}
-			
 		}
 	}
 	
@@ -209,26 +206,29 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	 * Method that calculates LCOM2 value, according to Henderson-Sellers definition.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return Double
+	 * @return double (avg(m(a)) - m)/(1 - m) where m(a) is the number of methods that access a
 	 */
-	private Double calculateLCOM2Value(){
+	private double calculateLCOM2Value(){
 		
+		int sum = 0;
+		int accesses = 0;
 		Set<String> allSharedMethods = new HashSet<>();
 		
-		for (Iterator<HashSet<String>> it = sharedAttributesPerMethods.values().iterator(); it.hasNext();) {
+		for (Iterator<HashSet<String>> it = sharedAttributesPerMethods.values().iterator(); it.hasNext(); accesses++) {
 			Set<String> methods = it.next();
 			allSharedMethods.addAll(methods);
+			sum += methods.size();
 		}
 		
-		Double index = Double.valueOf(allSharedMethods.size())/2;
-		Double entrySize = Double.valueOf(sharedAttributesPerMethods.keySet().size())*allSharedMethods.size();
+		int index = allSharedMethods.size();
+		if (index == 1) return 0;
 		
-		if (entrySize < 0) return 0d;
-		Double result = (1- index/entrySize);
-		if (result.isInfinite() || result.isNaN())
-			return 0d;
-
-		return result;
+		if(accesses > 0) {
+			double avg = (double) sum / (double) accesses;
+			return Math.abs((avg - index) / (1 - index));
+		}
+		
+		return 0;
 	}
 	
 	/**

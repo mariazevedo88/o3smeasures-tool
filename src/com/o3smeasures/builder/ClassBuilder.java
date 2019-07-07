@@ -75,8 +75,8 @@ public class ClassBuilder implements IBuilder{
 					item.setMin(measure.getMinValue());
 					item.setClassWithMax(measure.getClassWithMaxValue());
 					
-					classItem.addValue(item.getValue());
-					classItem.addMean(item.getMean());
+					classItem.addValue(measure.getCalculatedValue());
+					classItem.addMean(measure.getMeanValue());
 				}
 				
 				classItem.setMax(item.getMax());
