@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SwitchCase;
@@ -127,6 +128,10 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 		if(isSameMethod(node)) {
 			cyclomaticComplexityIndex++;
 			sumCyclomaticComplexity++;
+			if(node.getFinally() != null) {
+				cyclomaticComplexityIndex++;
+				sumCyclomaticComplexity++;
+			}
 			isFirstVisitingPerMethod = false;
 			return true;
 		}
@@ -252,13 +257,30 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(ReturnStatement node) {
-		if(isSameMethod(node) && node.getExpression() instanceof MethodInvocation) {
-			cyclomaticComplexityIndex++;
-			sumCyclomaticComplexity++;
-			isFirstVisitingPerMethod = false;
+		if(isSameMethod(node)){
+			inspectMethodInvocations(node.getExpression());
+			if(node.getExpression() instanceof ParenthesizedExpression) {
+				ParenthesizedExpression exp = (ParenthesizedExpression) node.getExpression();
+				if(exp.getExpression() instanceof ConditionalExpression) {
+					ConditionalExpression condExp = (ConditionalExpression) exp.getExpression();
+					inspectMethodInvocations(condExp.getThenExpression());
+					inspectMethodInvocations(condExp.getElseExpression());
+					cyclomaticComplexityIndex++;
+					sumCyclomaticComplexity++;
+					isFirstVisitingPerMethod = false;
+				}
+			}
 			return true;
 		}
 		return false;
+	}
+
+	private void inspectMethodInvocations(Expression node) {
+		if(node instanceof MethodInvocation) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+			isFirstVisitingPerMethod = false;
+		}
 	}
 	
 	/**
@@ -289,9 +311,9 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @return Double
+	 * @return double
 	 */
-	public Double getCyclomaticComplexityIndex(){
+	public double getCyclomaticComplexityIndex(){
 		if(cyclomaticComplexityIndex == 0d) cyclomaticComplexityIndex++;
 		return new BigDecimal(cyclomaticComplexityIndex, new MathContext(2, RoundingMode.UP)).doubleValue();
 	}
@@ -313,9 +335,9 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @return Double
+	 * @return double
 	 */
-	public Double getAllCyclomaticComplexity() {
+	public double getAllCyclomaticComplexity() {
 		if(sumCyclomaticComplexity == 0d) sumCyclomaticComplexity++;
 		return sumCyclomaticComplexity;
 	}
@@ -342,8 +364,8 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	private boolean isSameMethod(Statement node) {
 		if(node.getParent().getParent() instanceof MethodDeclaration) {
-			return ((MethodDeclaration) node.getParent().getParent())
-					.getName().toString().equals(methodName);
+			MethodDeclaration declaration = (MethodDeclaration) node.getParent().getParent();
+			return declaration.getName().toString().equals(methodName);
 		}
 		
 		return false;
@@ -359,11 +381,11 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 * @return boolean
 	 */
 	private boolean isSameMethod(CatchClause node) {
-		if(node.getParent().getParent() instanceof MethodDeclaration) {
-			return ((MethodDeclaration) node.getParent().getParent())
-					.getName().toString().equals(methodName);
+		if(node.getParent().getParent().getParent() instanceof MethodDeclaration) {
+			MethodDeclaration declaration = (MethodDeclaration) node.getParent()
+					.getParent().getParent();
+			return declaration.getName().toString().equals(methodName);
 		}
-		
 		return false;
 	}
 	
@@ -378,11 +400,24 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	private boolean isSameMethod(Expression node) {
 		if(node.getParent().getParent() instanceof MethodDeclaration) {
-			return ((MethodDeclaration) node.getParent().getParent())
-					.getName().toString().equals(methodName);
+			MethodDeclaration declaration = (MethodDeclaration) node.getParent().getParent();
+			return declaration.getName().toString().equals(methodName);
 		}
-		
 		return false;
+	}
+	
+	/**
+	 * Method that checks whether a TryStatement has a catch clause.
+	 * @author Mariana Azevedo
+	 * @since 06/07/2019
+	 * 
+	 * @param node - TryStatement
+	 */
+	public void checkCatchFinallyClausesInWeightMethodsClass(TryStatement node) {
+		if(!node.catchClauses().isEmpty()) {
+			cyclomaticComplexityIndex++;
+			sumCyclomaticComplexity++;
+		}
 	}
 	
 }

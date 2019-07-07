@@ -56,18 +56,16 @@ public class NumberOfChildrenJavaModel implements IJavaModel<ICompilationUnit>{
 			for (IType type : types) {
 				ITypeHierarchy th= type.newTypeHierarchy((IJavaProject) type.getAncestor(IJavaElement.JAVA_PROJECT), null);
 				
-				if (th != null) subtypesList = th.getAllSubtypes(type);
+				if (th != null) subtypesList = th.getSubtypes(type);
 				
 				if (subtypesList != null) length = subtypesList.length;
 				
-				Double value = new BigDecimal(length, new MathContext(2, RoundingMode.UP)).doubleValue();
+				double value = new BigDecimal(length, new MathContext(2, RoundingMode.UP)).doubleValue();
 				setNocValue(value);
 			}
 			
-		}catch (JavaModelException exception1) {
-			logger.error(exception1);
-		}catch (NullPointerException exception2){
-			logger.error(exception2);
+		}catch (JavaModelException | NullPointerException ex) {
+			logger.error(ex);
 		}
 	}
 	

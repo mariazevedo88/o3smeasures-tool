@@ -12,10 +12,13 @@ import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.ExpressionMethodReference;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SwitchCase;
 import org.eclipse.jdt.core.dom.TryStatement;
@@ -37,6 +40,8 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	private Double wmcIndex;
 	private CyclomaticComplexityVisitor visitor;
 	private static WeightMethodsPerClassVisitor instance;
+	
+	private String methodName;
 	
 	public WeightMethodsPerClassVisitor(){
 		super();
@@ -71,10 +76,9 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 		
 		for (Object type : node.types()){
 		
-			if ((type instanceof TypeDeclaration) && !((TypeDeclaration) type).isInterface()){
+			if ((type instanceof TypeDeclaration)){
 					
-				List<TypeDeclaration> bodyDeclarationsList = ((TypeDeclaration) type).
-						bodyDeclarations();
+				List<TypeDeclaration> bodyDeclarationsList = ((TypeDeclaration) type).bodyDeclarations();
 				Iterator<TypeDeclaration> itBodyDeclaration = bodyDeclarationsList.iterator();
 				
 				while (itBodyDeclaration.hasNext()){
@@ -125,6 +129,9 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	 * @param itStatement
 	 */
 	private void getStatementType(Object itStatement) {
+		
+		this.visitor.setMethodName(getMethodName());
+		
 		if (itStatement instanceof CatchClause){
 			this.visitor.visit((CatchClause)itStatement);
 		}else if (itStatement instanceof ForStatement){
@@ -135,6 +142,8 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 			this.visitor.visit((WhileStatement)itStatement);
 		}else if (itStatement instanceof TryStatement){
 			this.visitor.visit((TryStatement)itStatement);
+			this.visitor.checkCatchFinallyClausesInWeightMethodsClass
+				((TryStatement)itStatement);
 		}else if (itStatement instanceof ConditionalExpression){
 			this.visitor.visit((ConditionalExpression)itStatement);
 		}else if (itStatement instanceof SwitchCase){
@@ -143,6 +152,12 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 			this.visitor.visit((DoStatement)itStatement);
 		}else if (itStatement instanceof ExpressionStatement){
 			this.visitor.visit((ExpressionStatement)itStatement);
+		}else if(itStatement instanceof ExpressionMethodReference) {
+			this.visitor.visit((ExpressionMethodReference)itStatement);
+		}else if(itStatement instanceof LambdaExpression) {
+			this.visitor.visit((LambdaExpression)itStatement);
+		}else if(itStatement instanceof ReturnStatement) {
+			this.visitor.visit((ReturnStatement)itStatement);
 		}
 	}
 	
@@ -150,9 +165,10 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	 * Method to get the WMC value.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return Double
+	 * @return double
 	 */
-	public Double getWeightMethodsPerClassIndex(){
+	public double getWeightMethodsPerClassIndex(){
+		if(wmcIndex == 0d) wmcIndex++;
 		return new BigDecimal(this.wmcIndex, new MathContext(2, RoundingMode.UP)).doubleValue();
 	}
 	
@@ -165,5 +181,27 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 		this.wmcIndex = 0d;
 		this.visitor = CyclomaticComplexityVisitor.getInstance();
 		this.visitor.cleanVariables();
+	}
+	
+	/**
+	 * Method to set the name of the method evaluated.
+	 * @author Mariana Azevedo
+	 * @since 06/07/2019
+	 * 
+	 * @param methodName
+	 */
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+
+	/**
+	 * Method to get the name of the method evaluated.
+	 * @author Mariana Azevedo
+	 * @since 07/07/2019
+	 * 
+	 * @return String
+	 */
+	public String getMethodName() {
+		return methodName;
 	}
 }
