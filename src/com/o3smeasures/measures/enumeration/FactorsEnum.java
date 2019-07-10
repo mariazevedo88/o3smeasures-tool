@@ -11,7 +11,8 @@ public enum FactorsEnum {
 	INCREASE_MODULARITY("Increase of Modularity"),
 	HIGH_COHESION_METHODS("High Cohesion of Methods"),
 	TIGHT_LOOSE_COHESION("Tight and Loose Class Cohesion"),
-	COMPLEXITY_REDUCTION("Complexity Reduction");
+	COMPLEXITY_REDUCTION("Complexity Reduction"),
+	NONE("None");
 	
 	private String name;
 	

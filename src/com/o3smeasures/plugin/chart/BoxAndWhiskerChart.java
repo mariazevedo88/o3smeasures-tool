@@ -12,6 +12,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 
+import com.o3smeasures.measures.enumeration.FactorsEnum;
 import com.o3smeasures.measures.enumeration.O3SMeasuresConfigurationEnum;
 import com.o3smeasures.statistic.Factor;
 import com.o3smeasures.statistic.Indicator;
@@ -110,7 +111,7 @@ public class BoxAndWhiskerChart {
 			for (ItemMeasured item : items) {
 				
 				String factorName = O3SMeasuresConfigurationEnum.searchByValue(item.getName()).getFactor();
-				if (!factorName.equals("None") && !factorName.equals("High Cohesion of Methods")){
+				if (!factorName.equals(FactorsEnum.NONE.getName()) && !factorName.equals(FactorsEnum.HIGH_COHESION_METHODS.getName())){
 					Factor factor = factorsMap.computeIfAbsent(factorName, f -> new Factor(factorName, factorName, 0));
 					factor.getIndicators().add(new Indicator(item, 0.0));
 				}

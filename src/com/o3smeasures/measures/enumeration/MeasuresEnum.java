@@ -16,7 +16,7 @@ public enum MeasuresEnum {
 	NC("NC", "Number of Classes"),
 	NOM("NOM", "Number of Methods"),
 	RFC("RFC", "Response for Class"),
-	TCC("TCC", "Tight and Loose Class Cohesion"),
+	TCC("TCC", "Tight Class Cohesion"),
 	WMC("WMC", "Weight Methods per Class");
 	
 	private String acronym;

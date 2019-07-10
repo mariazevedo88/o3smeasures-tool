@@ -17,6 +17,7 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import com.o3smeasures.measures.enumeration.FactorsEnum;
 import com.o3smeasures.measures.enumeration.O3SMeasuresConfigurationEnum;
 import com.o3smeasures.statistic.Factor;
 import com.o3smeasures.statistic.Indicator;
@@ -143,7 +144,7 @@ public class BarChart {
 			for (ItemMeasured item : items) {
 				
 				String factorName = O3SMeasuresConfigurationEnum.searchByValue(item.getName()).getFactor();
-				if (!factorName.equals("None") && !factorName.equals("High Cohesion of Methods")){
+				if (!factorName.equals(FactorsEnum.NONE.getName()) && !factorName.equals(FactorsEnum.HIGH_COHESION_METHODS.getName())){
 					Factor factor = factorsMap.computeIfAbsent(factorName, f -> new Factor(factorName, factorName, 0));
 					factor.getIndicators().add(new Indicator(item, 0.0));
 					factor.setNumberOfIndicators(factor.getNumberOfIndicators()+1);
