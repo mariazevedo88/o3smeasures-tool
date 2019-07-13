@@ -370,5 +370,9 @@
 	<target name="apitools.generation" if="generateAPIDescription">
 		<apitooling.apigeneration  projectName="${projectName}" project="${projectLocation}" binary="${binary.folders}" target="${target.folder}" extramanifests="${extraManifests}" allownonapiproject="${allowNonApiProject}"		/>
 	</target>
+	
+	<target name="test">
+	    <mkdir dir="${version}/test"/>
+	</target>
 
 </project>
