@@ -11,3 +11,6 @@
 hs_err_pid*
 /bin/
 javaCompiler...args
+@dot
+${buildDirectory}/
+@dot.log

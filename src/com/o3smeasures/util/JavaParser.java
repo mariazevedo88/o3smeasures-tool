@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -62,7 +61,6 @@ public class JavaParser {
 	  * @since 13/07/2014
 	  * @param fileInputStream
 	  * @return CompilationUnit
-	  * @throws ParseException
 	  */
 	 public static CompilationUnit parseAST(FileInputStream fileInputStream, String className){
 		
@@ -91,7 +89,6 @@ public class JavaParser {
 	  * @since 13/07/2014
 	  * @param file
 	  * @return ICompilationUnit
-	  * @throws ParseException
 	  */
 	 public static ICompilationUnit parseJDT(File file){
 		
@@ -133,7 +130,6 @@ public class JavaParser {
 	 * @param javaFile
 	 * @param className
 	 * @return CompilationUnit
-	 * @throws ParseException
 	 * @throws IOException
 	 */
 	public static CompilationUnit getJavaFile(File javaFile, String className) throws IOException{
