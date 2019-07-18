@@ -62,13 +62,14 @@ public class JavaParser {
 	  * @param fileInputStream
 	  * @return CompilationUnit
 	  */
-	 public static CompilationUnit parseAST(FileInputStream fileInputStream, String className){
+	 @SuppressWarnings("deprecation")
+	public static CompilationUnit parseAST(FileInputStream fileInputStream, String className){
 		
 		 CompilationUnit cUnit = null; 
 		 ASTSession.getInstance().reset();
 		 
 		 if (cacheParser) {
-		   astParser = ASTParser.newParser(AST.JLS11);
+		   astParser = ASTParser.newParser(AST.JLS8);
            astParser.setKind(ASTParser.K_COMPILATION_UNIT);
    		   astParser.setResolveBindings(true);
            char[] source = getFileContent(fileInputStream);

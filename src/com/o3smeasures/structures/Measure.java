@@ -32,9 +32,10 @@ public abstract class Measure {
 	private List<Granularity> applicableGranularities;
 	private ASTParser parser = null;
 	
+	@SuppressWarnings("deprecation")
 	public Measure(){
 		applicableGranularities = new ArrayList<>(4);
-		parser = ASTParser.newParser(AST.JLS11);
+		parser = ASTParser.newParser(AST.JLS8);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setResolveBindings(true);
 	}
