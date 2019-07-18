@@ -6,20 +6,19 @@ Plug-in for Eclipse to measure software internal quality. It was developed as pa
 "Um Estudo Quantitativo para Caracterização da Qualidade Interna de Sistemas de Software Orientados a Objetos Open-Source"
 ("A Quantitative Study to Characterize the Internal Quality of Open-Source Object-Oriented Software Systems").
 
-
 ## About o3smeasures
 This is a plug-in for Eclipse to measure software internal quality in Java projects.
 In the plug-in development, we used the Eclipse IDE 4.4 (Luna), the Java Development Tools (JDT), the Plug-in Development Environment (PDE), and Abstract Syntax Tree (AST). In JDT, there are tools for manipulating Java code. In PDE, there are tools to develop and test plug-ins in the Eclipse IDE.
 
 ## Dependencies
 
-- Java 8
-- Eclipse IDE Mars or higher
+- Java 8 or higher
+- Eclipse IDE Oxygen or higher
 - junit 4 (4.11.0)
-- org.eclipse.ui
-- org.eclipse.core.resources
-- org.eclipse.jdt.core (3.8.3)
-- org.eclipse.core.runtime (3.8.0)
+- org.eclipse.ui (3.109.0 or higher)
+- org.eclipse.core.resources (3.12.0 or higher)
+- org.eclipse.jdt.core (3.8.3 or higher)
+- org.eclipse.core.runtime (3.13.0 or higher)
 
 ## How to use as an Eclipse Application
 
@@ -27,10 +26,16 @@ o3smeasures can be used as an Eclipse Application, importing the project into yo
 After import the o3smeasures project, with the right mouse button you need select the option 
 <b>Run as</b> -> <b>Eclipse Application</b>. In the runtime eclipse application, select a Java project to be measured and with the right mouse button, go to <b>O3SMeasures</b> -> <b>Measure</b>.
 
-## How to install 
+## How to install
+
+### On dropins directory 
 
 o3smeasures plug-in is installed in the Eclipse directory. You need to paste the .jar on the <b>dropins</b> directory (<b>eclipse</b> -> <b>dropins</b>).
 After installed the o3smeasures project into your workspace, select a Java project to be measured and with the right mouse button, go to <b>O3SMeasures</b> -> <b>Measure</b>.
+
+### Marketplace
+
+Run Eclipse, go to <b>Help menu</b> -> <b>Install New Software...</b> On the opening dialog add a new Remote site named o3smeasures with the following url `https://raw.githubusercontent.com/mariazevedo88/o3smeasures-plugin/master/site.xml` and follow the instructions.
 
 ## Displaying the views
 
