@@ -8,7 +8,7 @@ Plug-in for Eclipse to measure software internal quality. It was developed as pa
 
 ## About o3smeasures
 This is a plug-in for Eclipse to measure software internal quality in Java projects.
-In the plug-in development, we used the Eclipse IDE 4.4 (Luna), the Java Development Tools (JDT), the Plug-in Development Environment (PDE), and Abstract Syntax Tree (AST). In JDT, there are tools for manipulating Java code. In PDE, there are tools to develop and test plug-ins in the Eclipse IDE.
+In the plug-in development, we used the Eclipse IDE (Oxygen), the Java Development Tools (JDT), the Plug-in Development Environment (PDE), and Abstract Syntax Tree (AST). In JDT, there are tools for manipulating Java code. In PDE, there are tools to develop and test plug-ins in the Eclipse IDE.
 
 ## Dependencies
 
