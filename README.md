@@ -33,9 +33,13 @@ After import the o3smeasures project, with the right mouse button you need selec
 o3smeasures plug-in is installed in the Eclipse directory. You need to paste the .jar on the <b>dropins</b> directory (<b>eclipse</b> -> <b>dropins</b>).
 After installed the o3smeasures project into your workspace, select a Java project to be measured and with the right mouse button, go to <b>O3SMeasures</b> -> <b>Measure</b>.
 
-### Marketplace
+### Install new Software interface
 
 Run Eclipse, go to <b>Help menu</b> -> <b>Install New Software...</b> On the opening dialog add a new Remote site named o3smeasures with the following url `https://raw.githubusercontent.com/mariazevedo88/o3smeasures-plugin/master/site.xml` and follow the instructions.
+
+### On Eclipse Marketplace
+
+Run Eclipse, go to <b>Help menu</b> -> <b>Eclipse Marketplace...</b> On the opening dialog, search for `o3smeasures`. Finding the plugin, click on the <b>Install</b> button and follow the instructions.
 
 ## Displaying the views
 
@@ -43,7 +47,7 @@ The o3smeasures views can be enabled by the eclipse menu <b>Window</b> -> <b>Sho
  
 ## Exporting files
 
-To export the measurement results in the O3SMeasures Diagnostic view, with the right mouse button in the view, select the option <b>Export to CSV file</b> to export in the .csv format or <b>Export to XML file</b> to export in the .xml format.
+To export the measurement results in the <b>O3SMeasures Diagnostic view</b>, with the right mouse button in the view, select the option <b>Export to CSV file</b> to export in the `.csv` format or <b>Export to XML file</b> to export in the `.xml` format.
 
 ## Contributing
 
