@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.o3smeasures.measures.enumeration.MeasuresEnum;
 import com.o3smeasures.plugin.views.FactorsView;
 import com.o3smeasures.plugin.views.IndicatorsView;
 import com.o3smeasures.plugin.views.PieChartView;
@@ -51,32 +52,59 @@ public class Measurement extends AbstractHandler {
 			
 			Runnable update = () -> updateViews(event);
 			
-			dialog.run(true, true, new IRunnableWithProgress(){
-			    public void run(IProgressMonitor monitor) {
-			    	monitor.beginTask("Measuring", 16);
-			    	for (int i = 0; i < 16; i++){
-				    	
-			    		monitor.subTask("Getting measure values " + (i+1) + " of "+ 16 + "...");
-			    		Display.getDefault().syncExec(update);
-			    		monitor.worked(1);
-			    		
-			    		if(monitor.isCanceled()){
-		                    monitor.done();
-		                    return;
-		                }
-			    	}
-			    	monitor.done();
-			    }
-			});
-		} catch (InvocationTargetException exception1) {
-			logger.error(exception1);
-		} catch (InterruptedException exception2) {
-			logger.error(exception2);
-			// Restore interrupted state...
-		    Thread.currentThread().interrupt();
+			IRunnableWithProgress runnable = monitor -> controlMonitorProgress(update, monitor);
+			
+			dialog.run(true, true, runnable);
+		
+		} catch (InvocationTargetException | InterruptedException e) {
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Method that controls the progress monitor
+	 * @author Mariana Azevedo
+	 * @since 19/07/2019
+	 * @param update
+	 * @param monitor
+	 */
+	private void controlMonitorProgress(Runnable update, IProgressMonitor monitor) {
+		
+		Integer size = MeasuresEnum.values().length;
+		int[] numMeasures = new int[size];
+		
+		monitor.beginTask("Measuring", size);
+		
+		for (Integer i : numMeasures){
+	    	
+    		monitor.subTask("Getting measure values " + (i+1) + " of "+ size + "...");
+    		Display.getDefault().syncExec(update);
+    		monitor.worked(1);
+    		if(checkIfUserCancelledExecution(monitor)) break;
+    	}
+		
+		monitor.done();
+	}
+
+	/**
+	 * Method that check if the user cancelled the measuring' execution
+	 * @author Mariana Azevedo
+	 * @since 19/07/2019
+	 * 
+	 * @param monitor
+	 * @return true/false
+	 */
+	private boolean checkIfUserCancelledExecution(IProgressMonitor monitor) {
+		
+		if(monitor.isCanceled()){
+		    monitor.done();
+		    return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -117,7 +145,7 @@ public class Measurement extends AbstractHandler {
 	 * Method to get the shell instance.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return Shell
+	 * @return shell
 	 */
 	public Shell getShell() {
 		return shell;

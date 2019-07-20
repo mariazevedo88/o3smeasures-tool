@@ -50,18 +50,18 @@ public class SampleView extends ViewPart {
 	private DecimalFormat formatter;
 	Application o3smeasuresPlugin;
 
-	public SampleView() {
-		//Empty constructor
-	}
+	public SampleView() {/*Empty Constructor*/}
 
 	public ItemMeasured getItemMeasured(){
 		return itemsMeasured;
 	}
 
 	/**
-	 * Method that shows the given selection in this view.
+	 * Method that shows the given selection in this view
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param selection
 	 */
 	public void showSelection(ISelection selection) {
@@ -76,8 +76,10 @@ public class SampleView extends ViewPart {
 
 	/**
 	 * Method to create the project model for measurement
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param elem
 	 */
 	private void createProjectModel(IJavaElement elem) {
@@ -96,8 +98,10 @@ public class SampleView extends ViewPart {
 
 	/**
 	 * Method that creates the measurement views
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param project
 	 */
 	private void createViews(final IProject project) {
@@ -120,10 +124,12 @@ public class SampleView extends ViewPart {
 	}
 
 	/**
-	 * Method that implements a callback that will allow us
-	 * to create the viewer and initialize it.
+	 * Method that implements a callback that will allow us to create the viewer 
+	 * and initialize it.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param parent
 	 */
 	public void createPartControl(Composite parent) {
@@ -163,6 +169,14 @@ public class SampleView extends ViewPart {
 		createMenuManager();
 	}
 	
+	/**
+	 * Method that creates the description column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @param column
+	 */
 	private void createLabelProviderDescriptionColumn(TreeViewerColumn column) {
 		
 		column.setLabelProvider(new ColumnLabelProvider() {
@@ -176,6 +190,14 @@ public class SampleView extends ViewPart {
 		});
 	}
 
+	/**
+	 * Method that creates the resource max value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @param column
+	 */
 	private void createLabelProviderResourceMaxValueColumn(TreeViewerColumn column) {
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -188,6 +210,14 @@ public class SampleView extends ViewPart {
 		});
 	}
 
+	/**
+	 * Method that creates the max value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @param column
+	 */
 	private void createLabelProviderMaxColumn(TreeViewerColumn column) {
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -200,6 +230,14 @@ public class SampleView extends ViewPart {
 		});
 	}
 
+	/**
+	 * Method that creates the min value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @param column
+	 */
 	private void createLabelProviderMinColumn(TreeViewerColumn column) {
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -212,6 +250,14 @@ public class SampleView extends ViewPart {
 		});
 	}
 
+	/**
+	 * Method that creates the mean value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @param column
+	 */
 	private void createLabelProviderMeanColumn(TreeViewerColumn column) {
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -224,6 +270,14 @@ public class SampleView extends ViewPart {
 		});
 	}
 
+	/**
+	 * Method that creates the value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @param column
+	 */
 	private void createLabelProviderValueColumn(TreeViewerColumn column) {
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -239,9 +293,13 @@ public class SampleView extends ViewPart {
 
 	/**
 	 * Method to fulfill column basic informations
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
 	 * @param width
 	 * @param columnName
-	 * @return
+	 * @return column
 	 */
 	public TreeViewerColumn fulfillColumn(int width, String columnName) {
 
@@ -257,6 +315,7 @@ public class SampleView extends ViewPart {
 	 * Method to set the menu on the SWT widget. Once created, 
 	 * the menu can be accessed by selecting the project in the workspace 
 	 * of Eclipse IDE and selecting the "Measure" option with the right mouse button.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -302,10 +361,12 @@ public class SampleView extends ViewPart {
 	
 	/**
 	 * Method that instanciate and execute the plugin
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param project
-	 * @return
+	 * @return ItemMeasured
 	 * @throws CoreException
 	 */
 	private ItemMeasured createModel(IProject project) throws CoreException {
@@ -314,7 +375,8 @@ public class SampleView extends ViewPart {
 	}
 
 	/**
-	 * Method that pass the focus request to the viewer's control.
+	 * Method that pass the focus request to the viewer's control
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -324,6 +386,7 @@ public class SampleView extends ViewPart {
 	
 	/**
 	 * Class to create the project's content provider
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -354,7 +417,8 @@ public class SampleView extends ViewPart {
 	}
 	
 	/**
-	 * Method to set the project measured.
+	 * Method to set the project measured
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -363,7 +427,8 @@ public class SampleView extends ViewPart {
 	}
 	
 	/**
-	 * Method to get the project measured.
+	 * Method to get the project measured
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -372,7 +437,8 @@ public class SampleView extends ViewPart {
 	}
 	
 	/**
-	 * Method to get the application instance.
+	 * Method to get the application instance
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */

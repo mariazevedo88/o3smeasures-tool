@@ -1,6 +1,6 @@
 package com.o3smeasures.main;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -40,8 +40,10 @@ public class Application {
 	
 	/**
 	 * Method that executes the project's measurement
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param project
 	 * @return ItemMeasured
 	 * @throws CoreException
@@ -49,31 +51,32 @@ public class Application {
 	public ItemMeasured execute (IProject project) throws CoreException{
 		MeasureBuilder builder = new MeasureBuilder();
 		createMeasureArray();
-		measures.forEach(measure -> builder.addMeasure(measure));
+		measures.forEach(builder::addMeasure);
 		return builder.execute(project);
 	}
 	
+	/**
+	 * Method that return the list of measures
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return measures
+	 */
 	public List<Measure> getMeasures(){
 		return measures;
 	}
 	
+	/**
+	 * Method that creates the array of measures
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 */
 	private void createMeasureArray(){
-		measures = new ArrayList<>();
-		measures.add(new NumberOfClasses());
-		measures.add(new LinesOfCode());
-		measures.add(new NumberOfMethods());
-		measures.add(new NumberOfAttributes());
-		measures.add(new CyclomaticComplexity());
-		measures.add(new WeightMethodsPerClass());
-		measures.add(new DepthOfInheritanceTree());
-		measures.add(new NumberOfChildren());
-		measures.add(new CouplingBetweenObjects());
-		measures.add(new FanOut());
-		measures.add(new ResponseForClass());
-		measures.add(new LackCohesionMethods());
-		measures.add(new LackCohesionMethodsTwo());
-		measures.add(new LackCohesionMethodsFour());
-		measures.add(new TightClassCohesion());
-		measures.add(new LooseClassCohesion());
+		measures = Arrays.asList(new NumberOfClasses(), new LinesOfCode(), new NumberOfMethods(), new NumberOfAttributes(),
+			new CyclomaticComplexity(), new WeightMethodsPerClass(), new DepthOfInheritanceTree(), new NumberOfChildren(),
+			new CouplingBetweenObjects(), new FanOut(), new ResponseForClass(), new LackCohesionMethods(), 
+			new LackCohesionMethodsTwo(), new LackCohesionMethodsFour(), new TightClassCohesion(), new LooseClassCohesion());
 	}
 }
