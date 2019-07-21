@@ -1,5 +1,6 @@
 package com.o3smeasures.measures;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.internal.core.SourceMethod;
@@ -20,6 +21,8 @@ import com.o3smeasures.structures.Measure;
  */
 @SuppressWarnings("restriction")
 public class WeightMethodsPerClass extends Measure{
+	
+	private static final Logger logger = Logger.getLogger(WeightMethodsPerClass.class);
 
 	private double value;
 	private double mean;
@@ -141,26 +144,33 @@ public class WeightMethodsPerClass extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 
-		CompilationUnit parse = parse(unit);
-		WeightMethodsPerClassVisitor visitor = WeightMethodsPerClassVisitor.getInstance();
-		visitor.setMethodName(((SourceMethod)unit).getElementName());
-		visitor.cleanArraysAndVariable();
-		parse.accept(visitor);
-		
-		setCalculatedValue(getWeightMethodsPerClassIndex(visitor));
-		setMeanValue(getCalculatedValue());
-		
-		String elementName = "";
-		
-		if(parse.getJavaElement() == null) {
-			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-			elementName = clazz.getName().toString();
-		}else{
-			elementName = parse.getJavaElement().getElementName();
+		try {
+			
+			CompilationUnit parse = parse(unit);
+			WeightMethodsPerClassVisitor visitor = WeightMethodsPerClassVisitor.getInstance();
+			visitor.setMethodName(((SourceMethod)unit).getElementName());
+			visitor.cleanArraysAndVariable();
+			parse.accept(visitor);
+			
+			setCalculatedValue(getWeightMethodsPerClassIndex(visitor));
+			setMeanValue(getCalculatedValue());
+			
+			String elementName = "";
+			
+			if(parse.getJavaElement() == null) {
+				TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+				elementName = clazz.getName().toString();
+			}else{
+				elementName = parse.getJavaElement().getElementName();
+			}
+			
+			setMaxValue(getCalculatedValue(), elementName);
+			setMinValue(getCalculatedValue());
+
+		} catch (ClassCastException e) {
+			setCalculatedValue(0d);
+			logger.error(e);
 		}
-		
-		setMaxValue(getCalculatedValue(), elementName);
-		setMinValue(getCalculatedValue());
 	}
 	
 	/**

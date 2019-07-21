@@ -17,7 +17,7 @@ In the plug-in development, we used the Eclipse IDE (Oxygen), the Java Developme
 
 - Java 8 or higher
 - Eclipse IDE Oxygen or higher
-- junit 4 (4.11.0)
+- jUnit 5 (5.4.0)
 - org.eclipse.ui (3.109.0 or higher)
 - org.eclipse.core.resources (3.12.0 or higher)
 - org.eclipse.jdt.core (3.8.3 or higher)
@@ -28,6 +28,11 @@ In the plug-in development, we used the Eclipse IDE (Oxygen), the Java Developme
 o3smeasures can be used as an Eclipse Application, importing the project into your workspace.
 After import the o3smeasures project, with the right mouse button you need select the option 
 <b>Run as</b> -> <b>Eclipse Application</b>. In the runtime eclipse application, select a Java project to be measured and with the right mouse button, go to <b>O3SMeasures</b> -> <b>Measure</b>.
+
+## Executing tests
+
+After import the o3smeasures project, with the right mouse button you need select the option 
+<b>Run as</b> -> <b>JUnit Plug-in Test</b>.
 
 ## How to install
 

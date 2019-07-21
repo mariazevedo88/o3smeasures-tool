@@ -1,38 +1,48 @@
 package com.o3smeasures.test;
 
-import java.io.File;
-import java.io.IOException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.junit.Test;
+import java.io.File;
+
+import org.apache.log4j.Logger;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.o3smeasures.measures.CouplingBetweenObjects;
 import com.o3smeasures.util.JavaParser;
 
-import junit.framework.TestCase;
-
 /**
  * A class test that executes CBO measure test calculation 
  * and asserts the implementation behavior or state.
- * @see TestCase
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class CouplingBetweenObjectsTest extends TestCase{
+@DisplayName("CouplingBetweenObjectsTest")
+@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
+public class CouplingBetweenObjectsTest{
+	
+	private static final Logger logger = Logger.getLogger(CouplingBetweenObjectsTest.class.getName());
 
 	@Test
-	public void testMeasure() throws IOException{
+	@DisplayName("Measuring CBO")
+	public void testMeasure(){
 		
 		String className = "HelloWorld.java";
 		File javaFile = new File("./test/"+className);
 		
 		CouplingBetweenObjects cbo = new CouplingBetweenObjects();
-		CompilationUnit cUnit = JavaParser.getJavaFile(javaFile, className);
+		ICompilationUnit cUnit = JavaParser.parseJDT(javaFile);
 		cbo.measure(cUnit);
 			
-		assertEquals(1.0, cbo.getCalculatedValue());
-		System.out.println(cbo.getAcronym() + ": " + cbo.getCalculatedValue() + "\n");
+		assertEquals(0.0, cbo.getCalculatedValue());
+		logger.info(cbo.getAcronym() + ": " + cbo.getCalculatedValue() + "\n");
 	}
 }

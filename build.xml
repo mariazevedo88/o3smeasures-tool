@@ -7,7 +7,7 @@
 	<property name="basearch" value="${arch}"/>
 	<property name="basenl" value="${nl}"/>
 	<property name="bundleId" value="O3SMeasures"/>
-	<property name="bundleVersion" value="1.3.1"/>
+	<property name="bundleVersion" value="1.3.3"/>
 	<property name="p2.publishonerror" value="false"/>
 
 	<!-- Compiler settings. -->
@@ -50,7 +50,7 @@
 			<isset property="buildTempFolder"/>
 		</condition>
 		<property name="pluginTemp" value="${basedir}"/>
-		<condition property="build.result.folder" value="${pluginTemp}/O3SMeasures_1.3.1"		>
+		<condition property="build.result.folder" value="${pluginTemp}/O3SMeasures_1.3.3"		>
 			<isset property="buildTempFolder"/>
 		</condition>
 		<property name="build.result.folder" value="${basedir}"/>
@@ -80,7 +80,7 @@
 		<antcall target="gather.bin.parts">
 			<param name="destination.temp.folder" value="${temp.folder}/"/>
 		</antcall>
-		<jar destfile="${plugin.destination}/O3SMeasures_1.3.1.jar" basedir="${temp.folder}/O3SMeasures_1.3.1" filesetmanifest="merge"/>
+		<jar destfile="${plugin.destination}/O3SMeasures_1.3.3.jar" basedir="${temp.folder}/O3SMeasures_1.3.3" filesetmanifest="merge"/>
 		<delete dir="${temp.folder}"/>
 	</target>
 
@@ -175,22 +175,28 @@
 			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.eclipse.text_3.8.100.v20190306-1823.jar"/>
 			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.eclipse.team.core_3.8.500.v20190216-2155.jar"/>
 			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.eclipse.compare.core_3.6.400.v20190214-2156.jar"/>
-			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
-			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
+			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.junit.jupiter.api_5.4.0.v20190212-2109.jar"/>
+			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.opentest4j_1.1.1.v20190212-2109.jar"/>
+			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.junit.platform.commons_1.4.0.v20190212-2109.jar"/>
+			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.apiguardian_1.0.0.v20190212-2109.jar"/>
+			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.junit.jupiter.params_5.4.0.v20190212-2109.jar"/>
+			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.junit.jupiter.engine_5.4.0.v20190212-2109.jar"/>
+			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.junit.platform.engine_1.4.0.v20190212-2109.jar"/>
+			<pathelement path="../../Documents/eclipse-jee-2019-03-R/eclipse/plugins/org.eclipse.jface.text_3.15.100.v20190305-0811.jar"/>
 			<pathelement path="lib/jcommon-1.0.16.jar"/>
-			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.1/lib/jcommon-1.0.16.jar"/>
+			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.3/lib/jcommon-1.0.16.jar"/>
 			<pathelement path="lib/jcommon-1.0.17.jar"/>
-			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.1/lib/jcommon-1.0.17.jar"/>
+			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.3/lib/jcommon-1.0.17.jar"/>
 			<pathelement path="lib/jfreechart-1.0.14-swt.jar"/>
-			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.1/lib/jfreechart-1.0.14-swt.jar"/>
+			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.3/lib/jfreechart-1.0.14-swt.jar"/>
 			<pathelement path="lib/jfreechart-1.0.14.jar"/>
-			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.1/lib/jfreechart-1.0.14.jar"/>
+			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.3/lib/jfreechart-1.0.14.jar"/>
 			<pathelement path="lib/commons-csv-1.0.jar"/>
-			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.1/lib/commons-csv-1.0.jar"/>
+			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.3/lib/commons-csv-1.0.jar"/>
 			<pathelement path="lib/jsefa-1.0.0.RELEASE.jar"/>
-			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.1/lib/jsefa-1.0.0.RELEASE.jar"/>
+			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.3/lib/jsefa-1.0.0.RELEASE.jar"/>
 			<pathelement path="lib/log4j-1.2.17.jar"/>
-			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.1/lib/log4j-1.2.17.jar"/>
+			<pathelement path="${build.result.folder}/../O3SMeasures_1.3.3/lib/log4j-1.2.17.jar"/>
 		</path>
 		<!-- compile the source code -->
 		<javac destdir="${build.result.folder}/@dot" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}"		>
@@ -236,8 +242,8 @@
 	</target>
 
 	<target name="checkCompilationResults" if="compilation.error.occured">
-		<echo file="${compilation.problem.marker}" message="O3SMeasures_1.3.1${line.separator}compilation.error.occured=${compilation.error.occured}"/>
-		<eclipse.logCompileError log="${compilation.prereq.log}" bundle="O3SMeasures_1.3.1">
+		<echo file="${compilation.problem.marker}" message="O3SMeasures_1.3.3${line.separator}compilation.error.occured=${compilation.error.occured}"/>
+		<eclipse.logCompileError log="${compilation.prereq.log}" bundle="O3SMeasures_1.3.3">
 		</eclipse.logCompileError>
 	</target>
 
@@ -247,7 +253,7 @@
 	</target>
 
 	<target name="publish.bin.parts" depends="init" if="p2.publish.parts" unless="compilation.problem.marker.exists">
-		<mkdir dir="${build.result.folder}/O3SMeasures_1.3.1"/>
+		<mkdir dir="${build.result.folder}/O3SMeasures_1.3.3"/>
 		<copy todir="${build.result.folder}" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
 				<include name="META-INF/MANIFEST.MF"/>
@@ -270,13 +276,13 @@
 	</target>
 
 	<target name="gather.bin.parts" depends="init" if="destination.temp.folder">
-		<mkdir dir="${destination.temp.folder}/O3SMeasures_1.3.1"/>
-		<copy todir="${destination.temp.folder}/O3SMeasures_1.3.1" failonerror="true" overwrite="false">
+		<mkdir dir="${destination.temp.folder}/O3SMeasures_1.3.3"/>
+		<copy todir="${destination.temp.folder}/O3SMeasures_1.3.3" failonerror="true" overwrite="false">
 			<fileset dir="${build.result.folder}/@dot">
 				<include name="**"/>
 			</fileset>
 		</copy>
-		<copy todir="${destination.temp.folder}/O3SMeasures_1.3.1" failonerror="true" overwrite="true">
+		<copy todir="${destination.temp.folder}/O3SMeasures_1.3.3" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
 				<include name="plugin.xml"/>
 				<include name="META-INF/"/>
@@ -286,13 +292,21 @@
 				<include name="lib/jcommon-1.0.16.jar"/>
 				<include name="lib/jcommon-1.0.17.jar"/>
 				<include name="lib/log4j-1.2.17.jar"/>
+				<include name="icons/"/>
+				<include name="doc/"/>
+				<include name="build.xml"/>
+				<include name="build.properties"/>
+				<include name="log4j.properties"/>
+				<include name="src/"/>
+				<include name="OSGI-INF/"/>
+				<include name=".classpath"/>
 			</fileset>
 		</copy>
 		<antcall target="apitools.generation">
 			<param name="projectLocation" value="${basedir}"/>
 			<param name="binary.folders" value="${build.result.folder}/@dot;C:\Users\Mariana\workspace-java\o3smeasures-tool/lib/jfreechart-1.0.14-swt.jar;C:\Users\Mariana\workspace-java\o3smeasures-tool/lib/jcommon-1.0.16.jar;C:\Users\Mariana\workspace-java\o3smeasures-tool/lib/jfreechart-1.0.14.jar;C:\Users\Mariana\workspace-java\o3smeasures-tool/lib/commons-csv-1.0.jar;C:\Users\Mariana\workspace-java\o3smeasures-tool/lib/jsefa-1.0.0.RELEASE.jar;C:\Users\Mariana\workspace-java\o3smeasures-tool/lib/jcommon-1.0.17.jar;C:\Users\Mariana\workspace-java\o3smeasures-tool/lib/log4j-1.2.17.jar"/>
 			<param name="projectName" value="${bundleId}_${bundleVersion}"/>
-			<param name="target.folder" value="${destination.temp.folder}/O3SMeasures_1.3.1"/>
+			<param name="target.folder" value="${destination.temp.folder}/O3SMeasures_1.3.3"/>
 		</antcall>
 	</target>
 
@@ -300,10 +314,10 @@
 	</target>
 
 	<target name="gather.sources" depends="init" if="destination.temp.folder">
-		<mkdir dir="${destination.temp.folder}/O3SMeasures_1.3.1"/>
-		<copy file="${build.result.folder}/src.zip" todir="${destination.temp.folder}/O3SMeasures_1.3.1" failonerror="false" overwrite="false"/>
+		<mkdir dir="${destination.temp.folder}/O3SMeasures_1.3.3"/>
+		<copy file="${build.result.folder}/src.zip" todir="${destination.temp.folder}/O3SMeasures_1.3.3" failonerror="false" overwrite="false"/>
 		<antcall target="copy.src.includes">
-			<param name="source.destination.folder" value="${destination.temp.folder}/O3SMeasures_1.3.1"/>
+			<param name="source.destination.folder" value="${destination.temp.folder}/O3SMeasures_1.3.3"/>
 		</antcall>
 	</target>
 
@@ -319,14 +333,14 @@
 	<target name="copy.src.includes" depends="init">
 		<copy todir="${source.destination.folder}" failonerror="false" overwrite="false">
 			<fileset dir="${basedir}">
-				<include name="lib/"/>
+				<include name="bin/"/>
 			</fileset>
 		</copy>
 	</target>
 
 	<target name="gather.logs" depends="init" if="destination.temp.folder">
-		<mkdir dir="${destination.temp.folder}/O3SMeasures_1.3.1"/>
-		<copy todir="${destination.temp.folder}/O3SMeasures_1.3.1" failonerror="false" overwrite="false">
+		<mkdir dir="${destination.temp.folder}/O3SMeasures_1.3.3"/>
+		<copy todir="${destination.temp.folder}/O3SMeasures_1.3.3" failonerror="false" overwrite="false">
 			<fileset dir="${build.result.folder}">
 				<include name="@dot${logExtension}"/>
 			</fileset>
@@ -336,8 +350,8 @@
 	<target name="clean" depends="init" description="Clean the plug-in: O3SMeasures of all the zips, jars and logs created.">
 		<delete dir="${build.result.folder}/@dot"/>
 		<delete file="${build.result.folder}/src.zip"/>
-		<delete file="${plugin.destination}/O3SMeasures_1.3.1.jar"/>
-		<delete file="${plugin.destination}/O3SMeasures_1.3.1.zip"/>
+		<delete file="${plugin.destination}/O3SMeasures_1.3.3.jar"/>
+		<delete file="${plugin.destination}/O3SMeasures_1.3.3.zip"/>
 		<delete dir="${temp.folder}"/>
 		<delete file="${compilation.problem.marker}" quiet="true"/>
 	</target>
@@ -363,7 +377,7 @@
 				<include name="**/*.bin${logExtension}"/>
 			</fileset>
 		</delete>
-		<zip destfile="${plugin.destination}/O3SMeasures_1.3.1.zip" basedir="${temp.folder}" filesonly="true" whenempty="skip" update="false"/>
+		<zip destfile="${plugin.destination}/O3SMeasures_1.3.3.zip" basedir="${temp.folder}" filesonly="true" whenempty="skip" update="false"/>
 		<delete dir="${temp.folder}"/>
 	</target>
 

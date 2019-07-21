@@ -32,7 +32,7 @@ import com.o3smeasures.plugin.views.SampleView;
  */
 public class Measurement extends AbstractHandler {
 
-	static Logger logger = Logger.getLogger(Measurement.class);
+	private static final Logger logger = Logger.getLogger(Measurement.class);
 	private Shell shell;
 	
 	public Measurement() {
