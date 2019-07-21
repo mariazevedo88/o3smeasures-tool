@@ -6,7 +6,7 @@
 		<menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
 	    	<menu label="O3SMeasures"
                	  mnemonic="O3SMeasures" id="O3SMeasures.menu1">
-		    	  <command commandId="com.o3smeasures.popup.actions.Measurement"
+		    	  <command commandId="io.github.mariazevedo88.o3smeasures.popup.actions.Measurement"
 			               id="O3SMeasures.newAction"
 			               label="Measure"
 			               style="push"
@@ -32,31 +32,31 @@
 	<extension point="org.eclipse.ui.commands">
 		  <category id="o3smeasures" name="o3smeasures"></category>
 	      <command categoryId="o3smeasures"
-	      		   id="com.o3smeasures.popup.actions.Measurement"
+	      		   id="io.github.mariazevedo88.o3smeasures.popup.actions.Measurement"
 	               description="O3SMeasures"
 	               name="O3SMeasures"
-	               defaultHandler="com.o3smeasures.popup.actions.Measurement">
+	               defaultHandler="io.github.mariazevedo88.o3smeasures.popup.actions.Measurement">
 	      </command>
     </extension>
     
     <extension point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <view id="com.o3smeasures.plugin.views.SampleView"
+         <view id="io.github.mariazevedo88.o3smeasures.plugin.views.SampleView"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
          </view>
-         <view id="com.o3smeasures.plugin.views.PieChartView"
+         <view id="io.github.mariazevedo88.o3smeasures.plugin.views.PieChartView"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
          </view>
-         <view id="com.o3smeasures.plugin.views.FactorsView"
+         <view id="io.github.mariazevedo88.o3smeasures.plugin.views.FactorsView"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
          </view>
-         <view id="com.o3smeasures.plugin.views.IndicatorsView"
+         <view id="io.github.mariazevedo88.o3smeasures.plugin.views.IndicatorsView"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
@@ -67,35 +67,35 @@
     <extension point="org.eclipse.ui.views">
     	<category id="o3smeasures" name="o3smeasures"></category>
 	    <view category="o3smeasures"
-              class="com.o3smeasures.plugin.views.SampleView"
+              class="io.github.mariazevedo88.o3smeasures.plugin.views.SampleView"
               icon="icons/logo.gif"
-              id="com.o3smeasures.plugin.views.SampleView"
+              id="io.github.mariazevedo88.o3smeasures.plugin.views.SampleView"
               name="o3smeasures Diagnostic View">
 	    </view>
       	<view category="o3smeasures"
-              class="com.o3smeasures.plugin.views.PieChartView"
+              class="io.github.mariazevedo88.o3smeasures.plugin.views.PieChartView"
               icon="icons/logo.gif"
-              id="com.o3smeasures.plugin.views.PieChartView"
+              id="io.github.mariazevedo88.o3smeasures.plugin.views.PieChartView"
               name="o3smeasures PieChart View">
       	</view>
   		<view category="o3smeasures"
-          	  class="com.o3smeasures.plugin.views.FactorsView"
+          	  class="io.github.mariazevedo88.o3smeasures.plugin.views.FactorsView"
           	  icon="icons/logo.gif"
-          	  id="com.o3smeasures.plugin.views.FactorsView"
+          	  id="io.github.mariazevedo88.o3smeasures.plugin.views.FactorsView"
           	  name="o3smeasures Factors View">
       	</view>
       	<view category="o3smeasures"
-              class="com.o3smeasures.plugin.views.IndicatorsView"
+              class="io.github.mariazevedo88.o3smeasures.plugin.views.IndicatorsView"
               icon="icons/logo.gif"
-              id="com.o3smeasures.plugin.views.IndicatorsView"
+              id="io.github.mariazevedo88.o3smeasures.plugin.views.IndicatorsView"
               name="o3smeasures Indicators View">
       	</view>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="com.o3smeasures.preferences.O3SMeasuresPreferencePage"
-            id="com.o3smeasures.preferencePage"
+            class="io.github.mariazevedo88.o3smeasures.preferences.O3SMeasuresPreferencePage"
+            id="io.github.mariazevedo88.o3smeasures.preferencePage"
             name="o3smeasures Preferences">
       </page>
    </extension>
