@@ -24,16 +24,16 @@ import com.o3smeasures.javamodel.generic.IJavaModel;
  */
 public class DepthOfInheritanceTreeJavaModel implements IJavaModel<ICompilationUnit>{
 
-	static Logger logger = Logger.getLogger(DepthOfInheritanceTreeJavaModel.class);
+	private static final Logger logger = Logger.getLogger(DepthOfInheritanceTreeJavaModel.class);
 	
 	private IType[] superclassesList;
-	private static int size = 20;
+	private static final int SIZE = 20;
 	private Double ditValue;
 	
 	private static DepthOfInheritanceTreeJavaModel instance;
 	
 	public DepthOfInheritanceTreeJavaModel() {
-		this.superclassesList = new IType[size];
+		this.superclassesList = new IType[SIZE];
 	}
 	
 	public static DepthOfInheritanceTreeJavaModel getInstance(){
@@ -65,10 +65,9 @@ public class DepthOfInheritanceTreeJavaModel implements IJavaModel<ICompilationU
 				setDitValue(value);
 			}
 			
-		}catch (JavaModelException javaException) {
-			logger.error(javaException);
-		}catch (NullPointerException nullPointerException){
-			logger.error(nullPointerException);
+		}catch (JavaModelException | NullPointerException e) {
+			setDitValue(0d);
+			logger.error(e);
 		}
 	}
 	
@@ -78,7 +77,7 @@ public class DepthOfInheritanceTreeJavaModel implements IJavaModel<ICompilationU
 	 * @since 13/07/2014
 	 */
 	public void cleanArray(){
-		this.superclassesList = new IType[size];
+		this.superclassesList = new IType[SIZE];
 	}
 
 	/**

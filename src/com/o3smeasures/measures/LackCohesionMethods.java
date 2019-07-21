@@ -138,7 +138,7 @@ public class LackCohesionMethods extends Measure{
 	public <T> void measure(T unit) {
 		
 		LackCohesionMethodsJavaModel lcomJavaModel = LackCohesionMethodsJavaModel.getInstance();
-		lcomJavaModel.setLcomType("LCOM");
+		lcomJavaModel.setLcomType(MeasuresEnum.LCOM.getAcronym());
 		lcomJavaModel.cleanMapsAndVariables();
 		lcomJavaModel.calculateValue((ICompilationUnit)unit);
 		

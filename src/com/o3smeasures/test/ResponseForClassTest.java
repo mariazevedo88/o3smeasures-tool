@@ -1,38 +1,48 @@
 package com.o3smeasures.test;
 
-import java.io.File;
-import java.io.IOException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.junit.Test;
+import java.io.File;
+
+import org.apache.log4j.Logger;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.o3smeasures.measures.ResponseForClass;
 import com.o3smeasures.util.JavaParser;
 
-import junit.framework.TestCase;
-
 /**
  * A class test that executes RFC measure test calculation 
  * and asserts the implementation behavior or state.
- * @see TestCase
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class ResponseForClassTest extends TestCase{
+@DisplayName("ResponseForClassTest")
+@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
+public class ResponseForClassTest {
 
+	private static final Logger logger = Logger.getLogger(ResponseForClassTest.class.getName());
+	
 	@Test
-	public void testMeasure() throws IOException{
+	@DisplayName("Measuring RFC")
+	public void testMeasure(){
 		
 		String className = "HelloWorld.java";
 		File javaFile = new File("./test/"+className);
 		
 		ResponseForClass rfc = new ResponseForClass();
-		CompilationUnit cUnit = JavaParser.getJavaFile(javaFile, className);
+		ICompilationUnit cUnit = JavaParser.parseJDT(javaFile);
 		rfc.measure(cUnit);
 			
-		assertEquals(5.0, rfc.getCalculatedValue());
-		System.out.println(rfc.getAcronym() + ": " + rfc.getCalculatedValue() + "\n");
+		assertEquals(0.0, rfc.getCalculatedValue());
+		logger.info(rfc.getAcronym() + ": " + rfc.getCalculatedValue() + "\n");
 	}
 }

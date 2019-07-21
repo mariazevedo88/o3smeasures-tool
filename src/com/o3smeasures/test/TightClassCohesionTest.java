@@ -1,28 +1,39 @@
 package com.o3smeasures.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.o3smeasures.measures.TightClassCohesion;
 import com.o3smeasures.util.JavaParser;
 
-import junit.framework.TestCase;
-
 /**
  * A class test that executes TCC measure test calculation 
  * and asserts the implementation behavior or state.
- * @see TestCase
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class TightClassCohesionTest extends TestCase{
+@DisplayName("TightClassCohesionTest")
+@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
+public class TightClassCohesionTest {
+	
+	private static final Logger logger = Logger.getLogger(TightClassCohesionTest.class.getName());
 
 	@Test
+	@DisplayName("Measuring TCC")
 	public void testMeasure() throws IOException{
 		
 		String className = "HelloWorld.java";
@@ -32,7 +43,7 @@ public class TightClassCohesionTest extends TestCase{
 		CompilationUnit cUnit = JavaParser.getJavaFile(javaFile, className);
 		tcc.measure(cUnit);
 			
-		assertEquals(20.0, tcc.getCalculatedValue());
-		System.out.println(tcc.getAcronym() + ": " + tcc.getCalculatedValue() + "\n");
+		assertEquals(0.2, tcc.getCalculatedValue());
+		logger.info(tcc.getAcronym() + ": " + tcc.getCalculatedValue() + "\n");
 	}
 }

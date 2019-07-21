@@ -21,7 +21,7 @@ import com.o3smeasures.structures.Measure;
  */
 public class MethodBuilder implements IBuilder{
 
-	static Logger logger = Logger.getLogger(MethodBuilder.class);
+	private static final Logger logger = Logger.getLogger(MethodBuilder.class);
 	private ICompilationUnit myClass;
 	
 	public MethodBuilder(ICompilationUnit myClass){

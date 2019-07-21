@@ -34,7 +34,7 @@ import org.eclipse.jdt.core.dom.AST;
  */
 public class JavaParser {
 	
-	 static Logger logger = Logger.getLogger(JavaParser.class);	
+	 private static final Logger logger = Logger.getLogger(JavaParser.class);	
 	
 	 private static ASTParser astParser;
 	 private static boolean cacheParser = true;
@@ -54,15 +54,15 @@ public class JavaParser {
         }
      }
 	 
-	 /**
-	  * Method that parses a compilation unit and creates the AST DOM to manipulate
-	  * the source code on an file.
-	  * @author Mariana Azevedo
-	  * @since 13/07/2014
-	  * @param fileInputStream
-	  * @return CompilationUnit
-	  */
-	 @SuppressWarnings("deprecation")
+	/**
+	 * Method that parses a compilation unit and creates the AST DOM to manipulate
+	 * the source code on an file.
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * @param fileInputStream
+	 * @return CompilationUnit
+	 */
+	@SuppressWarnings("deprecation")
 	public static CompilationUnit parseAST(FileInputStream fileInputStream, String className){
 		
 		 CompilationUnit cUnit = null; 
@@ -93,19 +93,19 @@ public class JavaParser {
 	  */
 	 public static ICompilationUnit parseJDT(File file){
 		
-		IPath path = Path.fromOSString(file.getAbsolutePath());
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IFile source = workspace.getRoot().getFileForLocation(path);
-		return (ICompilationUnit) JavaCore.create(source);
+  	    IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IPath path = Path.fromOSString(file.getPath());
+		IFile source = workspace.getRoot().getFile(path);
+		return JavaCore.createCompilationUnitFrom(source);
 	 }
 
-	 /**
-	  * Method to get the content of java file.
-	  * @author Mariana Azevedo
-	  * @since 13/07/2014
-	  * @param fileInputStream
-	  * @return char[]
-	  */
+	/**
+	 * Method to get the content of java file.
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * @param fileInputStream
+	 * @return char[]
+	 */
 	public static char[] getFileContent(FileInputStream fileInputStream) {
 	    StringBuilder strBuilder = new StringBuilder();
 	    Reader reader;

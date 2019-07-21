@@ -24,7 +24,7 @@ import com.o3smeasures.structures.Measure;
  */
 public class CouplingBetweenObjects extends Measure{
 	
-	static Logger logger = Logger.getLogger(CouplingBetweenObjects.class);
+	private static final Logger logger = Logger.getLogger(CouplingBetweenObjects.class);
 
 	private double value;
 	private double mean;
@@ -150,31 +150,34 @@ public class CouplingBetweenObjects extends Measure{
 		IType[] iTypes = null;
 		
 		try {
+			
 			iTypes = ((ICompilationUnit)unit).getTypes();
+			
+			CompilationUnit parse = parse(unit);
+			CouplingBetweenObjectsVisitor visitor = CouplingBetweenObjectsVisitor.getInstance();
+			visitor.cleanArrayAndVariable();
+			visitor.addListOfTypes(iTypes);
+			parse.accept(visitor);
+			
+			setCalculatedValue(getCouplingBetweenObjectsValue(visitor));
+			setMeanValue(getCalculatedValue());
+			
+			String elementName = "";
+			
+			if(parse.getJavaElement() == null) {
+				TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+				elementName = clazz.getName().toString();
+			}else{
+				elementName = parse.getJavaElement().getElementName();
+			}
+			
+			setMaxValue(getCalculatedValue(), elementName);
+			setMinValue(getCalculatedValue());
+			
 		} catch (JavaModelException exception) {
+			setCalculatedValue(0d);
 			logger.error(exception);
 		}
-		
-		CompilationUnit parse = parse(unit);
-		CouplingBetweenObjectsVisitor visitor = CouplingBetweenObjectsVisitor.getInstance();
-		visitor.cleanArrayAndVariable();
-		visitor.addListOfTypes(iTypes);
-		parse.accept(visitor);
-
-		setCalculatedValue(getCouplingBetweenObjectsValue(visitor));
-		setMeanValue(getCalculatedValue());
-		
-		String elementName = "";
-		
-		if(parse.getJavaElement() == null) {
-			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-			elementName = clazz.getName().toString();
-		}else{
-			elementName = parse.getJavaElement().getElementName();
-		}
-		
-		setMaxValue(getCalculatedValue(), elementName);
-		setMinValue(getCalculatedValue());
 	}
 	
 	/**

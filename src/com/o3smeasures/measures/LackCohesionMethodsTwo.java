@@ -135,7 +135,7 @@ public class LackCohesionMethodsTwo extends Measure{
 	public void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
 	}
-
+	
 	/**
 	 * @see Measure#measure
 	 */
@@ -143,7 +143,7 @@ public class LackCohesionMethodsTwo extends Measure{
 	public <T> void measure(T unit) {
 		
 		LackCohesionMethodsJavaModel lcomJavaModel = LackCohesionMethodsJavaModel.getInstance();
-		lcomJavaModel.setLcomType("LCOM2");
+		lcomJavaModel.setLcomType(MeasuresEnum.LCOM2.getAcronym());
 		lcomJavaModel.cleanMapsAndVariables();
 		lcomJavaModel.calculateValue((ICompilationUnit)unit);
 		

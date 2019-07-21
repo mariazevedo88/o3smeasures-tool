@@ -24,7 +24,7 @@ import com.o3smeasures.structures.Measure;
  */
 public class ResponseForClass extends Measure{
 
-	static Logger logger = Logger.getLogger(ResponseForClass.class);
+	private static final Logger logger = Logger.getLogger(ResponseForClass.class);
 	
 	private double value;
 	private double mean;
@@ -158,30 +158,32 @@ public class ResponseForClass extends Measure{
 				iMethods = iType.getMethods();
 			}
 			
+			CompilationUnit parse = parse(unit);
+			ResponseForClassVisitor visitor = ResponseForClassVisitor.getInstance();
+			visitor.cleanVariables();
+			visitor.addListOfMethodsDeclaration(iMethods);
+			parse.accept(visitor);
+			
+			setCalculatedValue(getResponseForClassValue(visitor));
+			setMeanValue(getCalculatedValue());
+			
+			String elementName = "";
+			
+			if(parse.getJavaElement() == null) {
+				TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+				elementName = clazz.getName().toString();
+			}else{
+				elementName = parse.getJavaElement().getElementName();
+			}
+			
+			setMaxValue(getCalculatedValue(), elementName);
+			setMinValue(getCalculatedValue());
+			
 		} catch (JavaModelException exception) {
+			setCalculatedValue(0d);
 			logger.error(exception);
 		}
 		
-		CompilationUnit parse = parse(unit);
-		ResponseForClassVisitor visitor = ResponseForClassVisitor.getInstance();
-		visitor.cleanVariables();
-		visitor.addListOfMethodsDeclaration(iMethods);
-		parse.accept(visitor);
-
-		setCalculatedValue(getResponseForClassValue(visitor));
-		setMeanValue(getCalculatedValue());
-		
-		String elementName = "";
-		
-		if(parse.getJavaElement() == null) {
-			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-			elementName = clazz.getName().toString();
-		}else{
-			elementName = parse.getJavaElement().getElementName();
-		}
-		
-		setMaxValue(getCalculatedValue(), elementName);
-		setMinValue(getCalculatedValue());
 	}
 	
 	/**

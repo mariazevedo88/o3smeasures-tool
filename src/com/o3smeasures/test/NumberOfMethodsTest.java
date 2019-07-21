@@ -1,28 +1,39 @@
 package com.o3smeasures.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.o3smeasures.measures.NumberOfMethods;
 import com.o3smeasures.util.JavaParser;
 
-import junit.framework.TestCase;
-
 /**
  * A class test that executes NOM measure test calculation 
  * and asserts the implementation behavior or state.
- * @see TestCase
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class NumberOfMethodsTest extends TestCase{
+@DisplayName("NumberOfMethodsTest")
+@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
+public class NumberOfMethodsTest {
+	
+	private static final Logger logger = Logger.getLogger(NumberOfMethodsTest.class.getName());
 	
 	@Test
+	@DisplayName("Measuring NOM")
 	public void testMeasure() throws IOException{
 		
 		String className = "HelloWorld.java";
@@ -33,7 +44,7 @@ public class NumberOfMethodsTest extends TestCase{
 		nom.measure(cUnit);
 			
 		assertEquals(5.0, nom.getCalculatedValue());
-		System.out.println(nom.getAcronym() + ": " + nom.getCalculatedValue() + "\n");
+		logger.info(nom.getAcronym() + ": " + nom.getCalculatedValue() + "\n");
 	}
 
 }

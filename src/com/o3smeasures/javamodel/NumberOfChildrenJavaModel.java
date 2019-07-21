@@ -24,16 +24,16 @@ import com.o3smeasures.javamodel.generic.IJavaModel;
  */
 public class NumberOfChildrenJavaModel implements IJavaModel<ICompilationUnit>{
 
-	static Logger logger = Logger.getLogger(NumberOfChildrenJavaModel.class);
+	private static final Logger logger = Logger.getLogger(NumberOfChildrenJavaModel.class);
 	
 	private IType[] subtypesList;
-	private static int size = 20;
+	private static final int SIZE = 20;
 	private Double nocValue;
 	
 	private static NumberOfChildrenJavaModel instance;
 	
 	public NumberOfChildrenJavaModel (){
-		this.subtypesList = new IType[size];
+		this.subtypesList = new IType[SIZE];
 	}
 	
 	public static NumberOfChildrenJavaModel getInstance(){
@@ -64,8 +64,9 @@ public class NumberOfChildrenJavaModel implements IJavaModel<ICompilationUnit>{
 				setNocValue(value);
 			}
 			
-		}catch (JavaModelException | NullPointerException ex) {
-			logger.error(ex);
+		}catch (JavaModelException | NullPointerException e) {
+			setNocValue(0d);
+			logger.error(e);
 		}
 	}
 	
@@ -75,7 +76,7 @@ public class NumberOfChildrenJavaModel implements IJavaModel<ICompilationUnit>{
 	 * @since 13/07/2014
 	 */
 	public void cleanArray(){
-		this.subtypesList = new IType[size];
+		this.subtypesList = new IType[SIZE];
 	}
 
 	/**

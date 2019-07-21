@@ -33,7 +33,7 @@ import com.o3smeasures.javamodel.generic.IJavaModel;
  */
 public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit>{
 
-	static Logger logger = Logger.getLogger(LackCohesionMethodsJavaModel.class);
+	private static final Logger logger = Logger.getLogger(LackCohesionMethodsJavaModel.class);
 	
 	private Map<String, HashSet<String>> sharedAttributesPerMethods;
 	private Map<String, HashSet<String>> nonSharedAttributesPerMethods;

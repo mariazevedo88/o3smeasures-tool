@@ -25,9 +25,7 @@ public class Activator extends AbstractUIPlugin implements IPropertyChangeListen
 	
 	private ListenerList<IPropertyChangeListener> listeners = new ListenerList<>();
 	
-	public Activator() {
-		//EmptyConstructor
-	}
+	public Activator() { /* EmptyConstructor */ }
 
 	/**
 	 * (non-Javadoc)

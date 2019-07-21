@@ -68,27 +68,27 @@
     	<category id="o3smeasures" name="o3smeasures"></category>
 	    <view category="o3smeasures"
               class="com.o3smeasures.plugin.views.SampleView"
-              icon="icons/eclipse16.gif"
+              icon="icons/logo.gif"
               id="com.o3smeasures.plugin.views.SampleView"
-              name="O3SMeasures Diagnostic View">
+              name="o3smeasures Diagnostic View">
 	    </view>
       	<view category="o3smeasures"
               class="com.o3smeasures.plugin.views.PieChartView"
-              icon="icons/eclipse16.gif"
+              icon="icons/logo.gif"
               id="com.o3smeasures.plugin.views.PieChartView"
-              name="O3SMeasures PieChart View">
+              name="o3smeasures PieChart View">
       	</view>
   		<view category="o3smeasures"
           	  class="com.o3smeasures.plugin.views.FactorsView"
-          	  icon="icons/eclipse16.gif"
+          	  icon="icons/logo.gif"
           	  id="com.o3smeasures.plugin.views.FactorsView"
-          	  name="O3SMeasures Factors View">
+          	  name="o3smeasures Factors View">
       	</view>
       	<view category="o3smeasures"
               class="com.o3smeasures.plugin.views.IndicatorsView"
-              icon="icons/eclipse16.gif"
+              icon="icons/logo.gif"
               id="com.o3smeasures.plugin.views.IndicatorsView"
-              name="O3SMeasures Indicators View">
+              name="o3smeasures Indicators View">
       	</view>
    </extension>
    <extension
@@ -96,7 +96,7 @@
       <page
             class="com.o3smeasures.preferences.O3SMeasuresPreferencePage"
             id="com.o3smeasures.preferencePage"
-            name="O3SMeasures Preferences">
+            name="o3smeasures Preferences">
       </page>
    </extension>
 
