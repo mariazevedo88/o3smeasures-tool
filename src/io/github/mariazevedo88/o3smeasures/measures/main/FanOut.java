@@ -1,22 +1,23 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
-import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.javamodel.NumberOfChildrenJavaModel;
+import io.github.mariazevedo88.o3smeasures.astvisitors.FanOutVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement the NOC - Number of children measure. 
- * Simply measures the number of immediate descendants of the class.
+ * Class that implement Fan-out measure, which is defined as the number 
+ * of other classes referenced by a class.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class NumberOfChildren extends Measure{
+public class FanOut extends Measure{
 
 	private double value;
 	private double mean;
@@ -25,7 +26,7 @@ public class NumberOfChildren extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public NumberOfChildren(){
+	public FanOut(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -33,7 +34,7 @@ public class NumberOfChildren extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		addApplicableGranularity(GranularityEnum.PACKAGE);
 	}
 	
 	/**
@@ -41,7 +42,7 @@ public class NumberOfChildren extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.NOC.getName();
+		return MeasuresEnum.FAN_OUT.getName();
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class NumberOfChildren extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.NOC.getAcronym();
+		return MeasuresEnum.FAN_OUT.getAcronym();
 	}
 
 	/**
@@ -57,7 +58,7 @@ public class NumberOfChildren extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "It is the number of direct descendants (subclasses) for each class.";
+		return "Defined as the number of other classes referenced by a class.";
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class NumberOfChildren extends Measure{
 	public double getMaxValue() {
 		return max;
 	}
-	
+
 	/**
 	 * @see Measure#getMeanValue
 	 */
@@ -113,7 +114,7 @@ public class NumberOfChildren extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Inheritance";
+		return "Coupling";
 	}
 	
 	/**
@@ -138,16 +139,38 @@ public class NumberOfChildren extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
-		NumberOfChildrenJavaModel nocJavaModel = NumberOfChildrenJavaModel.getInstance();
-		nocJavaModel.calculateValue((ICompilationUnit)unit);
-		nocJavaModel.cleanArray();
-		
-		setCalculatedValue(Math.abs(nocJavaModel.getNocValue()));
+		CompilationUnit parse = parse(unit);
+		FanOutVisitor visitor = FanOutVisitor.getInstance();
+		visitor.cleanArray();
+		parse.accept(visitor);
+
+		setCalculatedValue(getFanOutValue(visitor));
 		setMeanValue(getCalculatedValue());
-		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
 		setMinValue(getCalculatedValue());
 	}
 	
+	/**
+	 * Method to get the FOUT value for a class.
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * @param visitor
+	 * @return Double
+	 */
+	private Double getFanOutValue(FanOutVisitor visitor){
+		 return Math.abs(visitor.getFanOutValue());
+	}
+
 	/**
 	 * @see Measure#setMeanValue
 	 */

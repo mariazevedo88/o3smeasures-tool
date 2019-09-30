@@ -1,4 +1,4 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -34,7 +34,7 @@ public class NumberOfMethods extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PROJECT);
+		addApplicableGranularity(GranularityEnum.PROJECT);
 	}
 	
 	/**

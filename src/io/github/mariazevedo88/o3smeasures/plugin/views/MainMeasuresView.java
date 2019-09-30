@@ -39,18 +39,18 @@ import io.github.mariazevedo88.o3smeasures.util.FileExport;
  * @since 13/07/2014
  *
  */
-public class SampleView extends ViewPart {
+public class MainMeasuresView extends ViewPart {
 
-	static Logger logger = Logger.getLogger(SampleView.class);
-	public static final String ID = "io.github.mariazevedo88.o3smeasures.plugin.views.SampleView";
+	private static final Logger logger = Logger.getLogger(MainMeasuresView.class);
+	public static final String ID = "io.github.mariazevedo88.o3smeasures.plugin.views.MainMeasuresView";
 
 	private TreeViewer viewer;
 	private ItemMeasured itemsMeasured;
 	private IProject project;
 	private DecimalFormat formatter;
-	Application o3smeasuresPlugin;
+	private Application o3smeasuresPlugin;
 
-	public SampleView() {/*Empty Constructor*/}
+	public MainMeasuresView() {/*Empty Constructor*/}
 
 	public ItemMeasured getItemMeasured(){
 		return itemsMeasured;
@@ -371,7 +371,7 @@ public class SampleView extends ViewPart {
 	 */
 	private ItemMeasured createModel(IProject project) throws CoreException {
 		o3smeasuresPlugin = new Application();
-		return o3smeasuresPlugin.execute(project);
+		return o3smeasuresPlugin.executeMainMeasures(project);
 	}
 
 	/**
@@ -432,7 +432,7 @@ public class SampleView extends ViewPart {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
-	private IProject getProject(){
+	public IProject getProject(){
 		return project;
 	}
 	

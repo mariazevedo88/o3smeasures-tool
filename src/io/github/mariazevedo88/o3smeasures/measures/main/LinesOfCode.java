@@ -1,22 +1,22 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.LinesOfCodeVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement the NC - Number Of Classes measure, which indicates
- * the number of classes of a project. The range is [0,∞].
+ * Class that implement LOC - Lines of Code measure.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class NumberOfClasses extends Measure{
+public class LinesOfCode extends Measure{
 
 	private double value;
 	private double mean;
@@ -25,7 +25,7 @@ public class NumberOfClasses extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;	
 	
-	public NumberOfClasses(){
+	public LinesOfCode(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -33,7 +33,7 @@ public class NumberOfClasses extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PROJECT);
+		addApplicableGranularity(GranularityEnum.PROJECT);
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class NumberOfClasses extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.NC.getName();
+		return MeasuresEnum.LOC.getName();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class NumberOfClasses extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.NC.getAcronym();
+		return MeasuresEnum.LOC.getAcronym();
 	}
 
 	/**
@@ -57,15 +57,7 @@ public class NumberOfClasses extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Return the number of classes and inner classes of a class in a project.";
-	}
-
-	/**
-	 * @see Measure#getProperty
-	 */
-	@Override
-	public String getProperty() {
-		return "Size";
+		return "Number of the lines of the code in a project.";
 	}
 
 	/**
@@ -117,11 +109,11 @@ public class NumberOfClasses extends Measure{
 	}
 
 	/**
-	 * @see Measure#setMeanValue
+	 * @see Measure#getProperty
 	 */
 	@Override
-	public void setMeanValue(double value) {
-		this.mean = value;
+	public String getProperty() {
+		return "Size";
 	}
 	
 	/**
@@ -146,14 +138,13 @@ public class NumberOfClasses extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
-		// Now create the AST for the ICompilationUnits
 		CompilationUnit parse = parse(unit);
-		ClassVisitor visitor = ClassVisitor.getInstance();
+		LinesOfCodeVisitor visitor = LinesOfCodeVisitor.getInstance();
 		visitor.cleanVariable();
 		parse.accept(visitor);
-
-		setCalculatedValue(getNumberOfClasses(visitor));
-		setMeanValue(0d);
+		
+		setCalculatedValue(getNumberOfLinesOfCodeValue(visitor));
+		setMeanValue(getCalculatedValue());
 		
 		String elementName = "";
 		
@@ -169,14 +160,24 @@ public class NumberOfClasses extends Measure{
 	}
 	
 	/**
-	 * Method to get the NC value for a project.
+	 * Method to get the LOC value for a class.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param visitor
-	 * @return int
+	 * @return Double
 	 */
-	private int getNumberOfClasses(ClassVisitor visitor){
-		 return visitor.getNumOfClasses();
+	private Double getNumberOfLinesOfCodeValue(LinesOfCodeVisitor visitor){
+		return Math.abs(visitor.getNumberOfLinesOfCode());
+	}
+
+	/**
+	 * @see Measure#setMeanValue
+	 */
+	@Override
+	public void setMeanValue(double value) {
+		if (ClassVisitor.getNumOfProjectClasses() > 0d){
+			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
+		}
 	}
 
 	/**

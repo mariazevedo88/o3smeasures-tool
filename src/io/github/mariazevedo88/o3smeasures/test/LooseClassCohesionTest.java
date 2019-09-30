@@ -14,7 +14,7 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import io.github.mariazevedo88.o3smeasures.measures.LooseClassCohesion;
+import io.github.mariazevedo88.o3smeasures.measures.main.LooseClassCohesion;
 import io.github.mariazevedo88.o3smeasures.util.JavaParser;
 
 /**

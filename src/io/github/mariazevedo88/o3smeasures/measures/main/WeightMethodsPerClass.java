@@ -1,40 +1,45 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.internal.core.SourceMethod;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.FanOutVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.WeightMethodsPerClassVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement Fan-out measure, which is defined as the number 
- * of other classes referenced by a class.
+ * Class that implement the WMC - Weight methods per class, which is simply 
+ * the sum of the complexities of its methods.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class FanOut extends Measure{
+@SuppressWarnings("restriction")
+public class WeightMethodsPerClass extends Measure{
+	
+	private static final Logger logger = Logger.getLogger(WeightMethodsPerClass.class);
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;
+	private boolean isEnable;	
 	
-	public FanOut(){
+	public WeightMethodsPerClass(){
 		super();
-		this.value = 0d;
-		this.mean = 0d;
-		this.max = 0d;
-		this.min = 0d;
+		this.value = 1d;
+		this.mean = 1d;
+		this.max = 1d;
+		this.min = 1d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PACKAGE);
+		addApplicableGranularity(GranularityEnum.METHOD);
 	}
 	
 	/**
@@ -42,7 +47,7 @@ public class FanOut extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.FAN_OUT.getName();
+		return MeasuresEnum.WMC.getName();
 	}
 
 	/**
@@ -50,7 +55,7 @@ public class FanOut extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.FAN_OUT.getAcronym();
+		return MeasuresEnum.WMC.getAcronym();
 	}
 
 	/**
@@ -58,7 +63,7 @@ public class FanOut extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Defined as the number of other classes referenced by a class.";
+		return "It is the sum of the complexities of all class methods.";
 	}
 
 	/**
@@ -90,7 +95,7 @@ public class FanOut extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 0d;
+		return 1d;
 	}
 
 	/**
@@ -114,7 +119,7 @@ public class FanOut extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Coupling";
+		return "Complexity";
 	}
 	
 	/**
@@ -138,37 +143,45 @@ public class FanOut extends Measure{
 	 */
 	@Override
 	public <T> void measure(T unit) {
-		
-		CompilationUnit parse = parse(unit);
-		FanOutVisitor visitor = FanOutVisitor.getInstance();
-		visitor.cleanArray();
-		parse.accept(visitor);
 
-		setCalculatedValue(getFanOutValue(visitor));
-		setMeanValue(getCalculatedValue());
-		
-		String elementName = "";
-		
-		if(parse.getJavaElement() == null) {
-			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-			elementName = clazz.getName().toString();
-		}else{
-			elementName = parse.getJavaElement().getElementName();
+		try {
+			
+			CompilationUnit parse = parse(unit);
+			WeightMethodsPerClassVisitor visitor = WeightMethodsPerClassVisitor.getInstance();
+			visitor.setMethodName(((SourceMethod)unit).getElementName());
+			visitor.cleanArraysAndVariable();
+			parse.accept(visitor);
+			
+			setCalculatedValue(getWeightMethodsPerClassIndex(visitor));
+			setMeanValue(getCalculatedValue());
+			
+			String elementName = "";
+			
+			if(parse.getJavaElement() == null) {
+				TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+				elementName = clazz.getName().toString();
+			}else{
+				elementName = parse.getJavaElement().getElementName();
+			}
+			
+			setMaxValue(getCalculatedValue(), elementName);
+			setMinValue(getCalculatedValue());
+
+		} catch (ClassCastException e) {
+			setCalculatedValue(0d);
+			logger.error(e);
 		}
-		
-		setMaxValue(getCalculatedValue(), elementName);
-		setMinValue(getCalculatedValue());
 	}
 	
 	/**
-	 * Method to get the FOUT value for a class.
+	 * Method to get the WMC value for a class.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param visitor
 	 * @return Double
 	 */
-	private Double getFanOutValue(FanOutVisitor visitor){
-		 return Math.abs(visitor.getFanOutValue());
+	private Double getWeightMethodsPerClassIndex(WeightMethodsPerClassVisitor visitor){
+		return Math.abs(visitor.getWeightMethodsPerClassIndex());
 	}
 
 	/**
@@ -206,11 +219,12 @@ public class FanOut extends Measure{
 	@Override
 	public void setClassWithMaxValue(String value) {
 		this.classWithMaxValue = value;
+		
 	}
 
 	@Override
 	public void setMinValue(double value) {
-		if (min > value || min == 0d){
+		if (min > value || min == 1d){
 			this.min = value;
 		}
 	}

@@ -1,22 +1,31 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.javamodel.LackCohesionMethodsJavaModel;
+import io.github.mariazevedo88.o3smeasures.astvisitors.ResponseForClassVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implements the measure LCOM, defined by Chidamber and Kemerer.
+ * Class that implement the RFC - Response for class measure, that shows 
+ * the interaction of the class' methods with other methods.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class LackCohesionMethods extends Measure{
+public class ResponseForClass extends Measure{
 
+	private static final Logger logger = Logger.getLogger(ResponseForClass.class);
+	
 	private double value;
 	private double mean;
 	private double max;
@@ -24,7 +33,7 @@ public class LackCohesionMethods extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public LackCohesionMethods(){
+	public ResponseForClass(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -32,7 +41,7 @@ public class LackCohesionMethods extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
 	
 	/**
@@ -40,7 +49,7 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.LCOM.getName();
+		return MeasuresEnum.RFC.getName();
 	}
 
 	/**
@@ -48,7 +57,7 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.LCOM.getAcronym();
+		return MeasuresEnum.RFC.getAcronym();
 	}
 
 	/**
@@ -56,7 +65,11 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "LCOM defined by CK.";
+		return "Measures the complexity of the class in terms of method calls. " +
+				"It is calculated by adding the number of methods in the class "
+				+ "(not including inherited methods) plus the number of distinct method "
+				+ "calls made by the methods in the class (each method call is counted "
+				+ "only once even if it is called from different methods).";
 	}
 
 	/**
@@ -112,7 +125,7 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Cohesion";
+		return "Coupling";
 	}
 	
 	/**
@@ -137,17 +150,53 @@ public class LackCohesionMethods extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
-		LackCohesionMethodsJavaModel lcomJavaModel = LackCohesionMethodsJavaModel.getInstance();
-		lcomJavaModel.setLcomType(MeasuresEnum.LCOM.getAcronym());
-		lcomJavaModel.cleanMapsAndVariables();
-		lcomJavaModel.calculateValue((ICompilationUnit)unit);
+		IMethod[] iMethods = null;
+		try {
+			IType[] iTypes = ((ICompilationUnit)unit).getTypes();
+			
+			for (IType iType : iTypes){
+				iMethods = iType.getMethods();
+			}
+			
+			CompilationUnit parse = parse(unit);
+			ResponseForClassVisitor visitor = ResponseForClassVisitor.getInstance();
+			visitor.cleanVariables();
+			visitor.addListOfMethodsDeclaration(iMethods);
+			parse.accept(visitor);
+			
+			setCalculatedValue(getResponseForClassValue(visitor));
+			setMeanValue(getCalculatedValue());
+			
+			String elementName = "";
+			
+			if(parse.getJavaElement() == null) {
+				TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+				elementName = clazz.getName().toString();
+			}else{
+				elementName = parse.getJavaElement().getElementName();
+			}
+			
+			setMaxValue(getCalculatedValue(), elementName);
+			setMinValue(getCalculatedValue());
+			
+		} catch (JavaModelException exception) {
+			setCalculatedValue(0d);
+			logger.error(exception);
+		}
 		
-		setCalculatedValue(lcomJavaModel.getLcomValue());
-		setMeanValue(getCalculatedValue());
-		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
-		setMinValue(getCalculatedValue());
 	}
 	
+	/**
+	 * Method to get the RFC value for a class.
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * @param visitor
+	 * @return Double
+	 */
+	private Double getResponseForClassValue(ResponseForClassVisitor visitor){
+		return Math.abs(visitor.getResponseForClassValue());
+	}
+
 	/**
 	 * @see Measure#setMeanValue
 	 */

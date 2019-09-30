@@ -19,7 +19,8 @@ import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.plugin.views.FactorsView;
 import io.github.mariazevedo88.o3smeasures.plugin.views.IndicatorsView;
 import io.github.mariazevedo88.o3smeasures.plugin.views.PieChartView;
-import io.github.mariazevedo88.o3smeasures.plugin.views.SampleView;
+import io.github.mariazevedo88.o3smeasures.plugin.views.SecondaryMeasuresView;
+import io.github.mariazevedo88.o3smeasures.plugin.views.MainMeasuresView;
 
 /**
  * Class that extends the AbstractHandler interface for an object 
@@ -118,9 +119,14 @@ public class Measurement extends AbstractHandler {
 		ISelection sel = HandlerUtil.getActiveWorkbenchWindow(event).getSelectionService().getSelection();
         IStructuredSelection selection = (IStructuredSelection) sel;
     	
-        //Load Diagnostic View
-        SampleView view = (SampleView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(SampleView.ID);
+        //Load Main Measures Diagnostic View
+        MainMeasuresView view = (MainMeasuresView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(MainMeasuresView.ID);
         view.showSelection(selection);
+        
+        //Load Secondary Measures Diagnostic View
+        SecondaryMeasuresView secondaryView = (SecondaryMeasuresView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(SecondaryMeasuresView.ID);
+        secondaryView.setProject(view.getProject());
+        secondaryView.showSelection(view.getApplicationInstance());
 
         //Load 3D Pie Chart View
         PieChartView pieChartView = (PieChartView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(PieChartView.ID);
@@ -160,5 +166,4 @@ public class Measurement extends AbstractHandler {
 	public void setShell(Shell shell) {
 		this.shell = shell;
 	}
-
 }

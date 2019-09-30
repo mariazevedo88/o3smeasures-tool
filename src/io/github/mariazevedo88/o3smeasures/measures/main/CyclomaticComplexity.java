@@ -1,23 +1,28 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.internal.core.SourceMethod;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.TightClassCohesionVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.CyclomaticComplexityVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement TCC - Tight Class Cohesion measure. TCC tells the "connection density"
- * (while LCC is only affected by whether the methods are connected at all).
+ * Class that implement the CC - Cyclomatic complexity measure,
+ * which is a measure of a module's structural complexity.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class TightClassCohesion extends Measure{
+@SuppressWarnings("restriction")
+public class CyclomaticComplexity extends Measure{
+	
+	private static final Logger logger = Logger.getLogger(CyclomaticComplexity.class);
 
 	private double value;
 	private double mean;
@@ -26,15 +31,15 @@ public class TightClassCohesion extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public TightClassCohesion(){
+	public CyclomaticComplexity(){
 		super();
-		this.value = 0d;
-		this.mean = 0d;
-		this.max = 0d;
-		this.min = 0d;
+		this.value = 1d;
+		this.mean = 1d;
+		this.max = 1d;
+		this.min = 1d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		this.isEnable = true;
+		addApplicableGranularity(GranularityEnum.METHOD);
 	}
 	
 	/**
@@ -42,7 +47,7 @@ public class TightClassCohesion extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.TCC.getName();
+		return MeasuresEnum.CC.getName();
 	}
 
 	/**
@@ -50,7 +55,7 @@ public class TightClassCohesion extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.TCC.getAcronym();
+		return MeasuresEnum.CC.getAcronym();
 	}
 
 	/**
@@ -58,8 +63,8 @@ public class TightClassCohesion extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Measures the 'connection density', so to speak " +
-				"(while LCC is only affected by whether the methods are connected at all).";
+		return "It is calculated based on the number of different possible " +
+				"paths through the source code.";
 	}
 
 	/**
@@ -91,7 +96,7 @@ public class TightClassCohesion extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 0d;
+		return 1d;
 	}
 
 	/**
@@ -115,7 +120,7 @@ public class TightClassCohesion extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Cohesion";
+		return "Complexity";
 	}
 	
 	/**
@@ -140,40 +145,48 @@ public class TightClassCohesion extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
-		CompilationUnit parse = parse(unit);
-		TightClassCohesionVisitor visitor = TightClassCohesionVisitor.getInstance();
-		visitor.cleanArraysAndVariable();
-		parse.accept(visitor);
-
-		setCalculatedValue(getTCCIndex(visitor));
-		setMeanValue(getCalculatedValue());
-		
-		String elementName = "";
-		
-		if(parse.getJavaElement() == null) {
-			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-			elementName = clazz.getName().toString();
-		}else{
-			elementName = parse.getJavaElement().getElementName();
+		try {
+			CompilationUnit parse = parse(unit);
+			CyclomaticComplexityVisitor visitor = CyclomaticComplexityVisitor.getInstance();
+			visitor.setMethodName(((SourceMethod)unit).getElementName());
+			visitor.cleanVariables();
+			parse.accept(visitor);
+			
+			setCalculatedValue(getCyclomaticComplexityValue(visitor));
+			setMeanValue(getCalculatedValue());
+			
+			String elementName = "";
+			
+			if(parse.getJavaElement() == null) {
+				TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+				elementName = clazz.getName().toString();
+			}else{
+				elementName = parse.getJavaElement().getElementName();
+			}
+			
+			setMaxValue(getCalculatedValue(), elementName);
+			setMinValue(getCalculatedValue());
+			
+		} catch (ClassCastException e) {
+			setCalculatedValue(0d);
+			logger.error(e);
 		}
-		
-		setMaxValue(getCalculatedValue(), elementName);
-		setMinValue(getCalculatedValue());
 	}
-	
+
 	/**
-	 * Method to get the TCC value for a class.
+	 * Method to get the CC value for a class.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param visitor
-	 * @return double
+	 * @return Double
 	 */
-	private double getTCCIndex(TightClassCohesionVisitor visitor){
-		return Math.abs(visitor.getTCCValue());
+	private Double getCyclomaticComplexityValue(CyclomaticComplexityVisitor visitor){
+		return Math.abs(visitor.getCyclomaticComplexityIndex());
 	}
 
 	/**
 	 * @see Measure#setMeanValue
+	 * 
 	 */
 	@Override
 	public void setMeanValue(double value) {
@@ -211,8 +224,9 @@ public class TightClassCohesion extends Measure{
 
 	@Override
 	public void setMinValue(double value) {
-		if (min > value || min == 0d){
+		if (min > value || min == 1d){
 			this.min = value;
 		}
 	}
+	
 }

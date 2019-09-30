@@ -1,28 +1,30 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.internal.core.SourceMethod;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.CyclomaticComplexityVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.CouplingBetweenObjectsVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement the CC - Cyclomatic complexity measure,
- * which is a measure of a module's structural complexity.
+ * Class that implement CBO - Coupling Between Objects measure 
+ * that gives information how strong a class is coupled with its surrounding software system,
+ * by counting the number of other classes to which a specific class is coupled.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-@SuppressWarnings("restriction")
-public class CyclomaticComplexity extends Measure{
+public class CouplingBetweenObjects extends Measure{
 	
-	private static final Logger logger = Logger.getLogger(CyclomaticComplexity.class);
+	private static final Logger logger = Logger.getLogger(CouplingBetweenObjects.class);
 
 	private double value;
 	private double mean;
@@ -31,15 +33,15 @@ public class CyclomaticComplexity extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public CyclomaticComplexity(){
+	public CouplingBetweenObjects(){
 		super();
-		this.value = 1d;
-		this.mean = 1d;
-		this.max = 1d;
-		this.min = 1d;
+		this.value = 0d;
+		this.mean = 0d;
+		this.max = 0d;
+		this.min = 0d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;
-		addApplicableGranularity(Granularity.METHOD);
+		this.isEnable = true;		
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
 	
 	/**
@@ -47,7 +49,7 @@ public class CyclomaticComplexity extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.CC.getName();
+		return MeasuresEnum.CBO.getName();
 	}
 
 	/**
@@ -55,7 +57,7 @@ public class CyclomaticComplexity extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.CC.getAcronym();
+		return MeasuresEnum.CBO.getAcronym();
 	}
 
 	/**
@@ -63,8 +65,8 @@ public class CyclomaticComplexity extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "It is calculated based on the number of different possible " +
-				"paths through the source code.";
+		return "Total of the number of classes that a class referenced plus " +
+				"the number of classes that referenced the class.";
 	}
 
 	/**
@@ -96,7 +98,7 @@ public class CyclomaticComplexity extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 1d;
+		return 0d;
 	}
 
 	/**
@@ -120,7 +122,7 @@ public class CyclomaticComplexity extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Complexity";
+		return "Coupling";
 	}
 	
 	/**
@@ -145,14 +147,19 @@ public class CyclomaticComplexity extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
+		IType[] iTypes = null;
+		
 		try {
+			
+			iTypes = ((ICompilationUnit)unit).getTypes();
+			
 			CompilationUnit parse = parse(unit);
-			CyclomaticComplexityVisitor visitor = CyclomaticComplexityVisitor.getInstance();
-			visitor.setMethodName(((SourceMethod)unit).getElementName());
-			visitor.cleanVariables();
+			CouplingBetweenObjectsVisitor visitor = CouplingBetweenObjectsVisitor.getInstance();
+			visitor.cleanArrayAndVariable();
+			visitor.addListOfTypes(iTypes);
 			parse.accept(visitor);
 			
-			setCalculatedValue(getCyclomaticComplexityValue(visitor));
+			setCalculatedValue(getCouplingBetweenObjectsValue(visitor));
 			setMeanValue(getCalculatedValue());
 			
 			String elementName = "";
@@ -167,26 +174,25 @@ public class CyclomaticComplexity extends Measure{
 			setMaxValue(getCalculatedValue(), elementName);
 			setMinValue(getCalculatedValue());
 			
-		} catch (ClassCastException e) {
+		} catch (JavaModelException exception) {
 			setCalculatedValue(0d);
-			logger.error(e);
+			logger.error(exception);
 		}
 	}
-
+	
 	/**
-	 * Method to get the CC value for a class.
+	 * Method to get the CBO value for a class.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param visitor
 	 * @return Double
 	 */
-	private Double getCyclomaticComplexityValue(CyclomaticComplexityVisitor visitor){
-		return Math.abs(visitor.getCyclomaticComplexityIndex());
+	private Double getCouplingBetweenObjectsValue(CouplingBetweenObjectsVisitor visitor){
+		return Math.abs(visitor.getCouplingBetweenObjectsIndex());
 	}
 
 	/**
 	 * @see Measure#setMeanValue
-	 * 
 	 */
 	@Override
 	public void setMeanValue(double value) {
@@ -224,9 +230,8 @@ public class CyclomaticComplexity extends Measure{
 
 	@Override
 	public void setMinValue(double value) {
-		if (min > value || min == 1d){
+		if (min > value || min == 0d){
 			this.min = value;
 		}
 	}
-	
 }

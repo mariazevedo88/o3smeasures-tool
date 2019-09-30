@@ -1,31 +1,31 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.javamodel.DepthOfInheritanceTreeJavaModel;
+import io.github.mariazevedo88.o3smeasures.javamodel.NumberOfChildrenJavaModel;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement DIT - Depth of Inheritance Tree measure.
- * DIT measures how many super-classes can affect a class.
+ * Class that implement the NOC - Number of children measure. 
+ * Simply measures the number of immediate descendants of the class.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class DepthOfInheritanceTree extends Measure{
+public class NumberOfChildren extends Measure{
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;	
-
-	public DepthOfInheritanceTree(){
+	private boolean isEnable;
+	
+	public NumberOfChildren(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -33,7 +33,7 @@ public class DepthOfInheritanceTree extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PACKAGE);
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.DIT.getName();
+		return MeasuresEnum.NOC.getName();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.DIT.getAcronym();
+		return MeasuresEnum.NOC.getAcronym();
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Provides the position of the class in the inheritance tree.";
+		return "It is the number of direct descendants (subclasses) for each class.";
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class DepthOfInheritanceTree extends Measure{
 	public double getMaxValue() {
 		return max;
 	}
-
+	
 	/**
 	 * @see Measure#getMeanValue
 	 */
@@ -138,16 +138,16 @@ public class DepthOfInheritanceTree extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
-		DepthOfInheritanceTreeJavaModel ditJavaModel = DepthOfInheritanceTreeJavaModel.getInstance();
-		ditJavaModel.calculateValue((ICompilationUnit)unit);
-		ditJavaModel.cleanArray();
+		NumberOfChildrenJavaModel nocJavaModel = NumberOfChildrenJavaModel.getInstance();
+		nocJavaModel.calculateValue((ICompilationUnit)unit);
+		nocJavaModel.cleanArray();
 		
-		setCalculatedValue(Math.abs(ditJavaModel.getDitValue()));
+		setCalculatedValue(Math.abs(nocJavaModel.getNocValue()));
 		setMeanValue(getCalculatedValue());
 		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
 		setMinValue(getCalculatedValue());
 	}
-
+	
 	/**
 	 * @see Measure#setMeanValue
 	 */

@@ -1,31 +1,31 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.LinesOfCodeVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.NumberOfAttributesVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement LOC - Lines of Code measure.
+ * Class that implement the total number of attributes or fields in a class.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class LinesOfCode extends Measure{
+public class NumberOfAttributes extends Measure{
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;	
+	private boolean isEnable;
 	
-	public LinesOfCode(){
+	public NumberOfAttributes(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -33,7 +33,7 @@ public class LinesOfCode extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PROJECT);
+		addApplicableGranularity(GranularityEnum.PROJECT);
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class LinesOfCode extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.LOC.getName();
+		return MeasuresEnum.NOA.getName();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class LinesOfCode extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.LOC.getAcronym();
+		return MeasuresEnum.NOA.getAcronym();
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class LinesOfCode extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Number of the lines of the code in a project.";
+		return "The number of attributes in a project.";
 	}
 
 	/**
@@ -137,13 +137,14 @@ public class LinesOfCode extends Measure{
 	 */
 	@Override
 	public <T> void measure(T unit) {
-		
+
+		// Now create the AST for the ICompilationUnits
 		CompilationUnit parse = parse(unit);
-		LinesOfCodeVisitor visitor = LinesOfCodeVisitor.getInstance();
+		NumberOfAttributesVisitor visitor = NumberOfAttributesVisitor.getInstance();
 		visitor.cleanVariable();
 		parse.accept(visitor);
-		
-		setCalculatedValue(getNumberOfLinesOfCodeValue(visitor));
+
+		setCalculatedValue(getNumberOfAttributes(visitor));
 		setMeanValue(getCalculatedValue());
 		
 		String elementName = "";
@@ -160,14 +161,14 @@ public class LinesOfCode extends Measure{
 	}
 	
 	/**
-	 * Method to get the LOC value for a class.
+	 * Method to get the NOA value for a class.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param visitor
 	 * @return Double
 	 */
-	private Double getNumberOfLinesOfCodeValue(LinesOfCodeVisitor visitor){
-		return Math.abs(visitor.getNumberOfLinesOfCode());
+	private Double getNumberOfAttributes(NumberOfAttributesVisitor visitor){
+		return Math.abs(visitor.getNumberOfAttributes());
 	}
 
 	/**

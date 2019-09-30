@@ -1,33 +1,31 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.javamodel.LackCohesionMethodsJavaModel;
+import io.github.mariazevedo88.o3smeasures.javamodel.DepthOfInheritanceTreeJavaModel;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * LCOM4 measures the number of "connected components" in a class. 
- * A connected component is a set of related methods (and class-level variables). 
- * There should be only one such a component in each class. If there are 2 or more components, 
- * the class should be split into so many smaller classes.
+ * Class that implement DIT - Depth of Inheritance Tree measure.
+ * DIT measures how many super-classes can affect a class.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class LackCohesionMethodsFour extends Measure{
+public class DepthOfInheritanceTree extends Measure{
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;
-	
-	public LackCohesionMethodsFour(){
+	private boolean isEnable;	
+
+	public DepthOfInheritanceTree(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -35,7 +33,7 @@ public class LackCohesionMethodsFour extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		addApplicableGranularity(GranularityEnum.PACKAGE);
 	}
 	
 	/**
@@ -43,7 +41,7 @@ public class LackCohesionMethodsFour extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.LCOM4.getName();
+		return MeasuresEnum.DIT.getName();
 	}
 
 	/**
@@ -51,7 +49,7 @@ public class LackCohesionMethodsFour extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.LCOM4.getAcronym();
+		return MeasuresEnum.DIT.getAcronym();
 	}
 
 	/**
@@ -59,11 +57,7 @@ public class LackCohesionMethodsFour extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "LCOM4 measures the number of 'connected components' in a class. "
-				+ "A connected component is a set of related methods and fields. "
-				+ "There should be only one such component in each class. "
-				+ "If there are 2 or more components, the class should be split "
-				+ "into so many smaller classes.";
+		return "Provides the position of the class in the inheritance tree.";
 	}
 
 	/**
@@ -119,7 +113,7 @@ public class LackCohesionMethodsFour extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Cohesion";
+		return "Inheritance";
 	}
 	
 	/**
@@ -144,12 +138,11 @@ public class LackCohesionMethodsFour extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
-		LackCohesionMethodsJavaModel lcomJavaModel = LackCohesionMethodsJavaModel.getInstance();
-		lcomJavaModel.setLcomType(MeasuresEnum.LCOM4.getAcronym());
-		lcomJavaModel.cleanMapsAndVariables();
-		lcomJavaModel.calculateValue((ICompilationUnit)unit);
+		DepthOfInheritanceTreeJavaModel ditJavaModel = DepthOfInheritanceTreeJavaModel.getInstance();
+		ditJavaModel.calculateValue((ICompilationUnit)unit);
+		ditJavaModel.cleanArray();
 		
-		setCalculatedValue(lcomJavaModel.getLcom4Value());
+		setCalculatedValue(Math.abs(ditJavaModel.getDitValue()));
 		setMeanValue(getCalculatedValue());
 		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
 		setMinValue(getCalculatedValue());

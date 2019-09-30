@@ -20,6 +20,7 @@ import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
  *
  */
 public class PieChartView extends ViewPart {
+	
 	public static final String ID = "io.github.mariazevedo88.o3smeasures.plugin.views.PieChartView";
 	private ChartComposite view;
 	private JFreeChart jFreeChart;

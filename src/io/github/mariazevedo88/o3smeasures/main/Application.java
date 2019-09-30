@@ -7,22 +7,24 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
 import io.github.mariazevedo88.o3smeasures.builder.MeasureBuilder;
-import io.github.mariazevedo88.o3smeasures.measures.CouplingBetweenObjects;
-import io.github.mariazevedo88.o3smeasures.measures.CyclomaticComplexity;
-import io.github.mariazevedo88.o3smeasures.measures.DepthOfInheritanceTree;
-import io.github.mariazevedo88.o3smeasures.measures.FanOut;
-import io.github.mariazevedo88.o3smeasures.measures.LackCohesionMethods;
-import io.github.mariazevedo88.o3smeasures.measures.LackCohesionMethodsFour;
-import io.github.mariazevedo88.o3smeasures.measures.LackCohesionMethodsTwo;
-import io.github.mariazevedo88.o3smeasures.measures.LinesOfCode;
-import io.github.mariazevedo88.o3smeasures.measures.LooseClassCohesion;
-import io.github.mariazevedo88.o3smeasures.measures.NumberOfAttributes;
-import io.github.mariazevedo88.o3smeasures.measures.NumberOfChildren;
-import io.github.mariazevedo88.o3smeasures.measures.NumberOfClasses;
-import io.github.mariazevedo88.o3smeasures.measures.NumberOfMethods;
-import io.github.mariazevedo88.o3smeasures.measures.ResponseForClass;
-import io.github.mariazevedo88.o3smeasures.measures.TightClassCohesion;
-import io.github.mariazevedo88.o3smeasures.measures.WeightMethodsPerClass;
+import io.github.mariazevedo88.o3smeasures.measures.main.CouplingBetweenObjects;
+import io.github.mariazevedo88.o3smeasures.measures.main.CyclomaticComplexity;
+import io.github.mariazevedo88.o3smeasures.measures.main.DepthOfInheritanceTree;
+import io.github.mariazevedo88.o3smeasures.measures.main.FanOut;
+import io.github.mariazevedo88.o3smeasures.measures.main.LackCohesionMethods;
+import io.github.mariazevedo88.o3smeasures.measures.main.LackCohesionMethodsFour;
+import io.github.mariazevedo88.o3smeasures.measures.main.LackCohesionMethodsTwo;
+import io.github.mariazevedo88.o3smeasures.measures.main.LinesOfCode;
+import io.github.mariazevedo88.o3smeasures.measures.main.LooseClassCohesion;
+import io.github.mariazevedo88.o3smeasures.measures.main.NumberOfAttributes;
+import io.github.mariazevedo88.o3smeasures.measures.main.NumberOfChildren;
+import io.github.mariazevedo88.o3smeasures.measures.main.NumberOfClasses;
+import io.github.mariazevedo88.o3smeasures.measures.main.NumberOfMethods;
+import io.github.mariazevedo88.o3smeasures.measures.main.ResponseForClass;
+import io.github.mariazevedo88.o3smeasures.measures.main.TightClassCohesion;
+import io.github.mariazevedo88.o3smeasures.measures.main.WeightMethodsPerClass;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfLambdas;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfPackages;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
@@ -36,7 +38,8 @@ import io.github.mariazevedo88.o3smeasures.structures.Measure;
  */
 public class Application {
 
-	private List<Measure> measures;
+	private List<Measure> mainMeasures;
+	private List<Measure> secondaryMeasures;
 	
 	/**
 	 * Method that executes the project's measurement
@@ -48,35 +51,74 @@ public class Application {
 	 * @return ItemMeasured
 	 * @throws CoreException
 	 */
-	public ItemMeasured execute (IProject project) throws CoreException{
+	public ItemMeasured executeMainMeasures(IProject project) throws CoreException{
 		MeasureBuilder builder = new MeasureBuilder();
-		createMeasureArray();
-		measures.forEach(builder::addMeasure);
+		createMainMeasureArray();
+		mainMeasures.forEach(builder::addMeasure);
 		return builder.execute(project);
 	}
 	
 	/**
-	 * Method that return the list of measures
+	 * Method that executes the project's measurement
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @return measures
+	 * @param project
+	 * @return ItemMeasured
+	 * @throws CoreException
 	 */
-	public List<Measure> getMeasures(){
-		return measures;
+	public ItemMeasured executeSecondaryMeasures(IProject project) throws CoreException{
+		MeasureBuilder builder = new MeasureBuilder();
+		createSecondaryMeasureArray();
+		secondaryMeasures.forEach(builder::addMeasure);
+		return builder.execute(project);
 	}
 	
 	/**
-	 * Method that creates the array of measures
+	 * Method that return the list of the main measures
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return mainMeasures
+	 */
+	public List<Measure> getMainMeasures(){
+		return mainMeasures;
+	}
+	
+	/**
+	 * Method that return the list of the secondary measures
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 29/09/2019
+	 * 
+	 * @return secondaryMeasures
+	 */
+	public List<Measure> getSecondaryMeasures(){
+		return secondaryMeasures;
+	}
+	
+	/**
+	 * Method that creates the array of main measures
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
-	private void createMeasureArray(){
-		measures = Arrays.asList(new NumberOfClasses(), new LinesOfCode(), new NumberOfMethods(), new NumberOfAttributes(),
+	private void createMainMeasureArray(){
+		mainMeasures = Arrays.asList(new NumberOfClasses(), new LinesOfCode(), new NumberOfMethods(), new NumberOfAttributes(),
 			new CyclomaticComplexity(), new WeightMethodsPerClass(), new DepthOfInheritanceTree(), new NumberOfChildren(),
 			new CouplingBetweenObjects(), new FanOut(), new ResponseForClass(), new LackCohesionMethods(), 
 			new LackCohesionMethodsTwo(), new LackCohesionMethodsFour(), new TightClassCohesion(), new LooseClassCohesion());
+	}
+	
+	/**
+	 * Method that creates the array of secondary measures
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 29/09/2019
+	 */
+	private void createSecondaryMeasureArray(){
+		secondaryMeasures = Arrays.asList(new NumberOfPackages(), new NumberOfLambdas());
 	}
 }

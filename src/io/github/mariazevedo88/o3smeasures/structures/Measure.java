@@ -23,13 +23,13 @@ import io.github.mariazevedo88.o3smeasures.main.ASTSession;
  */
 public abstract class Measure {
 	
-	public enum Granularity {
+	public enum GranularityEnum {
 		PROJECT,
 		PACKAGE,
 		CLASS,
 		METHOD;		
 	}
-	private List<Granularity> applicableGranularities;
+	private List<GranularityEnum> applicableGranularities;
 	private ASTParser parser = null;
 	
 	@SuppressWarnings("deprecation")
@@ -47,7 +47,7 @@ public abstract class Measure {
 	 * @since 13/07/2014
 	 * @param granularity
 	 */
-	public void addApplicableGranularity(Granularity granularity){
+	public void addApplicableGranularity(GranularityEnum granularity){
 		if (!applicableGranularities.contains(granularity)) {
 			applicableGranularities.add(granularity);
 		}
@@ -60,7 +60,7 @@ public abstract class Measure {
 	 * @since 13/07/2014
 	 * @return List
 	 */
-	public List<Granularity> getAllApplicableGranularities(){
+	public List<GranularityEnum> getAllApplicableGranularities(){
 		return applicableGranularities;
 	}
 	
@@ -72,7 +72,7 @@ public abstract class Measure {
 	 * @param granularity
 	 * @return boolean
 	 */
-	public boolean isApplicableGranularity(Granularity granularity){
+	public boolean isApplicableGranularity(GranularityEnum granularity){
 		return applicableGranularities.contains(granularity);
 	}
 		

@@ -14,7 +14,6 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- * 
  */
 public class ClassVisitor extends ASTVisitor{
 
@@ -98,7 +97,7 @@ public class ClassVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to get the number classes
+	 * Method to get the number of classes
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @return int

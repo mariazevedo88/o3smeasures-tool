@@ -1,23 +1,23 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.LooseClassCohesionVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.TightClassCohesionVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement LCC - Loose Class Cohesion measure. LCC tells the overall connectedness. 
- * It depends on the number of methods and how they group together.
+ * Class that implement TCC - Tight Class Cohesion measure. TCC tells the "connection density"
+ * (while LCC is only affected by whether the methods are connected at all).
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class LooseClassCohesion extends Measure{
+public class TightClassCohesion extends Measure{
 
 	private double value;
 	private double mean;
@@ -26,7 +26,7 @@ public class LooseClassCohesion extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public LooseClassCohesion(){
+	public TightClassCohesion(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -34,7 +34,7 @@ public class LooseClassCohesion extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
 	
 	/**
@@ -42,7 +42,7 @@ public class LooseClassCohesion extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.LCC.getName();
+		return MeasuresEnum.TCC.getName();
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class LooseClassCohesion extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.LCC.getAcronym();
+		return MeasuresEnum.TCC.getAcronym();
 	}
 
 	/**
@@ -58,8 +58,8 @@ public class LooseClassCohesion extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Measures the overall connectedness. It depends " +
-				"on the number of methods and how they group together.";
+		return "Measures the 'connection density', so to speak " +
+				"(while LCC is only affected by whether the methods are connected at all).";
 	}
 
 	/**
@@ -141,11 +141,11 @@ public class LooseClassCohesion extends Measure{
 	public <T> void measure(T unit) {
 		
 		CompilationUnit parse = parse(unit);
-		LooseClassCohesionVisitor visitor = LooseClassCohesionVisitor.getInstance();
-		visitor.cleanArraysAndVariables();
+		TightClassCohesionVisitor visitor = TightClassCohesionVisitor.getInstance();
+		visitor.cleanArraysAndVariable();
 		parse.accept(visitor);
 
-		setCalculatedValue(getLCCValue(visitor));
+		setCalculatedValue(getTCCIndex(visitor));
 		setMeanValue(getCalculatedValue());
 		
 		String elementName = "";
@@ -162,14 +162,14 @@ public class LooseClassCohesion extends Measure{
 	}
 	
 	/**
-	 * Method to get the LCC value for a class.
+	 * Method to get the TCC value for a class.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param visitor
 	 * @return double
 	 */
-	private double getLCCValue(LooseClassCohesionVisitor visitor){
-		return Math.abs(visitor.getLCCIndex());
+	private double getTCCIndex(TightClassCohesionVisitor visitor){
+		return Math.abs(visitor.getTCCValue());
 	}
 
 	/**

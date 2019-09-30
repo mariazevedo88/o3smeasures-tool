@@ -1,31 +1,31 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.NumberOfAttributesVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement the total number of attributes or fields in a class.
+ * Class that implement the NC - Number Of Classes measure, which indicates
+ * the number of classes of a project. The range is [0,∞].
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class NumberOfAttributes extends Measure{
+public class NumberOfClasses extends Measure{
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;
+	private boolean isEnable;	
 	
-	public NumberOfAttributes(){
+	public NumberOfClasses(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -33,7 +33,7 @@ public class NumberOfAttributes extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PROJECT);
+		addApplicableGranularity(GranularityEnum.PROJECT);
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class NumberOfAttributes extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.NOA.getName();
+		return MeasuresEnum.NC.getName();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class NumberOfAttributes extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.NOA.getAcronym();
+		return MeasuresEnum.NC.getAcronym();
 	}
 
 	/**
@@ -57,7 +57,15 @@ public class NumberOfAttributes extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "The number of attributes in a project.";
+		return "Return the number of classes and inner classes of a class in a project.";
+	}
+
+	/**
+	 * @see Measure#getProperty
+	 */
+	@Override
+	public String getProperty() {
+		return "Size";
 	}
 
 	/**
@@ -109,11 +117,11 @@ public class NumberOfAttributes extends Measure{
 	}
 
 	/**
-	 * @see Measure#getProperty
+	 * @see Measure#setMeanValue
 	 */
 	@Override
-	public String getProperty() {
-		return "Size";
+	public void setMeanValue(double value) {
+		this.mean = value;
 	}
 	
 	/**
@@ -137,15 +145,15 @@ public class NumberOfAttributes extends Measure{
 	 */
 	@Override
 	public <T> void measure(T unit) {
-
+		
 		// Now create the AST for the ICompilationUnits
 		CompilationUnit parse = parse(unit);
-		NumberOfAttributesVisitor visitor = NumberOfAttributesVisitor.getInstance();
+		ClassVisitor visitor = ClassVisitor.getInstance();
 		visitor.cleanVariable();
 		parse.accept(visitor);
 
-		setCalculatedValue(getNumberOfAttributes(visitor));
-		setMeanValue(getCalculatedValue());
+		setCalculatedValue(getNumberOfClasses(visitor));
+		setMeanValue(0d);
 		
 		String elementName = "";
 		
@@ -161,24 +169,14 @@ public class NumberOfAttributes extends Measure{
 	}
 	
 	/**
-	 * Method to get the NOA value for a class.
+	 * Method to get the NC value for a project.
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * @param visitor
-	 * @return Double
+	 * @return int
 	 */
-	private Double getNumberOfAttributes(NumberOfAttributesVisitor visitor){
-		return Math.abs(visitor.getNumberOfAttributes());
-	}
-
-	/**
-	 * @see Measure#setMeanValue
-	 */
-	@Override
-	public void setMeanValue(double value) {
-		if (ClassVisitor.getNumOfProjectClasses() > 0d){
-			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
-		}
+	private int getNumberOfClasses(ClassVisitor visitor){
+		 return visitor.getNumOfClasses();
 	}
 
 	/**
