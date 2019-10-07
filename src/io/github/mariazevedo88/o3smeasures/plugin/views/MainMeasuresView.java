@@ -37,7 +37,6 @@ import io.github.mariazevedo88.o3smeasures.util.FileExport;
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class MainMeasuresView extends ViewPart {
 

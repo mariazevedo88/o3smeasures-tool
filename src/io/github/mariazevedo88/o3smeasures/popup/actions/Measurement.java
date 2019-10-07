@@ -47,10 +47,9 @@ public class Measurement extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
 		setShell(HandlerUtil.getActiveShell(event));
-        
         ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+        
 		try {
-			
 			Runnable update = () -> updateViews(event);
 			
 			IRunnableWithProgress runnable = monitor -> controlMonitorProgress(update, monitor);
@@ -75,13 +74,11 @@ public class Measurement extends AbstractHandler {
 	private void controlMonitorProgress(Runnable update, IProgressMonitor monitor) {
 		
 		Integer size = MeasuresEnum.values().length;
-		int[] numMeasures = new int[size];
+		monitor.beginTask("Measuring internal quality...", size);
 		
-		monitor.beginTask("Measuring", size);
-		
-		for (Integer i : numMeasures){
+		for (int i=1; i < size+1; i++){
 	    	
-    		monitor.subTask("Getting measure values " + (i+1) + " of "+ size + "...");
+    		monitor.subTask("Getting measure values " + (i) + " of "+ size + "...");
     		Display.getDefault().syncExec(update);
     		monitor.worked(1);
     		if(checkIfUserCancelledExecution(monitor)) break;

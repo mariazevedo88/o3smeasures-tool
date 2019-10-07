@@ -23,23 +23,23 @@ public class NumberOfLambdas extends Measure {
 		this.max = 0d;
 		this.min = 0d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;		
+		this.isEnable = true;
 		addApplicableGranularity(GranularityEnum.CLASS);
 	}
 
 	@Override
 	public String getName() {
-		return MeasuresEnum.NL.getName();
+		return MeasuresEnum.NOL.getName();
 	}
 
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.NL.getAcronym();
+		return MeasuresEnum.NOL.getAcronym();
 	}
 
 	@Override
 	public String getDescription() {
-		return "Total number of lambdas in a class";
+		return "Total number of lambda expression used in a class";
 	}
 
 	@Override
@@ -93,7 +93,6 @@ public class NumberOfLambdas extends Measure {
 			this.max = value;
 			setClassWithMaxValue(className);
 		}
-		
 	}
 
 	@Override
@@ -124,9 +123,10 @@ public class NumberOfLambdas extends Measure {
 		// Now create the AST for the ICompilationUnits
 		CompilationUnit parse = parse(unit);
 		LambdaVisitor visitor = LambdaVisitor.getInstance();
+		String className = parse.getJavaElement().getElementName();
 		parse.accept(visitor);
 
-		setCalculatedValue(visitor.getNumOfLambdas());
+		setCalculatedValue(getNumberOfLambdas(className, visitor));
 		setMeanValue(0d);
 		
 		String elementName = "";
@@ -140,6 +140,16 @@ public class NumberOfLambdas extends Measure {
 		
 		setMaxValue(getCalculatedValue(), elementName);
 		setMinValue(getCalculatedValue());
+	}
+	
+	/**
+	 * Method to get the number of lambdas in a class.
+	 * @author Mariana Azevedo
+	 * @since 05/10/2019
+	 * @return Double
+	 */
+	public Double getNumberOfLambdas(String className, LambdaVisitor visitor){
+		return Double.valueOf(visitor.getNumOfLambdas(className));
 	}
 
 }

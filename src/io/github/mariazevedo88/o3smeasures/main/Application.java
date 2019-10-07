@@ -23,6 +23,7 @@ import io.github.mariazevedo88.o3smeasures.measures.main.NumberOfMethods;
 import io.github.mariazevedo88.o3smeasures.measures.main.ResponseForClass;
 import io.github.mariazevedo88.o3smeasures.measures.main.TightClassCohesion;
 import io.github.mariazevedo88.o3smeasures.measures.main.WeightMethodsPerClass;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfInterfaces;
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfLambdas;
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfPackages;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
@@ -51,7 +52,7 @@ public class Application {
 	 * @return ItemMeasured
 	 * @throws CoreException
 	 */
-	public ItemMeasured executeMainMeasures(IProject project) throws CoreException{
+	public ItemMeasured executeMainMeasures(IProject project) throws CoreException {
 		MeasureBuilder builder = new MeasureBuilder();
 		createMainMeasureArray();
 		mainMeasures.forEach(builder::addMeasure);
@@ -68,7 +69,7 @@ public class Application {
 	 * @return ItemMeasured
 	 * @throws CoreException
 	 */
-	public ItemMeasured executeSecondaryMeasures(IProject project) throws CoreException{
+	public ItemMeasured executeSecondaryMeasures(IProject project) throws CoreException {
 		MeasureBuilder builder = new MeasureBuilder();
 		createSecondaryMeasureArray();
 		secondaryMeasures.forEach(builder::addMeasure);
@@ -119,6 +120,6 @@ public class Application {
 	 * @since 29/09/2019
 	 */
 	private void createSecondaryMeasureArray(){
-		secondaryMeasures = Arrays.asList(new NumberOfPackages(), new NumberOfLambdas());
+		secondaryMeasures = Arrays.asList(new NumberOfPackages(), new NumberOfLambdas(), new NumberOfInterfaces());
 	}
 }

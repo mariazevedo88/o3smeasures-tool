@@ -11,5 +11,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jsefa-1.0.0.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="lib/eclipse-collections-10.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

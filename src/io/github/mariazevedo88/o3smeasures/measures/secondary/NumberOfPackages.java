@@ -1,11 +1,16 @@
 package io.github.mariazevedo88.o3smeasures.measures.secondary;
 
-import org.eclipse.jdt.core.dom.CompilationUnit;
-
-import io.github.mariazevedo88.o3smeasures.astvisitors.PackageVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
+/**
+ * Class that implement the NPK - Number of Packages, which indicates
+ * the number of packages of a project. The range is [0,∞].
+ * @see Measure
+ * 
+ * @author Mariana Azevedo
+ * @since 29/09/2019
+ */
 public class NumberOfPackages extends Measure {
 	
 	private double value;
@@ -118,28 +123,11 @@ public class NumberOfPackages extends Measure {
 	@Override
 	public <T> void measure(T unit) {
 		
-		// Now create the AST for the ICompilationUnits
-		CompilationUnit parse = parse(unit);
-		PackageVisitor visitor = PackageVisitor.getInstance();
-		visitor.cleanVariable();
-		parse.accept(visitor);
-
-		setCalculatedValue(getNumberOfPackages(visitor));
+		setCalculatedValue(1d);
 		setMeanValue(0d);
 		
 		setMaxValue(getCalculatedValue(), "");
 		setMinValue(getCalculatedValue());
-	}
-	
-	/**
-	 * Method to get the number of packages value of a project.
-	 * @author Mariana Azevedo
-	 * @since 23/09/2019
-	 * @param visitor
-	 * @return int
-	 */
-	private int getNumberOfPackages(PackageVisitor visitor){
-		 return visitor.getNumOfPackages();
 	}
 
 }

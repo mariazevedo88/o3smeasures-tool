@@ -8,7 +8,7 @@ import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement the NC - Number Of Classes measure, which indicates
+ * Class that implement the NC - Number of Classes measure, which indicates
  * the number of classes of a project. The range is [0,∞].
  * @see Measure
  * 

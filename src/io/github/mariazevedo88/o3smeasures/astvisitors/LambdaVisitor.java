@@ -1,11 +1,18 @@
 package io.github.mariazevedo88.o3smeasures.astvisitors;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.LambdaExpression;
 
 /**
- * A visitor for abstract syntax trees, that visits the given 
- * node to perform the calculation of the number of lambdas.
+ * A visitor for abstract syntax trees, that visits the given node to perform 
+ * the calculation of the number of lambda expressions.
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
@@ -13,12 +20,13 @@ import org.eclipse.jdt.core.dom.LambdaExpression;
  */
 public class LambdaVisitor extends ASTVisitor{
 	
-	private Double lambdaIndex;
 	private static LambdaVisitor instance;
+	
+	private Map<String, List<String>> expressionsMap;
 	
 	public LambdaVisitor(){
 		super();
-		this.lambdaIndex = 0d;
+		this.expressionsMap = new HashMap<>();
 	}
 	
 	public static LambdaVisitor getInstance(){
@@ -33,26 +41,41 @@ public class LambdaVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(LambdaExpression node) {
-		lambdaIndex++;
-		return false;
+		calculateNumberOfLambdas(node);
+		return true;
 	}
 	
 	/**
-	 * Method that clean the variable to calculate Number of Lambda value.
+	 * Method to check whether the evaluated expression is of the 
+	 * same builder method or is of a class.
 	 * @author Mariana Azevedo
-	 * @since 29/09/2019
+	 * @since 05/10/2019
+	 * 
+	 * @param node
+	 * @return boolean
 	 */
-	public void cleanVariable(){
-		this.lambdaIndex = 0d;
+	private boolean calculateNumberOfLambdas(Expression node) {
+		String lambdaClassName = ((CompilationUnit) node.getRoot()).getJavaElement().getElementName();
+		if(!expressionsMap.containsKey(lambdaClassName)) {
+			expressionsMap.put(lambdaClassName, new ArrayList<>());
+		}
+
+		List<String> expressionsList = expressionsMap.get(lambdaClassName);
+		if(!expressionsList.contains(node.toString())) {
+			expressionsList.add(node.toString());
+			return false;
+		}
+
+		return true;
 	}
 	
 	/**
-	 * Method to get the number of lambdas
+	 * Method to get the number of lambdas in a class
 	 * @author Mariana Azevedo
 	 * @since 29/09/2019
 	 * @return int
 	 */
-	public int getNumOfLambdas() {
-		return lambdaIndex.intValue();
+	public int getNumOfLambdas(String className) {
+		return expressionsMap.get(className) != null ? expressionsMap.get(className).size() : 0;
 	}
 }

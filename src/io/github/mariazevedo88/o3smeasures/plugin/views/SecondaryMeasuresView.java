@@ -25,6 +25,15 @@ import io.github.mariazevedo88.o3smeasures.main.Application;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 import io.github.mariazevedo88.o3smeasures.util.FileExport;
 
+/**
+ * Class that inherits of the ViewPart abstract class (that implements
+ * all workbench views) and creates the spreadsheet view of the measurement
+ * results of a project.
+ * @see ViewPart
+ * 
+ * @author Mariana Azevedo
+ * @since 22/09/2019
+ */
 public class SecondaryMeasuresView extends ViewPart {
 	
 	private static final Logger logger = Logger.getLogger(SecondaryMeasuresView.class);
@@ -85,10 +94,12 @@ public class SecondaryMeasuresView extends ViewPart {
 			
 			Runnable buildViews = () -> {
 				try {
-					itemsMeasured = createModel(project, o3smeasuresPlugin);
-					if (itemsMeasured != null) {
-						viewer.setInput(itemsMeasured);
-						viewer.refresh(true);
+					if(o3smeasuresPlugin != null) {
+						itemsMeasured = createModel(project, o3smeasuresPlugin);
+						if (itemsMeasured != null) {
+							viewer.setInput(itemsMeasured);
+							viewer.refresh(true);
+						}
 					}
 				} catch (CoreException exception) {
 					logger.error(exception);
