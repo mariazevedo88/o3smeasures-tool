@@ -23,6 +23,11 @@ import io.github.mariazevedo88.o3smeasures.measures.main.NumberOfMethods;
 import io.github.mariazevedo88.o3smeasures.measures.main.ResponseForClass;
 import io.github.mariazevedo88.o3smeasures.measures.main.TightClassCohesion;
 import io.github.mariazevedo88.o3smeasures.measures.main.WeightMethodsPerClass;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.Abstractness;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.AfferentCoupling;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.DistanceMainSequence;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.EfferentCoupling;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.Instability;
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfInterfaces;
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfLambdas;
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfPackages;
@@ -120,6 +125,7 @@ public class Application {
 	 * @since 29/09/2019
 	 */
 	private void createSecondaryMeasureArray(){
-		secondaryMeasures = Arrays.asList(new NumberOfPackages(), new NumberOfLambdas(), new NumberOfInterfaces());
+		secondaryMeasures = Arrays.asList(new NumberOfPackages(), new NumberOfLambdas(), new NumberOfInterfaces(),
+			new Abstractness(), new EfferentCoupling(), new AfferentCoupling(), new Instability(), new DistanceMainSequence());
 	}
 }

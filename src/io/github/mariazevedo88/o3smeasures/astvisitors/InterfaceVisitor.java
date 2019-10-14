@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class InterfaceVisitor extends ASTVisitor {
 	
-	private Double numberOfInterfaces;
+	private double numberOfInterfaces;
 	
 	private static InterfaceVisitor instance;
 	
@@ -32,7 +32,13 @@ public class InterfaceVisitor extends ASTVisitor {
 		return false;
 	}
 
-	public Double getNumberOfInterfaces() {
+	/**
+	 * Method that returns the number of interfaces of a project
+	 * @author Mariana Azevedo
+	 * @since 05/10/2019
+	 * @return
+	 */
+	public double getNumberOfInterfaces() {
 		return numberOfInterfaces;
 	}
 	

@@ -41,9 +41,7 @@ public class FanOutVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(CompilationUnit node) {
-		
 		calculateFanOut(node);
-		
 		return false;
 	}
 	
