@@ -25,7 +25,7 @@ public class AfferentCoupling extends Measure {
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;
-		addApplicableGranularity(GranularityEnum.METHOD);
+		addApplicableGranularity(GranularityEnum.PACKAGE);
 	}
 	
 	@Override

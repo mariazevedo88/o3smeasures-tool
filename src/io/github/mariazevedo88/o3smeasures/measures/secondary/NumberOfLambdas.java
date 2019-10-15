@@ -3,6 +3,7 @@ package io.github.mariazevedo88.o3smeasures.measures.secondary;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
 import io.github.mariazevedo88.o3smeasures.astvisitors.LambdaVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
@@ -84,7 +85,9 @@ public class NumberOfLambdas extends Measure {
 
 	@Override
 	public void setMeanValue(double value) {
-		this.mean = value;
+		if (ClassVisitor.getNumOfProjectClasses() > 0d){
+			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
+		}
 	}
 
 	@Override

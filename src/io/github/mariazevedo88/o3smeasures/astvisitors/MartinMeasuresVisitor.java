@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jdt.core.Flags;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
@@ -19,6 +20,9 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 	private double afferentIndex;
 	
 	private Map<String, Double> afferentClasses;
+	private IType[] allTypes;
+	
+	private double numberOfTypes;
 
 	public MartinMeasuresVisitor(){
 		super();
@@ -26,6 +30,8 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 		this.efferentIndex = 0d;
 		this.afferentIndex = 0d;
 		this.afferentClasses = new HashMap<>();
+		
+		this.numberOfTypes = 0d;
 	}
 	
 	public static MartinMeasuresVisitor getInstance(){
@@ -52,12 +58,15 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 	}
 
 	private void calculateAbstractness(TypeDeclaration unit) {
-		if(unit.isInterface()) {
-			abstractnessIndex++;
-		} else {
-			int flags = unit.getFlags();
-			if (Flags.isAbstract(flags) && Flags.isPublic(flags)) {
+		if(allTypes != null) {
+			numberOfTypes += allTypes.length;
+			if(unit.isInterface()) {
 				abstractnessIndex++;
+			} else {
+				int flags = unit.getFlags();
+				if (Flags.isAbstract(flags) && Flags.isPublic(flags)) {
+					abstractnessIndex++;
+				}
 			}
 		}
 	}
@@ -86,7 +95,7 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 	}
 
 	public double getAbstractnessIndex() {
-		return abstractnessIndex;
+		return abstractnessIndex/numberOfTypes;
 	}
 	
 	public double getEfferentIndex() {
@@ -98,11 +107,23 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 	}
 	
 	public double getInstabilityIndex() {
-		return efferentIndex/(afferentIndex + efferentIndex);
+		double instabilityIndex = efferentIndex/(afferentIndex + efferentIndex);
+		return Double.isNaN(instabilityIndex) ? 0d : instabilityIndex;
 	}
 	
 	public double getDistanceMainSequence() {
-		return abstractnessIndex + getInstabilityIndex() - 1;
+		double distanceMainSeq = Math.abs(abstractnessIndex + getInstabilityIndex() - 1);
+		return Double.isNaN(distanceMainSeq) ? 0d : distanceMainSeq;
+	}
+	
+	/**
+	 * Method to get all ITypes from a compilation unit
+	 * @author Mariana Azevedo
+	 * @since 14/10/2019
+	 * @param types
+	 */
+	public void addListOfTypes(IType[] types){
+		this.allTypes = types;
 	}
 	
 	/**
@@ -114,6 +135,8 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 		this.abstractnessIndex = 0d;
 		this.efferentIndex = 0d;
 		this.afferentIndex = 0d;
+		this.numberOfTypes = 0d;
+		this.allTypes = null;
 		this.afferentClasses.clear();
 	}
 

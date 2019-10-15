@@ -1,9 +1,14 @@
 package io.github.mariazevedo88.o3smeasures.measures.secondary;
 
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+
+import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.NumberOfMethodReferenceVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
-public class NumberOfMethodReferences extends Measure {
+public class NumberOfMethodReference extends Measure {
 
 	private double value;
 	private double mean;
@@ -12,7 +17,7 @@ public class NumberOfMethodReferences extends Measure {
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public NumberOfMethodReferences(){
+	public NumberOfMethodReference(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -80,7 +85,9 @@ public class NumberOfMethodReferences extends Measure {
 
 	@Override
 	public void setMeanValue(double value) {
-		this.mean = value;
+		if (ClassVisitor.getNumOfProjectClasses() > 0d){
+			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
+		}
 	}
 
 	@Override
@@ -116,6 +123,26 @@ public class NumberOfMethodReferences extends Measure {
 	@Override
 	public <T> void measure(T unit) {
 		
+		// Now create the AST for the ICompilationUnits
+		CompilationUnit parse = parse(unit);
+		NumberOfMethodReferenceVisitor visitor = NumberOfMethodReferenceVisitor.getInstance();
+		String className = parse.getJavaElement().getElementName();
+		parse.accept(visitor);
+
+		setCalculatedValue(getNumberOfMethodRef(className, visitor));
+		setMeanValue(getCalculatedValue());
+		
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
+		setMinValue(getCalculatedValue());
 	}
 
 	/**
@@ -124,7 +151,7 @@ public class NumberOfMethodReferences extends Measure {
 	 * @since 05/10/2019
 	 * @return Double
 	 */
-	public Double getNumberOfMethodRef(String className){
-		return null;
+	public Double getNumberOfMethodRef(String className, NumberOfMethodReferenceVisitor visitor){
+		return Double.valueOf(visitor.getNumOfMethodReferences(className));
 	}
 }

@@ -1,5 +1,9 @@
 package io.github.mariazevedo88.o3smeasures.measures.secondary;
 
+import org.apache.log4j.Logger;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
@@ -9,6 +13,8 @@ import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 public class Abstractness extends Measure {
+	
+	private static final Logger logger = Logger.getLogger(Abstractness.class);
 	
 	private double value;
 	private double mean;
@@ -124,25 +130,38 @@ public class Abstractness extends Measure {
 	@Override
 	public <T> void measure(T unit) {
 		
-		// Now create the AST for the ICompilationUnits
-		CompilationUnit parse = parse(unit);
-		MartinMeasuresVisitor visitor = MartinMeasuresVisitor.getInstance();
-		parse.accept(visitor);
-
-		setCalculatedValue(visitor.getAbstractnessIndex());
-		setMeanValue(0d);
+		IType[] iTypes = null;
 		
-		String elementName = "";
+		try {
+			
+			iTypes = ((ICompilationUnit)unit).getTypes();
 		
-		if(parse.getJavaElement() == null) {
-			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-			elementName = clazz.getName().toString();
-		}else{
-			elementName = parse.getJavaElement().getElementName();
+			// Now create the AST for the ICompilationUnits
+			CompilationUnit parse = parse(unit);
+			MartinMeasuresVisitor visitor = MartinMeasuresVisitor.getInstance();
+			visitor.cleanVariables();
+			visitor.addListOfTypes(iTypes);
+			parse.accept(visitor);
+	
+			setCalculatedValue(visitor.getAbstractnessIndex());
+			setMeanValue(0d);
+			
+			String elementName = "";
+			
+			if(parse.getJavaElement() == null) {
+				TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+				elementName = clazz.getName().toString();
+			}else{
+				elementName = parse.getJavaElement().getElementName();
+			}
+			
+			setMaxValue(getCalculatedValue(), elementName);
+			setMinValue(getCalculatedValue());
+			
+		} catch (JavaModelException exception) {
+			setCalculatedValue(0d);
+			logger.error(exception);
 		}
-		
-		setMaxValue(getCalculatedValue(), elementName);
-		setMinValue(getCalculatedValue());
 	}
 
 }
