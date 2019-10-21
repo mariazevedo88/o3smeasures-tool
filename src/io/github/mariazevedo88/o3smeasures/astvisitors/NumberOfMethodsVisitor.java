@@ -14,11 +14,11 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 /**
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the NOM (Number of Methods) measure.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class NumberOfMethodsVisitor extends ASTVisitor{
 
@@ -30,6 +30,14 @@ public class NumberOfMethodsVisitor extends ASTVisitor{
 		methodsList = new ArrayList<>();
 	}
 	
+	/**
+	 * Method that creates a NumberOfMethodsVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/04/2017
+	 * 
+	 * @return NumberOfMethodsVisitor
+	 */
 	public static NumberOfMethodsVisitor getInstance(){
 		if(instance == null) {
 			instance = new NumberOfMethodsVisitor();
@@ -48,8 +56,10 @@ public class NumberOfMethodsVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to calculate the number of methods in a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 */
 	private void calculateNumberOfMethods(CompilationUnit unit){
@@ -67,8 +77,10 @@ public class NumberOfMethodsVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to get the number of methods in a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return Double
 	 */
 	public Double getNumberOfMethods(){
@@ -77,6 +89,7 @@ public class NumberOfMethodsVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that clean the array used to calculate NOM value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */

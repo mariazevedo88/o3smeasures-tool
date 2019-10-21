@@ -33,6 +33,7 @@ import io.github.mariazevedo88.o3smeasures.util.FileExport;
  * Class that inherits of the ViewPart abstract class (that implements
  * all workbench views) and creates the spreadsheet view of the measurement
  * results of a project.
+ * 
  * @see ViewPart
  * 
  * @author Mariana Azevedo
@@ -79,13 +80,12 @@ public class MainMeasuresView extends ViewPart {
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @param elem
+	 * @param elements
 	 */
-	private void createProjectModel(IJavaElement elem) {
-		if (elem != null) {
-
+	private void createProjectModel(IJavaElement elements) {
+		if (elements != null) {
 			try {
-				project = (IProject) elem.getUnderlyingResource();
+				project = (IProject) elements.getUnderlyingResource();
 				setProject(project);
 				setContentDescription("Project: " + project.getName());
 				createViews(project);
@@ -289,7 +289,6 @@ public class MainMeasuresView extends ViewPart {
 		});
 	}
 
-
 	/**
 	 * Method to fulfill column basic informations
 	 * 
@@ -298,6 +297,7 @@ public class MainMeasuresView extends ViewPart {
 	 * 
 	 * @param width
 	 * @param columnName
+	 * 
 	 * @return column
 	 */
 	public TreeViewerColumn fulfillColumn(int width, String columnName) {
@@ -365,7 +365,9 @@ public class MainMeasuresView extends ViewPart {
 	 * @since 13/07/2014
 	 * 
 	 * @param project
+	 * 
 	 * @return ItemMeasured
+	 * 
 	 * @throws CoreException
 	 */
 	private ItemMeasured createModel(IProject project) throws CoreException {
@@ -430,6 +432,8 @@ public class MainMeasuresView extends ViewPart {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
+	 * @return IProject
 	 */
 	public IProject getProject(){
 		return project;
@@ -440,6 +444,8 @@ public class MainMeasuresView extends ViewPart {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
+	 * @return Application
 	 */
 	public Application getApplicationInstance(){
 		return o3smeasuresPlugin;

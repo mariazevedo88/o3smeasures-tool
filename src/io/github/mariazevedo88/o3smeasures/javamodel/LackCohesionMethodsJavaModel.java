@@ -24,12 +24,12 @@ import io.github.mariazevedo88.o3smeasures.javamodel.generic.IJavaModel;
 
 /**
  * A JavaModel class to access the JavaModel of a class
- * to calculate the LCOM, LCOM2, and LCOM4 measures. 
+ * to calculate the LCOM, LCOM2, and LCOM4 measures.
+ *  
  * @see IJavaModel
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit>{
 
@@ -61,6 +61,14 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 		this.lcom4Value = 0d;
 	}
 	
+	/**
+	 * Method that creates a LackCohesionMethodsJavaModel instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return LackCohesionMethodsJavaModel
+	 */
 	public static LackCohesionMethodsJavaModel getInstance(){
 		if(instance == null) {
 			instance = new LackCohesionMethodsJavaModel();
@@ -110,8 +118,10 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	/**
 	 * Method that adds on the hash map all methods that
 	 * share common attributes.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param field
 	 * @param method
 	 */
@@ -131,11 +141,14 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 				addMethod(method, sharedMethods);
 			}
 		}
-		
 	}
 
 	/**
 	 * Method that add a method in the set
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
 	 * @param method
 	 * @param methodSet
 	 */
@@ -147,8 +160,10 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	/**
 	 * Method to check with methods share common attributes, according to
 	 * CK definition.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param methods
 	 */
 	@SuppressWarnings("deprecation")
@@ -176,8 +191,10 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	
 	/**
 	 * Method that calculates LCOM value, according to CK definition.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return Double
 	 */
 	private Double calculateLCOMValue(){
@@ -204,8 +221,10 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	
 	/**
 	 * Method that calculates LCOM2 value, according to Henderson-Sellers definition.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double (avg(m(a)) - m)/(1 - m) where m(a) is the number of methods that access a
 	 */
 	private double calculateLCOM2Value(){
@@ -233,8 +252,10 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	
 	/**
 	 * Method to check with methods are connected components, according to Hitz and Montazeri definition.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return Double
 	 */
 	private Double calculateLCOM4Value(){
@@ -243,6 +264,7 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	
 	/**
 	 * Method that clean all hash maps used to calculate LCOM values.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -258,8 +280,11 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	
 	/**
 	 * Method to get LCOM type (Options: LCOM, LCOM2, and LCOM4).
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
+	 * @return String
 	 */
 	public String getLcomType() {
 		return lcomType;
@@ -267,6 +292,7 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 
 	/**
 	 * Method to set LCOM type (Options: LCOM, LCOM2, and LCOM4).
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -276,6 +302,7 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	
 	/**
 	 * Method to set LCOM value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -285,6 +312,7 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 
 	/**
 	 * Method to set LCOM2 value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -294,6 +322,7 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 
 	/**
 	 * Method to set LCOM4 value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -303,28 +332,37 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 
 	/**
 	 * Method to get LCOM value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
+	 * @return double
 	 */
-	public Double getLcomValue(){
+	public double getLcomValue(){
 		return lcomValue;
 	}
 	
 	/**
 	 * Method to get LCOM2 value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
+	 * @return double
 	 */
-	public Double getLcom2Value(){
+	public double getLcom2Value(){
 		return lcom2Value;
 	} 
 	
 	/**
 	 * Method to get LCOM4 value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
+	 * @return double
 	 */
-	public Double getLcom4Value(){ 
+	public double getLcom4Value(){ 
 		return lcom4Value;
 	}
 }

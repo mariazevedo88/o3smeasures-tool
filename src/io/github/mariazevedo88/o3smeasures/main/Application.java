@@ -31,6 +31,7 @@ import io.github.mariazevedo88.o3smeasures.measures.secondary.Instability;
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfInterfaces;
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfLambdas;
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfMethodReference;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfModules;
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfPackages;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
@@ -127,7 +128,7 @@ public class Application {
 	 */
 	private void createSecondaryMeasureArray(){
 		secondaryMeasures = Arrays.asList(new NumberOfPackages(), new NumberOfLambdas(), new NumberOfInterfaces(), 
-			new NumberOfMethodReference(), new EfferentCoupling(), new AfferentCoupling(), new Abstractness(), 
-			new Instability(), new DistanceMainSequence());
+			new NumberOfMethodReference(), new NumberOfModules(), new EfferentCoupling(), new AfferentCoupling(), 
+			new Abstractness(), new Instability(), new DistanceMainSequence());
 	}
 }

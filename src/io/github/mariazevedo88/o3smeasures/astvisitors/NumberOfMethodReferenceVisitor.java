@@ -12,6 +12,15 @@ import org.eclipse.jdt.core.dom.ExpressionMethodReference;
 
 public class NumberOfMethodReferenceVisitor extends ASTVisitor {
 
+/**
+ * A visitor for abstract syntax trees that implements the number of
+ * method reference calculation.
+ * 
+ * @see ASTVisitor
+ * 
+ * @author Mariana Azevedo
+ * @since 29/09/2019
+ */
 private static NumberOfMethodReferenceVisitor instance;
 	
 	private Map<String, List<String>> referencesMap;
@@ -21,6 +30,14 @@ private static NumberOfMethodReferenceVisitor instance;
 		this.referencesMap = new HashMap<>();
 	}
 	
+	/**
+	 * Method that creates a NumberOfMethodReferenceVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 29/09/2019
+	 * 
+	 * @return NumberOfMethodReferenceVisitor
+	 */
 	public static NumberOfMethodReferenceVisitor getInstance(){
 		if(instance == null) {
 			instance = new NumberOfMethodReferenceVisitor();
@@ -40,6 +57,7 @@ private static NumberOfMethodReferenceVisitor instance;
 	/**
 	 * Method to check whether the evaluated expression is of the 
 	 * same builder method or is of a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 05/10/2019
 	 * 
@@ -63,8 +81,10 @@ private static NumberOfMethodReferenceVisitor instance;
 	
 	/**
 	 * Method to get the number of lambdas in a class
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 29/09/2019
+	 * 
 	 * @return int
 	 */
 	public int getNumOfMethodReferences(String className) {

@@ -18,11 +18,11 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the TCC (Tight Class Cohesion) 
  * measure.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class TightClassCohesionVisitor extends ASTVisitor{
 

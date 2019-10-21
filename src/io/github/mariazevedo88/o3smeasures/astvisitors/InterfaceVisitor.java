@@ -4,6 +4,15 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+/**
+ * A visitor for abstract syntax trees, that visits the given node to perform 
+ * the calculation of the number of interfaces.
+ * 
+ * @see ASTVisitor
+ * 
+ * @author Mariana Azevedo
+ * @since 05/10/2019
+ */
 public class InterfaceVisitor extends ASTVisitor {
 	
 	private double numberOfInterfaces;
@@ -15,6 +24,14 @@ public class InterfaceVisitor extends ASTVisitor {
 		numberOfInterfaces = 0d;
 	}
 	
+	/**
+	 * Method that creates a InterfaceVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 05/10/2019
+	 * 
+	 * @return InterfaceVisitor
+	 */
 	public static InterfaceVisitor getInstance(){
 		if(instance == null) {
 			instance = new InterfaceVisitor();
@@ -33,10 +50,12 @@ public class InterfaceVisitor extends ASTVisitor {
 	}
 
 	/**
-	 * Method that returns the number of interfaces of a project
+	 * Method that returns the number of interfaces of a project.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 05/10/2019
-	 * @return
+	 * 
+	 * @return double
 	 */
 	public double getNumberOfInterfaces() {
 		return numberOfInterfaces;
@@ -44,6 +63,7 @@ public class InterfaceVisitor extends ASTVisitor {
 	
 	/**
 	 * Method that clean the variable to calculate Number of Interfaces value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 05/10/2019
 	 */

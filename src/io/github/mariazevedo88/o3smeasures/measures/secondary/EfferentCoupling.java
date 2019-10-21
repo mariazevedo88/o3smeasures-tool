@@ -28,62 +28,98 @@ public class EfferentCoupling extends Measure {
 		addApplicableGranularity(GranularityEnum.PACKAGE);
 	}
 	
+	/**
+	 * @see Measure#getName
+	 */
 	@Override
 	public String getName() {
 		return MeasuresEnum.EC.getName();
 	}
 
+	/**
+	 * @see Measure#getAcronym
+	 */
 	@Override
 	public String getAcronym() {
 		return MeasuresEnum.EC.getAcronym();
 	}
 
+	/**
+	 * @see Measure#getDescription
+	 */
 	@Override
 	public String getDescription() {
 		return "The number of classes inside a package that depend "
 				+ "on classes outside the package.";
 	}
 
+	/**
+	 * @see Measure#getProperty
+	 */
 	@Override
 	public String getProperty() {
 		return "Coupling";
 	}
 
+	/**
+	 * @see Measure#getMinValue
+	 */
 	@Override
 	public double getMinValue() {
 		return min;
 	}
 
+	/**
+	 * @see Measure#getMaxValue
+	 */
 	@Override
 	public double getMaxValue() {
 		return max;
 	}
 
+	/**
+	 * @see Measure#getClassWithMaxValue
+	 */
 	@Override
 	public String getClassWithMaxValue() {
 		return classWithMaxValue;
 	}
 
+	/**
+	 * @see Measure#getMeanValue
+	 */
 	@Override
 	public double getMeanValue() {
 		return mean;
 	}
 
+	/**
+	 * @see Measure#getRefValue
+	 */
 	@Override
 	public double getRefValue() {
-		return 0d;
+		return 6d;
 	}
 
+	/**
+	 * @see Measure#getCalculatedValue
+	 */
 	@Override
 	public double getCalculatedValue() {
 		return value;
 	}
 
+	/**
+	 * @see Measure#setCalculatedValue
+	 */
 	@Override
 	public void setCalculatedValue(double value) {
 		this.value = value;
 	}
 
+	/**
+	 * @see Measure#setMeanValue
+	 */
 	@Override
 	public void setMeanValue(double value) {
 		if (ClassVisitor.getNumOfProjectClasses() > 0d){
@@ -116,11 +152,17 @@ public class EfferentCoupling extends Measure {
 		return isEnable;
 	}
 
+	/**
+	 * @see Measure#setEnable
+	 */
 	@Override
 	public void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
 	}
 
+	/**
+	 * @see Measure#measure
+	 */
 	@Override
 	public <T> void measure(T unit) {
 

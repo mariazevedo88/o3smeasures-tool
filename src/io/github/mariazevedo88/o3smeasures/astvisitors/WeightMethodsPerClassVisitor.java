@@ -29,11 +29,11 @@ import org.eclipse.jdt.core.dom.WhileStatement;
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the WMC (Weight Methods per Class) 
  * measure.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	
@@ -49,6 +49,14 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 		this.visitor = new CyclomaticComplexityVisitor();
 	}
 	
+	/**
+	 * Method that creates a WeightMethodsPerClassVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/04/2017
+	 * 
+	 * @return WeightMethodsPerClassVisitor
+	 */
 	public static WeightMethodsPerClassVisitor getInstance(){
 		if(instance == null) {
 			instance = new WeightMethodsPerClassVisitor();

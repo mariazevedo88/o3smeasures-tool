@@ -20,11 +20,11 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the LCC (Loose Class Cohesion) 
  * measure.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class LooseClassCohesionVisitor extends ASTVisitor{
 	
@@ -42,6 +42,14 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 		numIndirectConnections = 0d;
 	}
 	
+	/**
+	 * Method that creates a LooseClassCohesionVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return LooseClassCohesionVisitor
+	 */
 	public static LooseClassCohesionVisitor getInstance(){
 		if(instance == null) {
 			instance = new LooseClassCohesionVisitor();
@@ -64,8 +72,10 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to get all attributes or fields of a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param node
 	 */
 	@SuppressWarnings("unchecked")
@@ -91,11 +101,12 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	/**
 	 * Method to calculate the number of methods of a class and set lists
 	 * of methods with direct connections and method with indirect connections.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 */
-	
 	private void calculateNumberOfMethods(CompilationUnit unit){
 		
 		List<MethodDeclaration> methodsWithDirectConn = new ArrayList<>(); 
@@ -121,10 +132,13 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 
 	/**
 	 * Method to get the number of methods with direct connections.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param methodsWithDirectConn
 	 * @param itMethods
+	 * 
 	 * @return List 
 	 */
 	private List<MethodDeclaration> getNumberOfDirectConnections(List<MethodDeclaration> methodsWithDirectConn,
@@ -155,8 +169,10 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to get the number of methods with indirect connections.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param methodsWithDirectConn
 	 * @param itMethods
 	 */
@@ -183,8 +199,10 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to calculate the LCC value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	private double calculateNP(){
@@ -198,22 +216,26 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to get the LCC value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return Double
 	 */
-	public Double getLCCIndex(){
-		Double np = calculateNP();
-		Double lccValue = 0d;
+	public double getLCCIndex(){
+		double np = calculateNP();
+		double lccValue = 0d;
 		if (np != 0d){
 			Double value = (numDirectConnections + numIndirectConnections)/np;
 			lccValue = new BigDecimal(value, new MathContext(3, RoundingMode.UP)).doubleValue();
 		}
+		
 		return lccValue;
 	}
 	
 	/**
 	 * Method that clean the variable used to calculate LCC value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */

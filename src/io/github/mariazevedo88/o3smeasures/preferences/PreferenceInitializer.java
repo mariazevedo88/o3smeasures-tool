@@ -7,6 +7,7 @@ import io.github.mariazevedo88.o3smeasures.plugin.Activator;
 
 /**
  * Class that implements the plugin preference page inicialization.
+ * 
  * @see AbstractPreferenceInitializer
  *  
  * @author Mariana Azevedo
@@ -30,8 +31,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	/**
 	 * Method that initialize in the preference page, the path of the directory used 
 	 * to export the measurement results.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return path in string format
 	 */
 	private String getPathFolder(){

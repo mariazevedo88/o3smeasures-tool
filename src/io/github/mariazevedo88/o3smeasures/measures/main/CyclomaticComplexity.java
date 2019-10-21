@@ -96,7 +96,7 @@ public class CyclomaticComplexity extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 1d;
+		return 2d;
 	}
 
 	/**
@@ -222,6 +222,9 @@ public class CyclomaticComplexity extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 1d){

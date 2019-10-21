@@ -26,7 +26,8 @@ public enum MeasuresEnum {
 	EC("EC", "Efferent Coupling"),
 	A("A", "Abstractness"),
 	I("A", "Instability"),
-	DFMS("DFMS", "Distance from the Main Sequence");
+	D("DFMS", "Distance from the Main Sequence"),
+	NMO("NMO", "Number of Modules");
 	
 	private String acronym;
 	private String name;

@@ -12,11 +12,11 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 /**
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the LOC (Lines of Code) measure.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class LinesOfCodeVisitor extends ASTVisitor{
 
@@ -28,6 +28,14 @@ public class LinesOfCodeVisitor extends ASTVisitor{
 		this.numberOfLinesOfCode = 0d;
 	}
 	
+	/**
+	 * Method that creates a LinesOfCodeVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return LinesOfCodeVisitor
+	 */
 	public static LinesOfCodeVisitor getInstance(){
 		if(instance == null) {
 			instance = new LinesOfCodeVisitor();
@@ -50,9 +58,11 @@ public class LinesOfCodeVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * Method to get the number of lines for a class
+	 * Method to get the number of lines for a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return Double
 	 */
 	public Double getNumberOfLinesOfCode(){
@@ -61,6 +71,7 @@ public class LinesOfCodeVisitor extends ASTVisitor{
 
 	/**
 	 * Method that clean the variable used to calculate LOC value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */

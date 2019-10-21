@@ -13,6 +13,7 @@ import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
  * Class that inherits of the ViewPart abstract class (that implements
  * all workbench views) and creates the pie chart (PieChartView) of the measurement
  * results of a project.
+ * 
  * @see ViewPart
  *  
  * @author Mariana Azevedo
@@ -24,12 +25,13 @@ public class PieChartView extends ViewPart {
 	public static final String ID = "io.github.mariazevedo88.o3smeasures.plugin.views.PieChartView";
 	private ChartComposite view;
 	private JFreeChart jFreeChart;
-	
 
 	/**
 	 * Method to plot the pie chart
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param itemMeasured
 	 */
 	public void showPieChart(ItemMeasured itemMeasured) {
@@ -43,8 +45,10 @@ public class PieChartView extends ViewPart {
 	/**
 	 * This is a callback method that will allow us to create the viewer and initialize
 	 * it.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param parent
 	 */
 	@Override
@@ -56,6 +60,7 @@ public class PieChartView extends ViewPart {
 
 	/**
 	 * Passing the focus request to the viewer's control.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -67,6 +72,7 @@ public class PieChartView extends ViewPart {
 	
 	/**
 	 * Method to set a jFreechart instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -76,12 +82,14 @@ public class PieChartView extends ViewPart {
 	
 	/**
 	 * Method to get a jFreechart instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
+	 * @return JFreeChart
 	 */
 	private JFreeChart getPieChart(){
 		return jFreeChart;
 	}
-	
 }
 

@@ -21,7 +21,7 @@ public class JSefaConverter implements SimpleTypeConverter {
 	
 	@Override
 	public Object fromString(String str) {
-		return new Double(str);
+		return Double.valueOf(str);
 	}
 	@Override
 	public String toString(Object doubleObj) {

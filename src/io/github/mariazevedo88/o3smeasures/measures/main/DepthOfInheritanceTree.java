@@ -89,7 +89,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 0d;
+		return 2d;
 	}
 
 	/**
@@ -185,6 +185,9 @@ public class DepthOfInheritanceTree extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 0d){

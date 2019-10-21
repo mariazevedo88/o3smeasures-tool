@@ -206,6 +206,9 @@ public class NumberOfClasses extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 0d){

@@ -14,6 +14,7 @@ import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
  * all workbench views) and creates a bar chart view of the measurement
  * results of a project, based on the indicators that composed the 
  * internal quality factors.
+ * 
  * @see ViewPart
  * 
  * @author Mariana Azevedo
@@ -36,8 +37,10 @@ public class IndicatorsView extends ViewPart {
 	
 	/**
 	 * Method to plot the bar chart
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
+	 * 
 	 * @param itemMeasured
 	 */
 	public void showIndicatorChart(ItemMeasured itemMeasured){
@@ -48,12 +51,13 @@ public class IndicatorsView extends ViewPart {
 		setIndicatorsChart(jFreeChart);
 	}
 
-
 	/**
 	 * This is a callback method that will allow us to create the viewer and initialize
 	 * it.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
+	 * 
 	 * @param parent
 	 */
 	@Override
@@ -61,12 +65,11 @@ public class IndicatorsView extends ViewPart {
 		view = new ChartComposite(parent, SWT.NONE, getIndicatorsChart(), true);
 		view.pack();
 		view.update();
-		
 	}
 
-	
 	/**
 	 * Passing the focus request to the viewer's control.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
 	 */
@@ -78,6 +81,7 @@ public class IndicatorsView extends ViewPart {
 	
 	/**
 	 * Method to set a jFreeChart instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
 	 */
@@ -87,11 +91,13 @@ public class IndicatorsView extends ViewPart {
 	
 	/**
 	 * Method to get a jFreeChart instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
+	 * 
+	 * @return JFreeChart
 	 */
 	private JFreeChart getIndicatorsChart(){
 		return jFreeChart;
 	}
-
 }

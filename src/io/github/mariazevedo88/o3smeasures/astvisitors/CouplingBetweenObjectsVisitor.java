@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  * A visitor for abstract syntax trees, that visits the given 
  * node to perform the calculation of the CBO (Coupling between 
  * Objects) measure.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
@@ -35,6 +36,14 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 		iTypeList = new IType[size];
 	}
 	
+	/**
+	 * Method that creates a CouplingBetweenObjectsVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return CouplingBetweenObjectsVisitor
+	 */
 	public static CouplingBetweenObjectsVisitor getInstance(){
 		if(instance == null) {
 			instance = new CouplingBetweenObjectsVisitor();
@@ -55,8 +64,10 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	/**
 	 * Method that calculates the number of classes of 
 	 * a specific project.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 */
 	@SuppressWarnings("unchecked")
@@ -74,8 +85,10 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 
 	/**
 	 * Method that verify method statements
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param method
 	 * @param firstMethodBody
 	 */
@@ -88,8 +101,10 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	/**
 	 * Method that verify how many times a method is referenced
 	 * by another method body declaration 
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param method
 	 * @param firstMethodStatements
 	 */
@@ -108,8 +123,10 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to get all ITypes from a compilation unit
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param types
 	 */
 	public void addListOfTypes(IType[] types){
@@ -118,6 +135,7 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that clean the array used to calculate CBO value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -128,9 +146,11 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to get CBO value for a compilation unit
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014 
-	 * @return
+	 * 
+	 * @return Double
 	 */
 	public Double getCouplingBetweenObjectsIndex(){
 		return Double.valueOf(iTypeList.length) + Double.valueOf(numCalls);

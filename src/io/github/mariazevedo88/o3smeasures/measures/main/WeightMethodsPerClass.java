@@ -95,7 +95,7 @@ public class WeightMethodsPerClass extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 1d;
+		return 11d;
 	}
 
 	/**
@@ -222,6 +222,9 @@ public class WeightMethodsPerClass extends Measure{
 		
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 1d){

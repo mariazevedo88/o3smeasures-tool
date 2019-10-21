@@ -1,17 +1,25 @@
 package io.github.mariazevedo88.o3smeasures.measures.secondary;
 
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+
+import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.NumberOfModulesVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement the NPK - Number of Packages, which indicates
- * the number of packages of a project. The range is [0,∞].
- * @see Measure
+ * Class that implements the NMO - Number of modules measure. It calculates the number 
+ * of modules in a project. ava 9 introduces a new level of abstraction above packages, 
+ * formally known as the Java Platform Module System (JPMS), or “Modules” for short. 
+ * A Module is a group of closely related packages and resources along with a new module 
+ * descriptor file.
  * 
  * @author Mariana Azevedo
- * @since 29/09/2019
+ * @since 19/10/2019
+ *
  */
-public class NumberOfPackages extends Measure {
+public class NumberOfModules extends Measure {
 	
 	private double value;
 	private double mean;
@@ -20,14 +28,14 @@ public class NumberOfPackages extends Measure {
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public NumberOfPackages(){
+	public NumberOfModules(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
 		this.min = 0d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;		
+		this.isEnable = true;
 		addApplicableGranularity(GranularityEnum.PROJECT);
 	}
 
@@ -36,7 +44,7 @@ public class NumberOfPackages extends Measure {
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.NPK.getName();
+		return MeasuresEnum.NMO.getName();
 	}
 
 	/**
@@ -44,7 +52,7 @@ public class NumberOfPackages extends Measure {
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.NPK.getAcronym();
+		return MeasuresEnum.NMO.getAcronym();
 	}
 
 	/**
@@ -52,7 +60,7 @@ public class NumberOfPackages extends Measure {
 	 */
 	@Override
 	public String getDescription() {
-		return "Total number of packages in a project";
+		return "Total number of modules used in a project";
 	}
 
 	/**
@@ -60,7 +68,7 @@ public class NumberOfPackages extends Measure {
 	 */
 	@Override
 	public String getProperty() {
-		return "Size";
+		return "Complexity";
 	}
 
 	/**
@@ -87,6 +95,9 @@ public class NumberOfPackages extends Measure {
 		return classWithMaxValue;
 	}
 
+	/**
+	 * @see Measure#getMeanValue
+	 */
 	@Override
 	public double getMeanValue() {
 		return mean;
@@ -97,7 +108,7 @@ public class NumberOfPackages extends Measure {
 	 */
 	@Override
 	public double getRefValue() {
-		return 1d;
+		return 0d;
 	}
 
 	/**
@@ -120,8 +131,10 @@ public class NumberOfPackages extends Measure {
 	 * @see Measure#setMeanValue
 	 */
 	@Override
-	public void setMeanValue(double value) {
-		this.mean = value;
+	public void setMeanValue(double mean) {
+		if (ClassVisitor.getNumOfProjectClasses() > 0d){
+			this.mean = (mean/ClassVisitor.getNumOfProjectClasses());
+		}
 	}
 
 	/**
@@ -131,6 +144,7 @@ public class NumberOfPackages extends Measure {
 	public void setMaxValue(double value, String className) {
 		if (max < value){
 			this.max = value;
+			setClassWithMaxValue(className);
 		}
 	}
 
@@ -174,11 +188,40 @@ public class NumberOfPackages extends Measure {
 	@Override
 	public <T> void measure(T unit) {
 		
-		setCalculatedValue(1d);
+		// Now create the AST for the ICompilationUnits
+		CompilationUnit parse = parse(unit);
+		NumberOfModulesVisitor visitor = NumberOfModulesVisitor.getInstance();
+		visitor.cleanVariables();
+		parse.accept(visitor);
+
+		setCalculatedValue(getNumberOfModules(visitor));
 		setMeanValue(0d);
 		
-		setMaxValue(getCalculatedValue(), "");
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
 		setMinValue(getCalculatedValue());
 	}
-
+	
+	/**
+	 * Method to get the number of lambdas in a class.
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 20/10/2019
+	 * 
+	 * @param className
+	 * @param visitor
+	 * 
+	 * @return Double
+	 */
+	public Double getNumberOfModules(NumberOfModulesVisitor visitor){
+		return Double.valueOf(visitor.getNumOfModules());
+	}
 }

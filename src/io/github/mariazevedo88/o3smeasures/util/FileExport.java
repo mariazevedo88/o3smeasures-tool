@@ -42,6 +42,7 @@ public class FileExport {
 	
 	/**
 	 * Method to set the path of the file (csv or xml) created.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -60,11 +61,11 @@ public class FileExport {
 		}else{
 			tempFolderPath = preferenceValue.concat(pathDelimiter);
 		}
-		
 	}
 	
 	/**
 	 * Method to build the csv file header.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -76,9 +77,12 @@ public class FileExport {
 	/**
 	 * Method to populate the csv value with the measurement results. Which item 
 	 * is a measure defined in the application.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param itemMeasured
+	 * 
 	 * @return List
 	 */
 	private List<String[]> populateItems(ItemMeasured itemMeasured){
@@ -98,10 +102,13 @@ public class FileExport {
 	
 	/**
 	 * Method to create a csv file with the measurement result.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param outputFile
 	 * @param item
+	 * 
 	 * @throws IOException 
 	 */
 	public void createCSVFile(String outputFile, ItemMeasured item) throws IOException{
@@ -132,10 +139,13 @@ public class FileExport {
 	
 	/**
 	 * Method to create a xml file with the measurement result.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param outputFile
 	 * @param itemMeasured
+	 * 
 	 * @throws IOException 
 	 */
 	public void createXMLFile (String outputFile, ItemMeasured itemMeasured) throws IOException{
@@ -169,5 +179,4 @@ public class FileExport {
 			logger.error(exception);
 		}
 	}
-	
 }

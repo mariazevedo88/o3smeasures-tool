@@ -29,6 +29,7 @@ import io.github.mariazevedo88.o3smeasures.util.FileExport;
  * Class that inherits of the ViewPart abstract class (that implements
  * all workbench views) and creates the spreadsheet view of the measurement
  * results of a project.
+ * 
  * @see ViewPart
  * 
  * @author Mariana Azevedo
@@ -74,7 +75,7 @@ public class SecondaryMeasuresView extends ViewPart {
 	 * @author Mariana Azevedo
 	 * @since 29/09/2019
 	 * 
-	 * @param elem
+	 * @param o3smeasuresPlugin
 	 */
 	private void createProjectModel(Application o3smeasuresPlugin) {
 		setContentDescription("Project: " + getProject().getName());
@@ -88,10 +89,10 @@ public class SecondaryMeasuresView extends ViewPart {
 	 * @since 29/09/2019
 	 * 
 	 * @param project
+	 * @param o3smeasuresPlugin
 	 */
 	private void createViews(final IProject project, Application o3smeasuresPlugin) {
 		if (project.isOpen()) {
-			
 			Runnable buildViews = () -> {
 				try {
 					if(o3smeasuresPlugin != null) {
@@ -105,7 +106,6 @@ public class SecondaryMeasuresView extends ViewPart {
 					logger.error(exception);
 				}
 			};
-			
 			Display.getDefault().asyncExec(buildViews);
 		}
 	}
@@ -118,6 +118,7 @@ public class SecondaryMeasuresView extends ViewPart {
 	 * 
 	 * @param width
 	 * @param columnName
+	 * 
 	 * @return column
 	 */
 	public TreeViewerColumn fulfillColumn(int width, String columnName) {
@@ -251,6 +252,15 @@ public class SecondaryMeasuresView extends ViewPart {
 		});
 	}
 	
+	/**
+	 * Method that implements a callback that will allow us to create the viewer 
+	 * and initialize it. 
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/09/2019
+	 * 
+	 * @param parent
+	 */
 	@Override
 	public void createPartControl(Composite parent) {
 		
@@ -341,10 +351,13 @@ public class SecondaryMeasuresView extends ViewPart {
 	 * Method that instanciate and execute the plugin
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 23/09/2019
 	 * 
 	 * @param project
+	 * @param o3smeasuresPlugin
+	 * 
 	 * @return ItemMeasured
+	 * 
 	 * @throws CoreException
 	 */
 	private ItemMeasured createModel(IProject project, Application o3smeasuresPlugin) throws CoreException {
@@ -409,6 +422,8 @@ public class SecondaryMeasuresView extends ViewPart {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 23/09/2019
+	 * 
+	 * @return IProject
 	 */
 	public IProject getProject(){
 		return project;

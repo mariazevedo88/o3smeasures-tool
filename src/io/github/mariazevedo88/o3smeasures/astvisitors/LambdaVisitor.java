@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.LambdaExpression;
 /**
  * A visitor for abstract syntax trees, that visits the given node to perform 
  * the calculation of the number of lambda expressions.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
@@ -29,6 +30,14 @@ public class LambdaVisitor extends ASTVisitor{
 		this.expressionsMap = new HashMap<>();
 	}
 	
+	/**
+	 * Method that creates a LambdaVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 29/09/2019
+	 * 
+	 * @return LambdaVisitor
+	 */
 	public static LambdaVisitor getInstance(){
 		if(instance == null) {
 			instance = new LambdaVisitor();
@@ -48,6 +57,7 @@ public class LambdaVisitor extends ASTVisitor{
 	/**
 	 * Method to check whether the evaluated expression is of the 
 	 * same builder method or is of a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 05/10/2019
 	 * 
@@ -71,8 +81,10 @@ public class LambdaVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to get the number of lambdas in a class
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 29/09/2019
+	 * 
 	 * @return int
 	 */
 	public int getNumOfLambdas(String className) {

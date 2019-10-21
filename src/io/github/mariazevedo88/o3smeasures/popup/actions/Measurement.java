@@ -25,6 +25,7 @@ import io.github.mariazevedo88.o3smeasures.plugin.views.MainMeasuresView;
 /**
  * Class that extends the AbstractHandler interface for an object 
  * action that is contributed into a popup menu for a view or editor.
+ * 
  * @see AbstractHandler
  *  
  * @author Mariana Azevedo
@@ -66,8 +67,10 @@ public class Measurement extends AbstractHandler {
 	
 	/**
 	 * Method that controls the progress monitor
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 19/07/2019
+	 * 
 	 * @param update
 	 * @param monitor
 	 */
@@ -89,6 +92,7 @@ public class Measurement extends AbstractHandler {
 
 	/**
 	 * Method that check if the user cancelled the measuring' execution
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 19/07/2019
 	 * 
@@ -107,8 +111,10 @@ public class Measurement extends AbstractHandler {
 	
 	/**
 	 * Method to update the views with the measurement results
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param event
 	 */
 	private void updateViews(ExecutionEvent event) {
@@ -146,8 +152,10 @@ public class Measurement extends AbstractHandler {
 	
 	/**
 	 * Method to get the shell instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return shell
 	 */
 	public Shell getShell() {
@@ -156,8 +164,10 @@ public class Measurement extends AbstractHandler {
 
 	/**
 	 * Method to set the shell instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param shell
 	 */
 	public void setShell(Shell shell) {

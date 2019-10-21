@@ -9,6 +9,7 @@ import io.github.mariazevedo88.o3smeasures.plugin.Activator;
 
 /**
  * Class that implements the plugin preference page.
+ * 
  * @see FieldEditorPreferencePage
  * @see IWorkbenchPreferencePage
  *  
