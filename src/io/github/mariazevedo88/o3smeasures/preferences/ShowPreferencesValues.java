@@ -12,6 +12,7 @@ import io.github.mariazevedo88.o3smeasures.plugin.Activator;
 /**
  * Class that implements the abstract handler that show the value chosen in 
  * the preference page.
+ * 
  * @see AbstractHandler
  *  
  * @author Mariana Azevedo

@@ -11,11 +11,11 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the NOA (Number of Attributes) 
  * measure.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class NumberOfAttributesVisitor extends ASTVisitor{
 	
@@ -27,6 +27,14 @@ public class NumberOfAttributesVisitor extends ASTVisitor{
 		numberOfAttributes = 0d;
 	}
 	
+	/**
+	 * Method that creates a NumberOfAttributesVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return NumberOfAttributesVisitor
+	 */
 	public static NumberOfAttributesVisitor getInstance(){
 		if(instance == null) {
 			instance = new NumberOfAttributesVisitor();
@@ -45,8 +53,10 @@ public class NumberOfAttributesVisitor extends ASTVisitor{
 
 	/**
 	 * Method to get the number of attributes or fields in a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return Double
 	 */
 	public Double getNumberOfAttributes(){
@@ -55,6 +65,7 @@ public class NumberOfAttributesVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that clean the variable used to calculate NOA value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */

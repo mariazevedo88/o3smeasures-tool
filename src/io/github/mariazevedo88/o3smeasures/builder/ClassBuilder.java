@@ -8,7 +8,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import io.github.mariazevedo88.o3smeasures.builder.generic.IBuilder;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
-import io.github.mariazevedo88.o3smeasures.structures.Measure.Granularity;
+import io.github.mariazevedo88.o3smeasures.structures.Measure.GranularityEnum;
 
 /**
  * Implementation of IBuilder interface for class quality evaluation. 
@@ -54,7 +54,7 @@ public class ClassBuilder implements IBuilder{
 
 				classItem = new ItemMeasured(unit.getElementName(), item);
 				
-				if (measure.isApplicableGranularity(Granularity.METHOD)) {
+				if (measure.isApplicableGranularity(GranularityEnum.METHOD)) {
 					
 					addMethodsBuilder(measure, unit, classItem);
 					

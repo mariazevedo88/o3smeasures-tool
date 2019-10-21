@@ -13,7 +13,6 @@ import org.jsefa.xml.annotation.XmlElement;
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 @XmlDataType(defaultElementName = "measure")
 public class ItemMeasured {
@@ -52,6 +51,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return String
 	 */
 	public String getName(){
@@ -63,6 +63,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return ItemMeasured
 	 */
 	public ItemMeasured getParent(){
@@ -74,6 +75,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param item
 	 */
 	public void setParent(ItemMeasured item){
@@ -85,6 +87,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return List
 	 */
 	public List<ItemMeasured> getChildren(){
@@ -96,6 +99,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param item
 	 */
 	public void addChild(ItemMeasured item){
@@ -107,6 +111,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	public double getValue(){
@@ -118,6 +123,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param value
 	 */
 	public void setValue(double value){
@@ -129,6 +135,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param value
 	 */
 	public void addValue(double value){
@@ -140,6 +147,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	public double getMean(){
@@ -151,6 +159,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param mean
 	 */
 	public void setMean(double mean){
@@ -162,6 +171,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param mean
 	 */
 	public void addMean(double mean){
@@ -173,6 +183,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	public double getMax(){
@@ -184,6 +195,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param max
 	 */
 	public void setMax(double max){
@@ -195,7 +207,8 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return double
+	 * 
+	 * @return String
 	 */
 	public String getClassWithMax(){
 		return classWithMaxValue;
@@ -206,6 +219,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param classWithMaxValue
 	 */
 	public void setClassWithMax(String classWithMaxValue){
@@ -217,6 +231,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return Measure
 	 */
 	public Measure getMeasure() {
@@ -228,6 +243,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param measure
 	 */
 	public void setMeasure(Measure measure) {
@@ -239,6 +255,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 23/02/2019
+	 * 
 	 * @return double
 	 */
 	public double getMin() {
@@ -250,6 +267,7 @@ public class ItemMeasured {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 23/02/2019
+	 * 
 	 * @param measure
 	 */
 	public void setMin(double min) {

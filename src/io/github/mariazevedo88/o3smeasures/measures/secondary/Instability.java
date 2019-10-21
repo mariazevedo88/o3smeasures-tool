@@ -1,24 +1,25 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.secondary;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.TightClassCohesionVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.MartinMeasuresVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement TCC - Tight Class Cohesion measure. TCC tells the "connection density"
- * (while LCC is only affected by whether the methods are connected at all).
- * @see Measure
+ * Class that implements I - Instability measure. The ratio of efferent coupling (Ce) to total coupling (Ce + Ca) 
+ * such that I = Ce / (Ce + Ca). This metric is an indicator of the package's resilience to change. The range for 
+ * this metric is 0 to 1, with I=0 indicating a completely stable package and I=1 indicating a completely unstable 
+ * package.
  * 
  * @author Mariana Azevedo
- * @since 13/07/2014
+ * @since 14/10/2019
  *
  */
-public class TightClassCohesion extends Measure{
-
+public class Instability extends Measure {
+	
 	private double value;
 	private double mean;
 	private double max;
@@ -26,23 +27,23 @@ public class TightClassCohesion extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public TightClassCohesion(){
+	public Instability(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
 		this.min = 0d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		this.isEnable = true;
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
-	
+
 	/**
 	 * @see Measure#getName
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.TCC.getName();
+		return MeasuresEnum.I.getName();
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class TightClassCohesion extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.TCC.getAcronym();
+		return MeasuresEnum.I.getAcronym();
 	}
 
 	/**
@@ -58,8 +59,16 @@ public class TightClassCohesion extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Measures the 'connection density', so to speak " +
-				"(while LCC is only affected by whether the methods are connected at all).";
+		return "Ce/(Ca + Ce) - indicates the necessity of performing modifications in an entity due to" + 
+				" updates occurred in other software entities";
+	}
+
+	/**
+	 * @see Measure#getProperty
+	 */
+	@Override
+	public String getProperty() {
+		return "Coupling";
 	}
 
 	/**
@@ -76,6 +85,14 @@ public class TightClassCohesion extends Measure{
 	@Override
 	public double getMaxValue() {
 		return max;
+	}
+
+	/**
+	 * @see Measure#getClassWithMaxValue
+	 */
+	@Override
+	public String getClassWithMaxValue() {
+		return classWithMaxValue;
 	}
 
 	/**
@@ -111,13 +128,44 @@ public class TightClassCohesion extends Measure{
 	}
 
 	/**
-	 * @see Measure#getProperty
+	 * @see Measure#setMeanValue
 	 */
 	@Override
-	public String getProperty() {
-		return "Cohesion";
+	public void setMeanValue(double value) {
+		if (ClassVisitor.getNumOfProjectClasses() > 0d){
+			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
+		}
 	}
-	
+
+	/**
+	 * @see Measure#setMaxValue
+	 */
+	@Override
+	public void setMaxValue(double value, String className) {
+		if (max < value){
+			this.max = value;
+			setClassWithMaxValue(className);
+		}
+	}
+
+	/**
+	 * @see Measure#setMinValue
+	 */
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
+
+	/**
+	 * @see Measure#setClassWithMaxValue
+	 */
+	@Override
+	public void setClassWithMaxValue(String value) {
+		this.classWithMaxValue = value;
+	}
+
 	/**
 	 * @see Measure#isEnable
 	 */
@@ -140,12 +188,13 @@ public class TightClassCohesion extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
+		// Now create the AST for the ICompilationUnits
 		CompilationUnit parse = parse(unit);
-		TightClassCohesionVisitor visitor = TightClassCohesionVisitor.getInstance();
-		visitor.cleanArraysAndVariable();
+		MartinMeasuresVisitor visitor = MartinMeasuresVisitor.getInstance();
+		visitor.cleanVariables();
 		parse.accept(visitor);
 
-		setCalculatedValue(getTCCIndex(visitor));
+		setCalculatedValue(visitor.getInstabilityIndex());
 		setMeanValue(getCalculatedValue());
 		
 		String elementName = "";
@@ -159,60 +208,5 @@ public class TightClassCohesion extends Measure{
 		
 		setMaxValue(getCalculatedValue(), elementName);
 		setMinValue(getCalculatedValue());
-	}
-	
-	/**
-	 * Method to get the TCC value for a class.
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * @param visitor
-	 * @return double
-	 */
-	private double getTCCIndex(TightClassCohesionVisitor visitor){
-		return Math.abs(visitor.getTCCValue());
-	}
-
-	/**
-	 * @see Measure#setMeanValue
-	 */
-	@Override
-	public void setMeanValue(double value) {
-		if (ClassVisitor.getNumOfProjectClasses() > 0d){
-			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
-		}
-	}
-
-	/**
-	 * @see Measure#setMaxValue
-	 */
-	@Override
-	public void setMaxValue(double value, String className) {
-		if (max < value){
-			this.max = value;
-			setClassWithMaxValue(className);
-		}
-	}
-
-	/**
-	 * @see Measure#getClassWithMaxValue
-	 */
-	@Override
-	public String getClassWithMaxValue() {
-		return classWithMaxValue;
-	}
-
-	/**
-	 * @see Measure#setClassWithMaxValue
-	 */
-	@Override
-	public void setClassWithMaxValue(String value) {
-		this.classWithMaxValue = value;
-	}
-
-	@Override
-	public void setMinValue(double value) {
-		if (min > value || min == 0d){
-			this.min = value;
-		}
 	}
 }

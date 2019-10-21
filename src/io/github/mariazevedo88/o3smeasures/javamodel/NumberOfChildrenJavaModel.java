@@ -16,11 +16,11 @@ import io.github.mariazevedo88.o3smeasures.javamodel.generic.IJavaModel;
 
 /**
  * A JavaModel class to access the JavaModel of a class to calculate the NOC measures. 
+ * 
  * @see IJavaModel
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class NumberOfChildrenJavaModel implements IJavaModel<ICompilationUnit>{
 
@@ -36,6 +36,14 @@ public class NumberOfChildrenJavaModel implements IJavaModel<ICompilationUnit>{
 		this.subtypesList = new IType[SIZE];
 	}
 	
+	/**
+	 * Method that creates a NumberOfChildrenJavaModel instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return NumberOfChildrenJavaModel
+	 */
 	public static NumberOfChildrenJavaModel getInstance(){
 		if(instance == null) {
 			instance = new NumberOfChildrenJavaModel();
@@ -49,9 +57,10 @@ public class NumberOfChildrenJavaModel implements IJavaModel<ICompilationUnit>{
 	@Override
 	public void calculateValue(ICompilationUnit unit) {
 		
+		int length = 0;
+		double value = 0d;
+		
 		try {
-			int length = 0;
-			
 			IType[] types = unit.getAllTypes();
 			for (IType type : types) {
 				ITypeHierarchy th= type.newTypeHierarchy((IJavaProject) type.getAncestor(IJavaElement.JAVA_PROJECT), null);
@@ -60,18 +69,18 @@ public class NumberOfChildrenJavaModel implements IJavaModel<ICompilationUnit>{
 				
 				if (subtypesList != null) length = subtypesList.length;
 				
-				double value = new BigDecimal(length, new MathContext(2, RoundingMode.UP)).doubleValue();
-				setNocValue(value);
+				value = new BigDecimal(length, new MathContext(2, RoundingMode.UP)).doubleValue();
 			}
-			
 		}catch (JavaModelException | NullPointerException e) {
-			setNocValue(0d);
 			logger.error(e);
 		}
+		
+		setNocValue(value);
 	}
 	
 	/**
 	 * Method that clean all the array used to calculate DIT value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -81,20 +90,23 @@ public class NumberOfChildrenJavaModel implements IJavaModel<ICompilationUnit>{
 
 	/**
 	 * Method to get NOC value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
+	 * @return double
 	 */
-	public Double getNocValue() {
+	public double getNocValue() {
 		return nocValue;
 	}
 
 	/**
 	 * Method to set NOC value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
 	public void setNocValue(Double nocValue) {
 		this.nocValue = nocValue;
 	}
-
 }

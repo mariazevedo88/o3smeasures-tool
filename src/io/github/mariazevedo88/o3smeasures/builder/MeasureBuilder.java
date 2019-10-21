@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.JavaCore;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
 import io.github.mariazevedo88.o3smeasures.main.ASTSession;
-import io.github.mariazevedo88.o3smeasures.measures.NumberOfClasses;
+import io.github.mariazevedo88.o3smeasures.measures.main.NumberOfClasses;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 

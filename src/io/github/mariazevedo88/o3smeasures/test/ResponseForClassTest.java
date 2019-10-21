@@ -13,7 +13,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import io.github.mariazevedo88.o3smeasures.measures.ResponseForClass;
+import io.github.mariazevedo88.o3smeasures.measures.main.ResponseForClass;
 import io.github.mariazevedo88.o3smeasures.util.JavaParser;
 
 /**

@@ -1,22 +1,23 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
-import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.javamodel.DepthOfInheritanceTreeJavaModel;
+import io.github.mariazevedo88.o3smeasures.astvisitors.NumberOfMethodsVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement DIT - Depth of Inheritance Tree measure.
- * DIT measures how many super-classes can affect a class.
+ * Class that implement the total number of methods (including public, 
+ * protected, and private methods) in a class.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class DepthOfInheritanceTree extends Measure{
+public class NumberOfMethods extends Measure{
 
 	private double value;
 	private double mean;
@@ -24,8 +25,8 @@ public class DepthOfInheritanceTree extends Measure{
 	private double min;
 	private String classWithMaxValue;
 	private boolean isEnable;	
-
-	public DepthOfInheritanceTree(){
+	
+	public NumberOfMethods(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -33,7 +34,7 @@ public class DepthOfInheritanceTree extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PACKAGE);
+		addApplicableGranularity(GranularityEnum.PROJECT);
 	}
 	
 	/**
@@ -41,7 +42,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.DIT.getName();
+		return MeasuresEnum.NOM.getName();
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.DIT.getAcronym();
+		return MeasuresEnum.NOM.getAcronym();
 	}
 
 	/**
@@ -57,7 +58,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Provides the position of the class in the inheritance tree.";
+		return "The number of methods in a project.";
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 0d;
+		return 6d;
 	}
 
 	/**
@@ -113,7 +114,7 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Inheritance";
+		return "Size";
 	}
 	
 	/**
@@ -137,15 +138,38 @@ public class DepthOfInheritanceTree extends Measure{
 	 */
 	@Override
 	public <T> void measure(T unit) {
-		
-		DepthOfInheritanceTreeJavaModel ditJavaModel = DepthOfInheritanceTreeJavaModel.getInstance();
-		ditJavaModel.calculateValue((ICompilationUnit)unit);
-		ditJavaModel.cleanArray();
-		
-		setCalculatedValue(Math.abs(ditJavaModel.getDitValue()));
+
+		// Now create the AST for the ICompilationUnits
+		CompilationUnit parse = parse(unit);
+		NumberOfMethodsVisitor visitor = NumberOfMethodsVisitor.getInstance();
+		visitor.cleanArray();
+		parse.accept(visitor);
+
+		setCalculatedValue(getAllMethods(visitor));
 		setMeanValue(getCalculatedValue());
-		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
 		setMinValue(getCalculatedValue());
+	}
+	
+	/**
+	 * Method to get the NOM value for a class.
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * @param visitor
+	 * @return Double
+	 */
+	private Double getAllMethods(NumberOfMethodsVisitor visitor){
+		 return Math.abs(visitor.getNumberOfMethods());
 	}
 
 	/**
@@ -185,6 +209,9 @@ public class DepthOfInheritanceTree extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 0d){

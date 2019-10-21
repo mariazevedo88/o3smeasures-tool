@@ -30,11 +30,11 @@ import org.eclipse.jdt.core.dom.WhileStatement;
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the CC (Cyclomatic Complexity) 
  * measure, excluding getters and setters invocation.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class CyclomaticComplexityVisitor extends ASTVisitor{
 
@@ -53,6 +53,14 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 		this.isFirstVisitingPerMethod = true;
 	}
 	
+	/**
+	 * Method that creates a CyclomaticComplexityVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return CyclomaticComplexityVisitor
+	 */
 	public static CyclomaticComplexityVisitor getInstance(){
 		if(instance == null) {
 			instance = new CyclomaticComplexityVisitor();
@@ -275,6 +283,14 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 		return false;
 	}
 
+	/**
+	 * Method to inspect method invocations in the source code
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 06/07/2019
+	 * 
+	 * @param node
+	 */
 	private void inspectMethodInvocations(Expression node) {
 		if(node instanceof MethodInvocation) {
 			cyclomaticComplexityIndex++;
@@ -285,6 +301,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to inspect logical expressions in source code
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
@@ -308,6 +325,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	/**
 	 * Method that returns the cyclomatic complexity index in a class. For a single routine 
 	 * in the method, cyclomaticComplexityIndex is always equal to 1.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
@@ -320,6 +338,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that clean all the variables used to calculate CC value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -332,6 +351,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	/**
 	 * Method that returns the sum of all complexities. For a single routine 
 	 * in the method, sumCyclomaticComplexity is always equal to 1.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
@@ -344,6 +364,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 
 	/**
 	 * Method to set the name of the method evaluated.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
 	 * 
@@ -356,10 +377,12 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	/**
 	 * Method to check whether the evaluated Statement is of the 
 	 * same builder method or is of a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
 	 * 
 	 * @param node
+	 * 
 	 * @return boolean
 	 */
 	private boolean isSameMethod(Statement node) {
@@ -374,10 +397,12 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	/**
 	 * Method to check whether the evaluated CatchClause is of the 
 	 * same builder method or is of a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
 	 * 
 	 * @param node
+	 * 
 	 * @return boolean
 	 */
 	private boolean isSameMethod(CatchClause node) {
@@ -392,10 +417,12 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	/**
 	 * Method to check whether the evaluated expression is of the 
 	 * same builder method or is of a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
 	 * 
 	 * @param node
+	 * 
 	 * @return boolean
 	 */
 	private boolean isSameMethod(Expression node) {
@@ -408,6 +435,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that checks whether a TryStatement has a catch clause.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
 	 * 
@@ -419,5 +447,4 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 			sumCyclomaticComplexity++;
 		}
 	}
-	
 }

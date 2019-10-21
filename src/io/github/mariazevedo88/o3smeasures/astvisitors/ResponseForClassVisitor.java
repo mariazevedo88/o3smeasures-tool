@@ -18,11 +18,11 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the RFC (Response for a Class) 
  * measure.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class ResponseForClassVisitor extends ASTVisitor{
 
@@ -39,6 +39,14 @@ public class ResponseForClassVisitor extends ASTVisitor{
 		listOfMethodsName = new IMethod[size];
 	}
 	
+	/**
+	 * Method that creates a ResponseForClassVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/04/2017
+	 * 
+	 * @return ResponseForClassVisitor
+	 */
 	public static ResponseForClassVisitor getInstance(){
 		if(instance == null) {
 			instance = new ResponseForClassVisitor();
@@ -58,8 +66,10 @@ public class ResponseForClassVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to calculate the number of methods in a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 */
 	private void calculateNumberOfMethods(CompilationUnit unit){
@@ -77,6 +87,9 @@ public class ResponseForClassVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to calculate method calls in the method's body.
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
 	 */
 	@SuppressWarnings("unchecked")
 	private void calculateMethodCalls(){
@@ -106,8 +119,10 @@ public class ResponseForClassVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to add method's declaration in a list.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param methods
 	 */
 	public void addListOfMethodsDeclaration(IMethod [] methods){
@@ -116,8 +131,10 @@ public class ResponseForClassVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to get the RFC value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return Double
 	 */
 	public Double getResponseForClassValue(){
@@ -128,6 +145,7 @@ public class ResponseForClassVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that clean the variables used to calculate RFC value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */

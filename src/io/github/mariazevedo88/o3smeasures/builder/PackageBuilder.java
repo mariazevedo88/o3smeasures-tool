@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaModelException;
 
 import io.github.mariazevedo88.o3smeasures.builder.generic.IBuilder;
+import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
@@ -57,13 +58,33 @@ public class PackageBuilder implements IBuilder{
 					
 					packageName = myPackage.isDefaultPackage() ? "(default)" : myPackage.getElementName();
 					packageMeasured = new ItemMeasured(packageName, item);
-					addClassBuilder(measure, myPackage, packageMeasured);
+					
+					if(MeasuresEnum.NPK.getAcronym().equals(measure.getAcronym())) {
+						measure.measure(myPackage);
+						
+						item.setMax(measure.getMaxValue());
+						item.setMin(measure.getMinValue());
+						item.addValue(measure.getCalculatedValue());
+						item.addMean(measure.getMeanValue());
+						
+						packageMeasured.addValue(measure.getCalculatedValue());
+						packageMeasured.addMean(measure.getMeanValue());
+						
+					}else {
+						addClassBuilder(measure, myPackage, packageMeasured);
+
+						item.setMax(packageMeasured.getMax());
+						item.setMin(packageMeasured.getMin());
+						item.setClassWithMax(packageMeasured.getClassWithMax());
+						
+						item.addValue(packageMeasured.getValue());
+						item.addMean(packageMeasured.getMean());
+					}
+					
+					packageMeasured.setMax(item.getMax());
+					packageMeasured.setMin(item.getMin());
+					
 					item.addChild(packageMeasured);
-					item.setMax(packageMeasured.getMax());
-					item.setMin(packageMeasured.getMin());
-					item.setClassWithMax(packageMeasured.getClassWithMax());
-					item.addValue(packageMeasured.getValue());
-					item.addMean(packageMeasured.getMean());
 				}
 			}
 		} catch (JavaModelException exception) {

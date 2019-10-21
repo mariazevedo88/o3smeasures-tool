@@ -43,8 +43,10 @@ public class JavaParser {
 	 
 	 /**
 	  * Method to check if a parser is already instantiated.
+	  * 
 	  * @author Mariana Azevedo
 	  * @since 13/07/2014
+	  * 
 	  * @param value
 	  */
 	 public static void setCacheParser(boolean value) {
@@ -57,8 +59,10 @@ public class JavaParser {
 	/**
 	 * Method that parses a compilation unit and creates the AST DOM to manipulate
 	 * the source code on an file.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param fileInputStream
 	 * @return CompilationUnit
 	 */
@@ -86,8 +90,10 @@ public class JavaParser {
 	 /**
 	  * Method that parses a file and creates the JDT DOM to manipulate
 	  * the source code on an file.
+	  * 
 	  * @author Mariana Azevedo
 	  * @since 13/07/2014
+	  * 
 	  * @param file
 	  * @return ICompilationUnit
 	  */
@@ -101,9 +107,12 @@ public class JavaParser {
 
 	/**
 	 * Method to get the content of java file.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param fileInputStream
+	 * 
 	 * @return char[]
 	 */
 	public static char[] getFileContent(FileInputStream fileInputStream) {
@@ -126,10 +135,13 @@ public class JavaParser {
 	
 	/**
 	 * Method to get the java file to parse.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param javaFile
 	 * @param className
+	 * 
 	 * @return CompilationUnit
 	 * @throws IOException
 	 */

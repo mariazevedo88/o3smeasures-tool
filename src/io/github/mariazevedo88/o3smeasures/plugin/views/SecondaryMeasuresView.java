@@ -8,13 +8,9 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -33,107 +29,241 @@ import io.github.mariazevedo88.o3smeasures.util.FileExport;
  * Class that inherits of the ViewPart abstract class (that implements
  * all workbench views) and creates the spreadsheet view of the measurement
  * results of a project.
+ * 
  * @see ViewPart
  * 
  * @author Mariana Azevedo
- * @since 13/07/2014
- *
+ * @since 22/09/2019
  */
-public class SampleView extends ViewPart {
-
-	static Logger logger = Logger.getLogger(SampleView.class);
-	public static final String ID = "io.github.mariazevedo88.o3smeasures.plugin.views.SampleView";
+public class SecondaryMeasuresView extends ViewPart {
+	
+	private static final Logger logger = Logger.getLogger(SecondaryMeasuresView.class);
+	public static final String ID = "io.github.mariazevedo88.o3smeasures.plugin.views.SecondaryMeasuresView";
 
 	private TreeViewer viewer;
 	private ItemMeasured itemsMeasured;
 	private IProject project;
 	private DecimalFormat formatter;
-	Application o3smeasuresPlugin;
-
-	public SampleView() {/*Empty Constructor*/}
-
+	
+	public SecondaryMeasuresView() {/*Empty Constructor*/}
+	
 	public ItemMeasured getItemMeasured(){
 		return itemsMeasured;
+	}
+	
+	public void setItemMeasured(ItemMeasured itemsMeasured){
+		this.itemsMeasured = itemsMeasured;
 	}
 
 	/**
 	 * Method that shows the given selection in this view
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 23/09/2019
 	 * 
-	 * @param selection
+	 * @param itemMeasured
 	 */
-	public void showSelection(ISelection selection) {
+	public void showSelection(Application o3smeasuresPlugin) {
 
 		formatter = new DecimalFormat("#.###", new DecimalFormatSymbols(new Locale("en", "US")));
-		
-		if ((!selection.isEmpty()) && (selection instanceof IStructuredSelection)) {
-			IJavaElement elem = (IJavaElement) ((IStructuredSelection) selection).getFirstElement();
-			createProjectModel(elem);
-		}
+		createProjectModel(o3smeasuresPlugin);
 	}
-
+	
 	/**
 	 * Method to create the project model for measurement
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 29/09/2019
 	 * 
-	 * @param elem
+	 * @param o3smeasuresPlugin
 	 */
-	private void createProjectModel(IJavaElement elem) {
-		if (elem != null) {
-
-			try {
-				project = (IProject) elem.getUnderlyingResource();
-				setProject(project);
-				setContentDescription("Project: " + project.getName());
-				createViews(project);
-			} catch (JavaModelException exception) {
-				logger.error(exception);
-			}
-		}
+	private void createProjectModel(Application o3smeasuresPlugin) {
+		setContentDescription("Project: " + getProject().getName());
+		createViews(getProject(), o3smeasuresPlugin);
 	}
-
+	
 	/**
 	 * Method that creates the measurement views
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 29/09/2019
 	 * 
 	 * @param project
+	 * @param o3smeasuresPlugin
 	 */
-	private void createViews(final IProject project) {
+	private void createViews(final IProject project, Application o3smeasuresPlugin) {
 		if (project.isOpen()) {
-			
 			Runnable buildViews = () -> {
 				try {
-					itemsMeasured = createModel(project);
-					if (itemsMeasured != null) {
-						viewer.setInput(itemsMeasured);
-						viewer.refresh(true);
+					if(o3smeasuresPlugin != null) {
+						itemsMeasured = createModel(project, o3smeasuresPlugin);
+						if (itemsMeasured != null) {
+							viewer.setInput(itemsMeasured);
+							viewer.refresh(true);
+						}
 					}
 				} catch (CoreException exception) {
 					logger.error(exception);
 				}
 			};
-			
 			Display.getDefault().asyncExec(buildViews);
 		}
 	}
-
+	
 	/**
-	 * Method that implements a callback that will allow us to create the viewer 
-	 * and initialize it.
+	 * Method to fulfill column basic informations
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 23/09/2019
+	 * 
+	 * @param width
+	 * @param columnName
+	 * 
+	 * @return column
+	 */
+	public TreeViewerColumn fulfillColumn(int width, String columnName) {
+
+		TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.NONE);
+		column.getColumn().setWidth(width);
+		column.getColumn().setMoveable(true);
+		column.getColumn().setText(columnName);
+		
+		return column;
+	}
+	
+	/**
+	 * Method that creates the value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/09/2019
+	 * 
+	 * @param column
+	 */
+	private void createLabelProviderValueColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof ItemMeasured) {
+					return formatter.format(((ItemMeasured)element).getValue());
+				}
+				return "";
+			}
+		});
+	}
+	
+	/**
+	 * Method that creates the resource max value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/09/2019
+	 * 
+	 * @param column
+	 */
+	private void createLabelProviderResourceMaxValueColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
+					return ((ItemMeasured) element).getClassWithMax();
+				}
+				return "";
+			}
+		});
+	}
+	
+	/**
+	 * Method that creates the max value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/09/2019
+	 * 
+	 * @param column
+	 */
+	private void createLabelProviderMaxColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
+					return formatter.format(((ItemMeasured) element).getMax());
+				}
+				return "";
+			}
+		});
+	}
+	
+	/**
+	 * Method that creates the min value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/09/2019
+	 * 
+	 * @param column
+	 */
+	private void createLabelProviderMinColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
+					return formatter.format(((ItemMeasured) element).getMin());
+				}
+				return "";
+			}
+		});
+	}
+	
+	/**
+	 * Method that creates the mean value column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/09/2019
+	 * 
+	 * @param column
+	 */
+	private void createLabelProviderMeanColumn(TreeViewerColumn column) {
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof ItemMeasured) {
+					return formatter.format(((ItemMeasured)element).getMean());
+				}
+				return "";
+			}
+		});
+	}
+	
+	/**
+	 * Method that creates the description column
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/09/2019
+	 * 
+	 * @param column
+	 */
+	private void createLabelProviderDescriptionColumn(TreeViewerColumn column) {
+		
+		column.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getMeasure() != null) {
+					return ((ItemMeasured) element).getMeasure().getDescription();
+				}
+				return "";
+			}
+		});
+	}
+	
+	/**
+	 * Method that implements a callback that will allow us to create the viewer 
+	 * and initialize it. 
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 23/09/2019
 	 * 
 	 * @param parent
 	 */
+	@Override
 	public void createPartControl(Composite parent) {
-				
+		
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		viewer.getTree().setLinesVisible(true);
 		viewer.getTree().setHeaderVisible(true);
@@ -170,154 +300,12 @@ public class SampleView extends ViewPart {
 	}
 	
 	/**
-	 * Method that creates the description column
-	 * 
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * 
-	 * @param column
-	 */
-	private void createLabelProviderDescriptionColumn(TreeViewerColumn column) {
-		
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getMeasure() != null) {
-					return ((ItemMeasured) element).getMeasure().getDescription();
-				}
-				return "";
-			}
-		});
-	}
-
-	/**
-	 * Method that creates the resource max value column
-	 * 
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * 
-	 * @param column
-	 */
-	private void createLabelProviderResourceMaxValueColumn(TreeViewerColumn column) {
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
-					return ((ItemMeasured) element).getClassWithMax();
-				}
-				return "";
-			}
-		});
-	}
-
-	/**
-	 * Method that creates the max value column
-	 * 
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * 
-	 * @param column
-	 */
-	private void createLabelProviderMaxColumn(TreeViewerColumn column) {
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
-					return formatter.format(((ItemMeasured) element).getMax());
-				}
-				return "";
-			}
-		});
-	}
-
-	/**
-	 * Method that creates the min value column
-	 * 
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * 
-	 * @param column
-	 */
-	private void createLabelProviderMinColumn(TreeViewerColumn column) {
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if ((element instanceof ItemMeasured) && ((ItemMeasured) element).getParent() != null) {
-					return formatter.format(((ItemMeasured) element).getMin());
-				}
-				return "";
-			}
-		});
-	}
-
-	/**
-	 * Method that creates the mean value column
-	 * 
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * 
-	 * @param column
-	 */
-	private void createLabelProviderMeanColumn(TreeViewerColumn column) {
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof ItemMeasured) {
-					return formatter.format(((ItemMeasured)element).getMean());
-				}
-				return "";
-			}
-		});
-	}
-
-	/**
-	 * Method that creates the value column
-	 * 
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * 
-	 * @param column
-	 */
-	private void createLabelProviderValueColumn(TreeViewerColumn column) {
-		column.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof ItemMeasured) {
-					return formatter.format(((ItemMeasured)element).getValue());
-				}
-				return "";
-			}
-		});
-	}
-
-
-	/**
-	 * Method to fulfill column basic informations
-	 * 
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * 
-	 * @param width
-	 * @param columnName
-	 * @return column
-	 */
-	public TreeViewerColumn fulfillColumn(int width, String columnName) {
-
-		TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.NONE);
-		column.getColumn().setWidth(width);
-		column.getColumn().setMoveable(true);
-		column.getColumn().setText(columnName);
-		
-		return column;
-	}
-
-	/**
 	 * Method to set the menu on the SWT widget. Once created, 
 	 * the menu can be accessed by selecting the project in the workspace 
 	 * of Eclipse IDE and selecting the "Measure" option with the right mouse button.
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 23/09/2019
 	 */
 	private void createMenuManager() {
 		
@@ -363,23 +351,26 @@ public class SampleView extends ViewPart {
 	 * Method that instanciate and execute the plugin
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 23/09/2019
 	 * 
 	 * @param project
+	 * @param o3smeasuresPlugin
+	 * 
 	 * @return ItemMeasured
+	 * 
 	 * @throws CoreException
 	 */
-	private ItemMeasured createModel(IProject project) throws CoreException {
-		o3smeasuresPlugin = new Application();
-		return o3smeasuresPlugin.execute(project);
+	private ItemMeasured createModel(IProject project, Application o3smeasuresPlugin) throws CoreException {
+		return o3smeasuresPlugin.executeSecondaryMeasures(project);
 	}
 
 	/**
 	 * Method that pass the focus request to the viewer's control
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 23/09/2019
 	 */
+	@Override
 	public void setFocus() {
 		viewer.getControl().setFocus();
 	}
@@ -388,7 +379,7 @@ public class SampleView extends ViewPart {
 	 * Class to create the project's content provider
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 23/09/2019
 	 */
 	private class MyContentProvider implements ITreeContentProvider {
 		@Override
@@ -420,9 +411,9 @@ public class SampleView extends ViewPart {
 	 * Method to set the project measured
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 23/09/2019
 	 */
-	private void setProject(IProject project){
+	public void setProject(IProject project){
 		this.project = project;
 	}
 	
@@ -430,19 +421,12 @@ public class SampleView extends ViewPart {
 	 * Method to get the project measured
 	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 23/09/2019
+	 * 
+	 * @return IProject
 	 */
-	private IProject getProject(){
+	public IProject getProject(){
 		return project;
 	}
-	
-	/**
-	 * Method to get the application instance
-	 * 
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 */
-	public Application getApplicationInstance(){
-		return o3smeasuresPlugin;
-	}
+
 }

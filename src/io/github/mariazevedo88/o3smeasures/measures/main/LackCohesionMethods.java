@@ -1,31 +1,30 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.ICompilationUnit;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
+import io.github.mariazevedo88.o3smeasures.javamodel.LackCohesionMethodsJavaModel;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement the NC - Number Of Classes measure, which indicates
- * the number of classes of a project. The range is [0,∞].
+ * Class that implements the measure LCOM, defined by Chidamber and Kemerer.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class NumberOfClasses extends Measure{
+public class LackCohesionMethods extends Measure{
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;	
+	private boolean isEnable;
 	
-	public NumberOfClasses(){
+	public LackCohesionMethods(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -33,7 +32,7 @@ public class NumberOfClasses extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PROJECT);
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
 	
 	/**
@@ -41,7 +40,7 @@ public class NumberOfClasses extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.NC.getName();
+		return MeasuresEnum.LCOM.getName();
 	}
 
 	/**
@@ -49,7 +48,7 @@ public class NumberOfClasses extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.NC.getAcronym();
+		return MeasuresEnum.LCOM.getAcronym();
 	}
 
 	/**
@@ -57,15 +56,7 @@ public class NumberOfClasses extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Return the number of classes and inner classes of a class in a project.";
-	}
-
-	/**
-	 * @see Measure#getProperty
-	 */
-	@Override
-	public String getProperty() {
-		return "Size";
+		return "LCOM defined by CK.";
 	}
 
 	/**
@@ -117,11 +108,11 @@ public class NumberOfClasses extends Measure{
 	}
 
 	/**
-	 * @see Measure#setMeanValue
+	 * @see Measure#getProperty
 	 */
 	@Override
-	public void setMeanValue(double value) {
-		this.mean = value;
+	public String getProperty() {
+		return "Cohesion";
 	}
 	
 	/**
@@ -146,37 +137,25 @@ public class NumberOfClasses extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
-		// Now create the AST for the ICompilationUnits
-		CompilationUnit parse = parse(unit);
-		ClassVisitor visitor = ClassVisitor.getInstance();
-		visitor.cleanVariable();
-		parse.accept(visitor);
-
-		setCalculatedValue(getNumberOfClasses(visitor));
-		setMeanValue(0d);
+		LackCohesionMethodsJavaModel lcomJavaModel = LackCohesionMethodsJavaModel.getInstance();
+		lcomJavaModel.setLcomType(MeasuresEnum.LCOM.getAcronym());
+		lcomJavaModel.cleanMapsAndVariables();
+		lcomJavaModel.calculateValue((ICompilationUnit)unit);
 		
-		String elementName = "";
-		
-		if(parse.getJavaElement() == null) {
-			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-			elementName = clazz.getName().toString();
-		}else{
-			elementName = parse.getJavaElement().getElementName();
-		}
-		
-		setMaxValue(getCalculatedValue(), elementName);
+		setCalculatedValue(lcomJavaModel.getLcomValue());
+		setMeanValue(getCalculatedValue());
+		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
 		setMinValue(getCalculatedValue());
 	}
 	
 	/**
-	 * Method to get the NC value for a project.
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * @param visitor
-	 * @return int
+	 * @see Measure#setMeanValue
 	 */
-	private int getNumberOfClasses(ClassVisitor visitor){
-		 return visitor.getNumOfClasses();
+	@Override
+	public void setMeanValue(double value) {
+		if (ClassVisitor.getNumOfProjectClasses() > 0d){
+			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
+		}
 	}
 
 	/**
@@ -206,6 +185,9 @@ public class NumberOfClasses extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 0d){

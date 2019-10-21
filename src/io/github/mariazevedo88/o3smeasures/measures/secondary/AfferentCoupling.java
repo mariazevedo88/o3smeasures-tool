@@ -1,39 +1,40 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.secondary;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.LinesOfCodeVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.MartinMeasuresVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement LOC - Lines of Code measure.
- * @see Measure
+ * Class that implements AC - Afferent Coupling measure. The measure is the number of classes in other 
+ * packages that depend upon classes within the package is an indicator of the package's responsibility. 
+ * Afferent couplings signal inward.
  * 
  * @author Mariana Azevedo
- * @since 13/07/2014
+ * @since 14/10/2019
  *
  */
-public class LinesOfCode extends Measure{
+public class AfferentCoupling extends Measure {
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;	
+	private boolean isEnable;
 	
-	public LinesOfCode(){
+	public AfferentCoupling(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
 		this.min = 0d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PROJECT);
+		this.isEnable = true;
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
 	
 	/**
@@ -41,7 +42,7 @@ public class LinesOfCode extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.LOC.getName();
+		return MeasuresEnum.AC.getName();
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class LinesOfCode extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.LOC.getAcronym();
+		return MeasuresEnum.AC.getAcronym();
 	}
 
 	/**
@@ -57,7 +58,16 @@ public class LinesOfCode extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Number of the lines of the code in a project.";
+		return "The number of classes outside a package that depend on "
+				+ "classes inside the package.";
+	}
+
+	/**
+	 * @see Measure#getProperty
+	 */
+	@Override
+	public String getProperty() {
+		return "Coupling";
 	}
 
 	/**
@@ -77,6 +87,14 @@ public class LinesOfCode extends Measure{
 	}
 
 	/**
+	 * @see Measure#getClassWithMaxValue
+	 */
+	@Override
+	public String getClassWithMaxValue() {
+		return classWithMaxValue;
+	}
+
+	/**
 	 * @see Measure#getMeanValue
 	 */
 	@Override
@@ -89,7 +107,7 @@ public class LinesOfCode extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 0d;
+		return 7d;
 	}
 
 	/**
@@ -106,68 +124,6 @@ public class LinesOfCode extends Measure{
 	@Override
 	public void setCalculatedValue(double value) {
 		this.value = value;
-	}
-
-	/**
-	 * @see Measure#getProperty
-	 */
-	@Override
-	public String getProperty() {
-		return "Size";
-	}
-	
-	/**
-	 * @see Measure#isEnable
-	 */
-	@Override
-	public boolean isEnable() {
-		return isEnable;
-	}
-
-	/**
-	 * @see Measure#setEnable
-	 */
-	@Override
-	public void setEnable(boolean isEnable) {
-		this.isEnable = isEnable;
-	}
-
-	/**
-	 * @see Measure#measure
-	 */
-	@Override
-	public <T> void measure(T unit) {
-		
-		CompilationUnit parse = parse(unit);
-		LinesOfCodeVisitor visitor = LinesOfCodeVisitor.getInstance();
-		visitor.cleanVariable();
-		parse.accept(visitor);
-		
-		setCalculatedValue(getNumberOfLinesOfCodeValue(visitor));
-		setMeanValue(getCalculatedValue());
-		
-		String elementName = "";
-		
-		if(parse.getJavaElement() == null) {
-			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-			elementName = clazz.getName().toString();
-		}else{
-			elementName = parse.getJavaElement().getElementName();
-		}
-		
-		setMaxValue(getCalculatedValue(), elementName);
-		setMinValue(getCalculatedValue());
-	}
-	
-	/**
-	 * Method to get the LOC value for a class.
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * @param visitor
-	 * @return Double
-	 */
-	private Double getNumberOfLinesOfCodeValue(LinesOfCodeVisitor visitor){
-		return Math.abs(visitor.getNumberOfLinesOfCode());
 	}
 
 	/**
@@ -192,11 +148,13 @@ public class LinesOfCode extends Measure{
 	}
 
 	/**
-	 * @see Measure#getClassWithMaxValue
+	 * @see Measure#setMinValue
 	 */
 	@Override
-	public String getClassWithMaxValue() {
-		return classWithMaxValue;
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
 	}
 
 	/**
@@ -207,10 +165,48 @@ public class LinesOfCode extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#isEnable
+	 */
 	@Override
-	public void setMinValue(double value) {
-		if (min > value || min == 0d){
-			this.min = value;
-		}
+	public boolean isEnable() {
+		return isEnable;
 	}
+
+	/**
+	 * @see Measure#setEnable
+	 */
+	@Override
+	public void setEnable(boolean isEnable) {
+		this.isEnable = isEnable;
+	}
+
+	/**
+	 * @see Measure#measure
+	 */
+	@Override
+	public <T> void measure(T unit) {
+		
+		// Now create the AST for the ICompilationUnits
+		CompilationUnit parse = parse(unit);
+		MartinMeasuresVisitor visitor = MartinMeasuresVisitor.getInstance();
+		visitor.cleanVariables();
+		parse.accept(visitor);
+
+		setCalculatedValue(visitor.getAfferentIndex());
+		setMeanValue(getCalculatedValue());
+		
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
+		setMinValue(getCalculatedValue());
+	}
+
 }

@@ -1,32 +1,31 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
-import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.javamodel.LackCohesionMethodsJavaModel;
+import io.github.mariazevedo88.o3smeasures.astvisitors.NumberOfAttributesVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * LCOM2 equals the percentage of methods that do not access a specific attribute averaged 
- * over all attributes in the class. If the number of methods or attributes is zero, LCOM2 
- * is undefined and displayed as zero.
+ * Class that implement the total number of attributes or fields in a class.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class LackCohesionMethodsTwo extends Measure{
+public class NumberOfAttributes extends Measure{
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;	
+	private boolean isEnable;
 	
-	public LackCohesionMethodsTwo(){
+	public NumberOfAttributes(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -34,7 +33,7 @@ public class LackCohesionMethodsTwo extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		addApplicableGranularity(GranularityEnum.PROJECT);
 	}
 	
 	/**
@@ -42,7 +41,7 @@ public class LackCohesionMethodsTwo extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.LCOM2.getName();
+		return MeasuresEnum.NOA.getName();
 	}
 
 	/**
@@ -50,7 +49,7 @@ public class LackCohesionMethodsTwo extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.LCOM2.getAcronym();
+		return MeasuresEnum.NOA.getAcronym();
 	}
 
 	/**
@@ -58,10 +57,7 @@ public class LackCohesionMethodsTwo extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "It is the percentage of methods that do not access a specific "
-				+ "attribute averaged over all attributes in the class. "
-				+ "If the number of methods or attributes is zero, LCOM2 is "
-				+ "undefined and displayed as zero.";
+		return "The number of attributes in a project.";
 	}
 
 	/**
@@ -117,7 +113,7 @@ public class LackCohesionMethodsTwo extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Cohesion";
+		return "Size";
 	}
 	
 	/**
@@ -135,24 +131,46 @@ public class LackCohesionMethodsTwo extends Measure{
 	public void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
 	}
-	
+
 	/**
 	 * @see Measure#measure
 	 */
 	@Override
 	public <T> void measure(T unit) {
-		
-		LackCohesionMethodsJavaModel lcomJavaModel = LackCohesionMethodsJavaModel.getInstance();
-		lcomJavaModel.setLcomType(MeasuresEnum.LCOM2.getAcronym());
-		lcomJavaModel.cleanMapsAndVariables();
-		lcomJavaModel.calculateValue((ICompilationUnit)unit);
-		
-		setCalculatedValue(lcomJavaModel.getLcom2Value());
+
+		// Now create the AST for the ICompilationUnits
+		CompilationUnit parse = parse(unit);
+		NumberOfAttributesVisitor visitor = NumberOfAttributesVisitor.getInstance();
+		visitor.cleanVariable();
+		parse.accept(visitor);
+
+		setCalculatedValue(getNumberOfAttributes(visitor));
 		setMeanValue(getCalculatedValue());
-		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
 		setMinValue(getCalculatedValue());
 	}
 	
+	/**
+	 * Method to get the NOA value for a class.
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * @param visitor
+	 * @return Double
+	 */
+	private Double getNumberOfAttributes(NumberOfAttributesVisitor visitor){
+		return Math.abs(visitor.getNumberOfAttributes());
+	}
+
 	/**
 	 * @see Measure#setMeanValue
 	 */
@@ -190,6 +208,9 @@ public class LackCohesionMethodsTwo extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 0d){

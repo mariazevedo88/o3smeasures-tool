@@ -13,7 +13,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import io.github.mariazevedo88.o3smeasures.measures.CouplingBetweenObjects;
+import io.github.mariazevedo88.o3smeasures.measures.main.CouplingBetweenObjects;
 import io.github.mariazevedo88.o3smeasures.util.JavaParser;
 
 /**

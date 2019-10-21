@@ -1,33 +1,31 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
-import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.javamodel.LackCohesionMethodsJavaModel;
+import io.github.mariazevedo88.o3smeasures.astvisitors.LinesOfCodeVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * LCOM4 measures the number of "connected components" in a class. 
- * A connected component is a set of related methods (and class-level variables). 
- * There should be only one such a component in each class. If there are 2 or more components, 
- * the class should be split into so many smaller classes.
+ * Class that implement LOC - Lines of Code measure.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class LackCohesionMethodsFour extends Measure{
+public class LinesOfCode extends Measure{
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;
+	private boolean isEnable;	
 	
-	public LackCohesionMethodsFour(){
+	public LinesOfCode(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -35,7 +33,7 @@ public class LackCohesionMethodsFour extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		addApplicableGranularity(GranularityEnum.PROJECT);
 	}
 	
 	/**
@@ -43,7 +41,7 @@ public class LackCohesionMethodsFour extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.LCOM4.getName();
+		return MeasuresEnum.LOC.getName();
 	}
 
 	/**
@@ -51,7 +49,7 @@ public class LackCohesionMethodsFour extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.LCOM4.getAcronym();
+		return MeasuresEnum.LOC.getAcronym();
 	}
 
 	/**
@@ -59,11 +57,7 @@ public class LackCohesionMethodsFour extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "LCOM4 measures the number of 'connected components' in a class. "
-				+ "A connected component is a set of related methods and fields. "
-				+ "There should be only one such component in each class. "
-				+ "If there are 2 or more components, the class should be split "
-				+ "into so many smaller classes.";
+		return "Number of the lines of the code in a project.";
 	}
 
 	/**
@@ -119,7 +113,7 @@ public class LackCohesionMethodsFour extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Cohesion";
+		return "Size";
 	}
 	
 	/**
@@ -144,15 +138,36 @@ public class LackCohesionMethodsFour extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
-		LackCohesionMethodsJavaModel lcomJavaModel = LackCohesionMethodsJavaModel.getInstance();
-		lcomJavaModel.setLcomType(MeasuresEnum.LCOM4.getAcronym());
-		lcomJavaModel.cleanMapsAndVariables();
-		lcomJavaModel.calculateValue((ICompilationUnit)unit);
+		CompilationUnit parse = parse(unit);
+		LinesOfCodeVisitor visitor = LinesOfCodeVisitor.getInstance();
+		visitor.cleanVariable();
+		parse.accept(visitor);
 		
-		setCalculatedValue(lcomJavaModel.getLcom4Value());
+		setCalculatedValue(getNumberOfLinesOfCodeValue(visitor));
 		setMeanValue(getCalculatedValue());
-		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
 		setMinValue(getCalculatedValue());
+	}
+	
+	/**
+	 * Method to get the LOC value for a class.
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * @param visitor
+	 * @return Double
+	 */
+	private Double getNumberOfLinesOfCodeValue(LinesOfCodeVisitor visitor){
+		return Math.abs(visitor.getNumberOfLinesOfCode());
 	}
 
 	/**
@@ -192,6 +207,9 @@ public class LackCohesionMethodsFour extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 0d){

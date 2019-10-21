@@ -19,11 +19,13 @@ import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.plugin.views.FactorsView;
 import io.github.mariazevedo88.o3smeasures.plugin.views.IndicatorsView;
 import io.github.mariazevedo88.o3smeasures.plugin.views.PieChartView;
-import io.github.mariazevedo88.o3smeasures.plugin.views.SampleView;
+import io.github.mariazevedo88.o3smeasures.plugin.views.SecondaryMeasuresView;
+import io.github.mariazevedo88.o3smeasures.plugin.views.MainMeasuresView;
 
 /**
  * Class that extends the AbstractHandler interface for an object 
  * action that is contributed into a popup menu for a view or editor.
+ * 
  * @see AbstractHandler
  *  
  * @author Mariana Azevedo
@@ -46,10 +48,9 @@ public class Measurement extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
 		setShell(HandlerUtil.getActiveShell(event));
-        
         ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+        
 		try {
-			
 			Runnable update = () -> updateViews(event);
 			
 			IRunnableWithProgress runnable = monitor -> controlMonitorProgress(update, monitor);
@@ -66,21 +67,21 @@ public class Measurement extends AbstractHandler {
 	
 	/**
 	 * Method that controls the progress monitor
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 19/07/2019
+	 * 
 	 * @param update
 	 * @param monitor
 	 */
 	private void controlMonitorProgress(Runnable update, IProgressMonitor monitor) {
 		
 		Integer size = MeasuresEnum.values().length;
-		int[] numMeasures = new int[size];
+		monitor.beginTask("Measuring internal quality...", size);
 		
-		monitor.beginTask("Measuring", size);
-		
-		for (Integer i : numMeasures){
+		for (int i=1; i < size+1; i++){
 	    	
-    		monitor.subTask("Getting measure values " + (i+1) + " of "+ size + "...");
+    		monitor.subTask("Getting measure values " + (i) + " of "+ size + "...");
     		Display.getDefault().syncExec(update);
     		monitor.worked(1);
     		if(checkIfUserCancelledExecution(monitor)) break;
@@ -91,6 +92,7 @@ public class Measurement extends AbstractHandler {
 
 	/**
 	 * Method that check if the user cancelled the measuring' execution
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 19/07/2019
 	 * 
@@ -109,8 +111,10 @@ public class Measurement extends AbstractHandler {
 	
 	/**
 	 * Method to update the views with the measurement results
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param event
 	 */
 	private void updateViews(ExecutionEvent event) {
@@ -118,9 +122,14 @@ public class Measurement extends AbstractHandler {
 		ISelection sel = HandlerUtil.getActiveWorkbenchWindow(event).getSelectionService().getSelection();
         IStructuredSelection selection = (IStructuredSelection) sel;
     	
-        //Load Diagnostic View
-        SampleView view = (SampleView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(SampleView.ID);
+        //Load Main Measures Diagnostic View
+        MainMeasuresView view = (MainMeasuresView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(MainMeasuresView.ID);
         view.showSelection(selection);
+        
+        //Load Secondary Measures Diagnostic View
+        SecondaryMeasuresView secondaryView = (SecondaryMeasuresView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(SecondaryMeasuresView.ID);
+        secondaryView.setProject(view.getProject());
+        secondaryView.showSelection(view.getApplicationInstance());
 
         //Load 3D Pie Chart View
         PieChartView pieChartView = (PieChartView) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().findView(PieChartView.ID);
@@ -143,8 +152,10 @@ public class Measurement extends AbstractHandler {
 	
 	/**
 	 * Method to get the shell instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return shell
 	 */
 	public Shell getShell() {
@@ -153,12 +164,13 @@ public class Measurement extends AbstractHandler {
 
 	/**
 	 * Method to set the shell instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param shell
 	 */
 	public void setShell(Shell shell) {
 		this.shell = shell;
 	}
-
 }

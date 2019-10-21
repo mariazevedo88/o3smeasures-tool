@@ -1,23 +1,24 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.secondary;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.LooseClassCohesionVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.NumberOfMethodReferenceVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement LCC - Loose Class Cohesion measure. LCC tells the overall connectedness. 
- * It depends on the number of methods and how they group together.
- * @see Measure
+ * Class that implements the NOMR - Number of Method Reference measure. It calculates 
+ * the number of method references in a class. A method reference is the shorthand syntax 
+ * for a lambda expression that executes just ONE method. The expression is available to
+ * use from Java8.
  * 
  * @author Mariana Azevedo
- * @since 13/07/2014
+ * @since 05/10/2019
  *
  */
-public class LooseClassCohesion extends Measure{
+public class NumberOfMethodReference extends Measure {
 
 	private double value;
 	private double mean;
@@ -26,23 +27,23 @@ public class LooseClassCohesion extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public LooseClassCohesion(){
+	public NumberOfMethodReference(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
 		this.min = 0d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		this.isEnable = true;
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
-	
+
 	/**
 	 * @see Measure#getName
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.LCC.getName();
+		return MeasuresEnum.NOMR.getName();
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class LooseClassCohesion extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.LCC.getAcronym();
+		return MeasuresEnum.NOMR.getAcronym();
 	}
 
 	/**
@@ -58,8 +59,15 @@ public class LooseClassCohesion extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Measures the overall connectedness. It depends " +
-				"on the number of methods and how they group together.";
+		return "Total number of method references used in a class";
+	}
+
+	/**
+	 * @see Measure#getProperty
+	 */
+	@Override
+	public String getProperty() {
+		return "Complexity";
 	}
 
 	/**
@@ -76,6 +84,14 @@ public class LooseClassCohesion extends Measure{
 	@Override
 	public double getMaxValue() {
 		return max;
+	}
+
+	/**
+	 * @see Measure#getClassWithMaxValue
+	 */
+	@Override
+	public String getClassWithMaxValue() {
+		return classWithMaxValue;
 	}
 
 	/**
@@ -111,13 +127,44 @@ public class LooseClassCohesion extends Measure{
 	}
 
 	/**
-	 * @see Measure#getProperty
+	 * @see Measure#setMeanValue
 	 */
 	@Override
-	public String getProperty() {
-		return "Cohesion";
+	public void setMeanValue(double value) {
+		if (ClassVisitor.getNumOfProjectClasses() > 0d){
+			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
+		}
 	}
-	
+
+	/**
+	 * @see Measure#setMaxValue
+	 */
+	@Override
+	public void setMaxValue(double value, String className) {
+		if (max < value){
+			this.max = value;
+			setClassWithMaxValue(className);
+		}
+	}
+
+	/**
+	 * @see Measure#setMinValue
+	 */
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
+
+	/**
+	 * @see Measure#setClassWithMaxValue
+	 */
+	@Override
+	public void setClassWithMaxValue(String value) {
+		this.classWithMaxValue = value;
+	}
+
 	/**
 	 * @see Measure#isEnable
 	 */
@@ -140,12 +187,13 @@ public class LooseClassCohesion extends Measure{
 	@Override
 	public <T> void measure(T unit) {
 		
+		// Now create the AST for the ICompilationUnits
 		CompilationUnit parse = parse(unit);
-		LooseClassCohesionVisitor visitor = LooseClassCohesionVisitor.getInstance();
-		visitor.cleanArraysAndVariables();
+		NumberOfMethodReferenceVisitor visitor = NumberOfMethodReferenceVisitor.getInstance();
+		String className = parse.getJavaElement().getElementName();
 		parse.accept(visitor);
 
-		setCalculatedValue(getLCCValue(visitor));
+		setCalculatedValue(getNumberOfMethodRef(className, visitor));
 		setMeanValue(getCalculatedValue());
 		
 		String elementName = "";
@@ -162,57 +210,17 @@ public class LooseClassCohesion extends Measure{
 	}
 	
 	/**
-	 * Method to get the LCC value for a class.
+	 * Method to get the number of method references in a class.
+	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 05/10/2019
+	 * 
+	 * @param className
 	 * @param visitor
-	 * @return double
+	 * 
+	 * @return Double
 	 */
-	private double getLCCValue(LooseClassCohesionVisitor visitor){
-		return Math.abs(visitor.getLCCIndex());
-	}
-
-	/**
-	 * @see Measure#setMeanValue
-	 */
-	@Override
-	public void setMeanValue(double value) {
-		if (ClassVisitor.getNumOfProjectClasses() > 0d){
-			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
-		}
-	}
-
-	/**
-	 * @see Measure#setMaxValue
-	 */
-	@Override
-	public void setMaxValue(double value, String className) {
-		if (max < value){
-			this.max = value;
-			setClassWithMaxValue(className);
-		}
-	}
-
-	/**
-	 * @see Measure#getClassWithMaxValue
-	 */
-	@Override
-	public String getClassWithMaxValue() {
-		return classWithMaxValue;
-	}
-
-	/**
-	 * @see Measure#setClassWithMaxValue
-	 */
-	@Override
-	public void setClassWithMaxValue(String value) {
-		this.classWithMaxValue = value;
-	}
-
-	@Override
-	public void setMinValue(double value) {
-		if (min > value || min == 0d){
-			this.min = value;
-		}
+	public Double getNumberOfMethodRef(String className, NumberOfMethodReferenceVisitor visitor){
+		return Double.valueOf(visitor.getNumOfMethodReferences(className));
 	}
 }

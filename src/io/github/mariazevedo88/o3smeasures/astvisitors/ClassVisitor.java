@@ -10,11 +10,11 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 /**
  * A visitor for abstract syntax trees, that visits the given 
  * node to perform the calculation of the number of classes.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- * 
  */
 public class ClassVisitor extends ASTVisitor{
 
@@ -28,6 +28,14 @@ public class ClassVisitor extends ASTVisitor{
 		numOfClassClasses = 0;
 	}
 	
+	/**
+	 * Method that creates a ClassVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return ClassVisitor
+	 */
 	public static ClassVisitor getInstance(){
 		if(instance == null) {
 			instance = new ClassVisitor();
@@ -47,8 +55,10 @@ public class ClassVisitor extends ASTVisitor{
 	/**
 	 * Method that calculates the number of classes of
 	 * a specific project.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 */
 	@SuppressWarnings("unchecked")
@@ -77,8 +87,10 @@ public class ClassVisitor extends ASTVisitor{
 	 * Method to get the number of project classes. This method is
 	 * used to other measures to calculate the average value per class
 	 * of all measures in the plug-in.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return static int
 	 */
 	public static int getNumOfProjectClasses() {
@@ -89,18 +101,20 @@ public class ClassVisitor extends ASTVisitor{
 	 * Method to set the number of project classes. This method is
 	 * used to other measures to calculate the average value per class
 	 * of all measures in the plug-in.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * 
 	 */
 	public static void setNumOfProjectClasses(double numClasses) {
 		numOfProjectClasses = (int) numClasses;
 	}
 	
 	/**
-	 * Method to get the number classes
+	 * Method to get the number of classes
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return int
 	 */
 	public int getNumOfClasses() {
@@ -109,11 +123,11 @@ public class ClassVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that clean the variable to calculate Number of Classes value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
 	public void cleanVariable(){
 		this.numOfClassClasses = 0;
 	}
-	
 }

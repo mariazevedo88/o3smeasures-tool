@@ -15,12 +15,12 @@ import org.eclipse.jdt.core.JavaModelException;
 import io.github.mariazevedo88.o3smeasures.javamodel.generic.IJavaModel;
 
 /**
- * A JavaModel class to access the JavaModel of a class to calculate the DIT measures. 
+ * A JavaModel class to access the JavaModel of a class to calculate the DIT measures.
+ *  
  * @see IJavaModel
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class DepthOfInheritanceTreeJavaModel implements IJavaModel<ICompilationUnit>{
 
@@ -36,6 +36,14 @@ public class DepthOfInheritanceTreeJavaModel implements IJavaModel<ICompilationU
 		this.superclassesList = new IType[SIZE];
 	}
 	
+	/**
+	 * Method that creates a DepthOfInheritanceTreeJavaModel instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return DepthOfInheritanceTreeJavaModel
+	 */
 	public static DepthOfInheritanceTreeJavaModel getInstance(){
 		if(instance == null) {
 			instance = new DepthOfInheritanceTreeJavaModel();
@@ -50,6 +58,7 @@ public class DepthOfInheritanceTreeJavaModel implements IJavaModel<ICompilationU
 	public void calculateValue(ICompilationUnit unit) {
 		
 		int length = 0;
+		double value = 0d;
 		
 		try {
 			IType[] types = unit.getAllTypes();
@@ -61,18 +70,20 @@ public class DepthOfInheritanceTreeJavaModel implements IJavaModel<ICompilationU
 				
 				if (superclassesList != null) length = superclassesList.length;
 				
-				Double value = new BigDecimal(length, new MathContext(2, RoundingMode.UP)).doubleValue();
+				value = new BigDecimal(length, new MathContext(2, RoundingMode.UP)).doubleValue();
 				setDitValue(value);
 			}
 			
 		}catch (JavaModelException | NullPointerException e) {
-			setDitValue(0d);
 			logger.error(e);
 		}
+		
+		setDitValue(value);
 	}
 	
 	/**
 	 * Method that clean all the array used to calculate DIT value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -82,20 +93,23 @@ public class DepthOfInheritanceTreeJavaModel implements IJavaModel<ICompilationU
 
 	/**
 	 * Method to get DIT value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
+	 * @return double
 	 */
-	public Double getDitValue() {
+	public double getDitValue() {
 		return ditValue;
 	}
 
 	/**
 	 * Method to set DIT value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
 	public void setDitValue(Double ditValue) {
 		this.ditValue = ditValue;
 	}
-
 }

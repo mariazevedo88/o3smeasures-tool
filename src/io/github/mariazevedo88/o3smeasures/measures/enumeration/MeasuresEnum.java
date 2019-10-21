@@ -17,7 +17,17 @@ public enum MeasuresEnum {
 	NOM("NOM", "Number of Methods"),
 	RFC("RFC", "Response for Class"),
 	TCC("TCC", "Tight Class Cohesion"),
-	WMC("WMC", "Weight Methods per Class");
+	WMC("WMC", "Weight Methods per Class"),
+	NPK("NPK", "Number of Packages"),
+	NOL("NOL", "Number of Lambdas"),
+	NOI("NOI", "Number of Interfaces"),
+	NOMR("NOMR", "Number of Method References"),
+	AC("AC", "Afferent Coupling"),
+	EC("EC", "Efferent Coupling"),
+	A("A", "Abstractness"),
+	I("A", "Instability"),
+	D("DFMS", "Distance from the Main Sequence"),
+	NMO("NMO", "Number of Modules");
 	
 	private String acronym;
 	private String name;

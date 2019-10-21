@@ -1,39 +1,32 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.CouplingBetweenObjectsVisitor;
+import io.github.mariazevedo88.o3smeasures.javamodel.LackCohesionMethodsJavaModel;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement CBO - Coupling Between Objects measure 
- * that gives information how strong a class is coupled with its surrounding software system,
- * by counting the number of other classes to which a specific class is coupled.
+ * LCOM2 equals the percentage of methods that do not access a specific attribute averaged 
+ * over all attributes in the class. If the number of methods or attributes is zero, LCOM2 
+ * is undefined and displayed as zero.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-public class CouplingBetweenObjects extends Measure{
-	
-	private static final Logger logger = Logger.getLogger(CouplingBetweenObjects.class);
+public class LackCohesionMethodsTwo extends Measure{
 
 	private double value;
 	private double mean;
 	private double max;
 	private double min;
 	private String classWithMaxValue;
-	private boolean isEnable;
+	private boolean isEnable;	
 	
-	public CouplingBetweenObjects(){
+	public LackCohesionMethodsTwo(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
@@ -41,7 +34,7 @@ public class CouplingBetweenObjects extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
 	
 	/**
@@ -49,7 +42,7 @@ public class CouplingBetweenObjects extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.CBO.getName();
+		return MeasuresEnum.LCOM2.getName();
 	}
 
 	/**
@@ -57,7 +50,7 @@ public class CouplingBetweenObjects extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.CBO.getAcronym();
+		return MeasuresEnum.LCOM2.getAcronym();
 	}
 
 	/**
@@ -65,8 +58,10 @@ public class CouplingBetweenObjects extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "Total of the number of classes that a class referenced plus " +
-				"the number of classes that referenced the class.";
+		return "It is the percentage of methods that do not access a specific "
+				+ "attribute averaged over all attributes in the class. "
+				+ "If the number of methods or attributes is zero, LCOM2 is "
+				+ "undefined and displayed as zero.";
 	}
 
 	/**
@@ -122,7 +117,7 @@ public class CouplingBetweenObjects extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Coupling";
+		return "Cohesion";
 	}
 	
 	/**
@@ -140,57 +135,24 @@ public class CouplingBetweenObjects extends Measure{
 	public void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
 	}
-
+	
 	/**
 	 * @see Measure#measure
 	 */
 	@Override
 	public <T> void measure(T unit) {
 		
-		IType[] iTypes = null;
+		LackCohesionMethodsJavaModel lcomJavaModel = LackCohesionMethodsJavaModel.getInstance();
+		lcomJavaModel.setLcomType(MeasuresEnum.LCOM2.getAcronym());
+		lcomJavaModel.cleanMapsAndVariables();
+		lcomJavaModel.calculateValue((ICompilationUnit)unit);
 		
-		try {
-			
-			iTypes = ((ICompilationUnit)unit).getTypes();
-			
-			CompilationUnit parse = parse(unit);
-			CouplingBetweenObjectsVisitor visitor = CouplingBetweenObjectsVisitor.getInstance();
-			visitor.cleanArrayAndVariable();
-			visitor.addListOfTypes(iTypes);
-			parse.accept(visitor);
-			
-			setCalculatedValue(getCouplingBetweenObjectsValue(visitor));
-			setMeanValue(getCalculatedValue());
-			
-			String elementName = "";
-			
-			if(parse.getJavaElement() == null) {
-				TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-				elementName = clazz.getName().toString();
-			}else{
-				elementName = parse.getJavaElement().getElementName();
-			}
-			
-			setMaxValue(getCalculatedValue(), elementName);
-			setMinValue(getCalculatedValue());
-			
-		} catch (JavaModelException exception) {
-			setCalculatedValue(0d);
-			logger.error(exception);
-		}
+		setCalculatedValue(lcomJavaModel.getLcom2Value());
+		setMeanValue(getCalculatedValue());
+		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		setMinValue(getCalculatedValue());
 	}
 	
-	/**
-	 * Method to get the CBO value for a class.
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * @param visitor
-	 * @return Double
-	 */
-	private Double getCouplingBetweenObjectsValue(CouplingBetweenObjectsVisitor visitor){
-		return Math.abs(visitor.getCouplingBetweenObjectsIndex());
-	}
-
 	/**
 	 * @see Measure#setMeanValue
 	 */
@@ -228,6 +190,9 @@ public class CouplingBetweenObjects extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 0d){

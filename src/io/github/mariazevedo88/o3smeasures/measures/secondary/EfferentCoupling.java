@@ -1,21 +1,14 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.secondary;
 
-import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.javamodel.LackCohesionMethodsJavaModel;
+import io.github.mariazevedo88.o3smeasures.astvisitors.MartinMeasuresVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
-/**
- * Class that implements the measure LCOM, defined by Chidamber and Kemerer.
- * @see Measure
- * 
- * @author Mariana Azevedo
- * @since 13/07/2014
- *
- */
-public class LackCohesionMethods extends Measure{
+public class EfferentCoupling extends Measure {
 
 	private double value;
 	private double mean;
@@ -24,15 +17,15 @@ public class LackCohesionMethods extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public LackCohesionMethods(){
+	public EfferentCoupling(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
 		this.min = 0d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		this.isEnable = true;
+		addApplicableGranularity(GranularityEnum.PACKAGE);
 	}
 	
 	/**
@@ -40,7 +33,7 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.LCOM.getName();
+		return MeasuresEnum.EC.getName();
 	}
 
 	/**
@@ -48,7 +41,7 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.LCOM.getAcronym();
+		return MeasuresEnum.EC.getAcronym();
 	}
 
 	/**
@@ -56,7 +49,16 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "LCOM defined by CK.";
+		return "The number of classes inside a package that depend "
+				+ "on classes outside the package.";
+	}
+
+	/**
+	 * @see Measure#getProperty
+	 */
+	@Override
+	public String getProperty() {
+		return "Coupling";
 	}
 
 	/**
@@ -76,6 +78,14 @@ public class LackCohesionMethods extends Measure{
 	}
 
 	/**
+	 * @see Measure#getClassWithMaxValue
+	 */
+	@Override
+	public String getClassWithMaxValue() {
+		return classWithMaxValue;
+	}
+
+	/**
 	 * @see Measure#getMeanValue
 	 */
 	@Override
@@ -88,7 +98,7 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 0d;
+		return 6d;
 	}
 
 	/**
@@ -108,16 +118,35 @@ public class LackCohesionMethods extends Measure{
 	}
 
 	/**
-	 * @see Measure#getProperty
+	 * @see Measure#setMeanValue
 	 */
 	@Override
-	public String getProperty() {
-		return "Cohesion";
+	public void setMeanValue(double value) {
+		if (ClassVisitor.getNumOfProjectClasses() > 0d){
+			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
+		}
 	}
-	
-	/**
-	 * @see Measure#isEnable
-	 */
+
+	@Override
+	public void setMaxValue(double value, String className) {
+		if (max < value){
+			this.max = value;
+			setClassWithMaxValue(className);
+		}
+	}
+
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
+
+	@Override
+	public void setClassWithMaxValue(String value) {
+		this.classWithMaxValue = value;
+	}
+
 	@Override
 	public boolean isEnable() {
 		return isEnable;
@@ -136,59 +165,27 @@ public class LackCohesionMethods extends Measure{
 	 */
 	@Override
 	public <T> void measure(T unit) {
-		
-		LackCohesionMethodsJavaModel lcomJavaModel = LackCohesionMethodsJavaModel.getInstance();
-		lcomJavaModel.setLcomType(MeasuresEnum.LCOM.getAcronym());
-		lcomJavaModel.cleanMapsAndVariables();
-		lcomJavaModel.calculateValue((ICompilationUnit)unit);
-		
-		setCalculatedValue(lcomJavaModel.getLcomValue());
+
+		// Now create the AST for the ICompilationUnits
+		CompilationUnit parse = parse(unit);
+		MartinMeasuresVisitor visitor = MartinMeasuresVisitor.getInstance();
+		visitor.cleanVariables();
+		parse.accept(visitor);
+
+		setCalculatedValue(visitor.getEfferentIndex());
 		setMeanValue(getCalculatedValue());
-		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		
+		String elementName = "";
+		
+		if(parse.getJavaElement() == null) {
+			TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
+			elementName = clazz.getName().toString();
+		}else{
+			elementName = parse.getJavaElement().getElementName();
+		}
+		
+		setMaxValue(getCalculatedValue(), elementName);
 		setMinValue(getCalculatedValue());
 	}
-	
-	/**
-	 * @see Measure#setMeanValue
-	 */
-	@Override
-	public void setMeanValue(double value) {
-		if (ClassVisitor.getNumOfProjectClasses() > 0d){
-			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
-		}
-	}
 
-	/**
-	 * @see Measure#setMaxValue
-	 */
-	@Override
-	public void setMaxValue(double value, String className) {
-		if (max < value){
-			this.max = value;
-			setClassWithMaxValue(className);
-		}
-	}
-
-	/**
-	 * @see Measure#getClassWithMaxValue
-	 */
-	@Override
-	public String getClassWithMaxValue() {
-		return classWithMaxValue;
-	}
-
-	/**
-	 * @see Measure#setClassWithMaxValue
-	 */
-	@Override
-	public void setClassWithMaxValue(String value) {
-		this.classWithMaxValue = value;
-	}
-
-	@Override
-	public void setMinValue(double value) {
-		if (min > value || min == 0d){
-			this.min = value;
-		}
-	}
 }

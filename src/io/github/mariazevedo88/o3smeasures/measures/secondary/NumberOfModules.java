@@ -1,23 +1,26 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.secondary;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.NumberOfAttributesVisitor;
+import io.github.mariazevedo88.o3smeasures.astvisitors.NumberOfModulesVisitor;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement the total number of attributes or fields in a class.
- * @see Measure
+ * Class that implements the NMO - Number of modules measure. It calculates the number 
+ * of modules in a project. ava 9 introduces a new level of abstraction above packages, 
+ * formally known as the Java Platform Module System (JPMS), or “Modules” for short. 
+ * A Module is a group of closely related packages and resources along with a new module 
+ * descriptor file.
  * 
  * @author Mariana Azevedo
- * @since 13/07/2014
+ * @since 19/10/2019
  *
  */
-public class NumberOfAttributes extends Measure{
-
+public class NumberOfModules extends Measure {
+	
 	private double value;
 	private double mean;
 	private double max;
@@ -25,23 +28,23 @@ public class NumberOfAttributes extends Measure{
 	private String classWithMaxValue;
 	private boolean isEnable;
 	
-	public NumberOfAttributes(){
+	public NumberOfModules(){
 		super();
 		this.value = 0d;
 		this.mean = 0d;
 		this.max = 0d;
 		this.min = 0d;
 		this.classWithMaxValue = "";
-		this.isEnable = true;		
-		addApplicableGranularity(Granularity.PROJECT);
+		this.isEnable = true;
+		addApplicableGranularity(GranularityEnum.PROJECT);
 	}
-	
+
 	/**
 	 * @see Measure#getName
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.NOA.getName();
+		return MeasuresEnum.NMO.getName();
 	}
 
 	/**
@@ -49,7 +52,7 @@ public class NumberOfAttributes extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.NOA.getAcronym();
+		return MeasuresEnum.NMO.getAcronym();
 	}
 
 	/**
@@ -57,7 +60,15 @@ public class NumberOfAttributes extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "The number of attributes in a project.";
+		return "Total number of modules used in a project";
+	}
+
+	/**
+	 * @see Measure#getProperty
+	 */
+	@Override
+	public String getProperty() {
+		return "Complexity";
 	}
 
 	/**
@@ -74,6 +85,14 @@ public class NumberOfAttributes extends Measure{
 	@Override
 	public double getMaxValue() {
 		return max;
+	}
+
+	/**
+	 * @see Measure#getClassWithMaxValue
+	 */
+	@Override
+	public String getClassWithMaxValue() {
+		return classWithMaxValue;
 	}
 
 	/**
@@ -109,13 +128,44 @@ public class NumberOfAttributes extends Measure{
 	}
 
 	/**
-	 * @see Measure#getProperty
+	 * @see Measure#setMeanValue
 	 */
 	@Override
-	public String getProperty() {
-		return "Size";
+	public void setMeanValue(double mean) {
+		if (ClassVisitor.getNumOfProjectClasses() > 0d){
+			this.mean = (mean/ClassVisitor.getNumOfProjectClasses());
+		}
 	}
-	
+
+	/**
+	 * @see Measure#setMaxValue
+	 */
+	@Override
+	public void setMaxValue(double value, String className) {
+		if (max < value){
+			this.max = value;
+			setClassWithMaxValue(className);
+		}
+	}
+
+	/**
+	 * @see Measure#setMinValue
+	 */
+	@Override
+	public void setMinValue(double value) {
+		if (min > value || min == 0d){
+			this.min = value;
+		}
+	}
+
+	/**
+	 * @see Measure#setClassWithMaxValue
+	 */
+	@Override
+	public void setClassWithMaxValue(String value) {
+		this.classWithMaxValue = value;
+	}
+
 	/**
 	 * @see Measure#isEnable
 	 */
@@ -137,15 +187,15 @@ public class NumberOfAttributes extends Measure{
 	 */
 	@Override
 	public <T> void measure(T unit) {
-
+		
 		// Now create the AST for the ICompilationUnits
 		CompilationUnit parse = parse(unit);
-		NumberOfAttributesVisitor visitor = NumberOfAttributesVisitor.getInstance();
-		visitor.cleanVariable();
+		NumberOfModulesVisitor visitor = NumberOfModulesVisitor.getInstance();
+		visitor.cleanVariables();
 		parse.accept(visitor);
 
-		setCalculatedValue(getNumberOfAttributes(visitor));
-		setMeanValue(getCalculatedValue());
+		setCalculatedValue(getNumberOfModules(visitor));
+		setMeanValue(0d);
 		
 		String elementName = "";
 		
@@ -161,57 +211,17 @@ public class NumberOfAttributes extends Measure{
 	}
 	
 	/**
-	 * Method to get the NOA value for a class.
+	 * Method to get the number of lambdas in a class.
+	 * 
 	 * @author Mariana Azevedo
-	 * @since 13/07/2014
+	 * @since 20/10/2019
+	 * 
+	 * @param className
 	 * @param visitor
+	 * 
 	 * @return Double
 	 */
-	private Double getNumberOfAttributes(NumberOfAttributesVisitor visitor){
-		return Math.abs(visitor.getNumberOfAttributes());
-	}
-
-	/**
-	 * @see Measure#setMeanValue
-	 */
-	@Override
-	public void setMeanValue(double value) {
-		if (ClassVisitor.getNumOfProjectClasses() > 0d){
-			this.mean = (value/ClassVisitor.getNumOfProjectClasses());
-		}
-	}
-
-	/**
-	 * @see Measure#setMaxValue
-	 */
-	@Override
-	public void setMaxValue(double value, String className) {
-		if (max < value){
-			this.max = value;
-			setClassWithMaxValue(className);
-		}
-	}
-
-	/**
-	 * @see Measure#getClassWithMaxValue
-	 */
-	@Override
-	public String getClassWithMaxValue() {
-		return classWithMaxValue;
-	}
-
-	/**
-	 * @see Measure#setClassWithMaxValue
-	 */
-	@Override
-	public void setClassWithMaxValue(String value) {
-		this.classWithMaxValue = value;
-	}
-
-	@Override
-	public void setMinValue(double value) {
-		if (min > value || min == 0d){
-			this.min = value;
-		}
+	public Double getNumberOfModules(NumberOfModulesVisitor visitor){
+		return Double.valueOf(visitor.getNumOfModules());
 	}
 }

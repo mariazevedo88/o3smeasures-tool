@@ -13,11 +13,11 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 /**
  * A visitor for abstract syntax trees, that visits the given node 
  * to perform the calculation of the FOUT (Fan-out) measure.
+ * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
- *
  */
 public class FanOutVisitor extends ASTVisitor{
 
@@ -29,6 +29,14 @@ public class FanOutVisitor extends ASTVisitor{
 		typesList = new ArrayList<>();
 	}
 	
+	/**
+	 * Method that creates a FanOutVisitor instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return FanOutVisitor
+	 */
 	public static FanOutVisitor getInstance(){
 		if(instance == null) {
 			instance = new FanOutVisitor();
@@ -41,17 +49,17 @@ public class FanOutVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(CompilationUnit node) {
-		
 		calculateFanOut(node);
-		
 		return false;
 	}
 	
 	/**
 	 * Method to calculate FOUT checking the number of types 
 	 * the class references.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 */
 	private void calculateFanOut(CompilationUnit unit){
@@ -64,6 +72,7 @@ public class FanOutVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that clean the array used to calculate FOUT value.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -73,9 +82,11 @@ public class FanOutVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to get the FOUT value for a class.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return
+	 * 
+	 * @return Double
 	 */
 	public Double getFanOutValue(){
 		int value = typesList.size();

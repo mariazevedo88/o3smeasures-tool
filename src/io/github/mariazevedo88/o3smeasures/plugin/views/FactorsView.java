@@ -13,11 +13,11 @@ import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
  * Class that inherits of the ViewPart abstract class (that implements
  * all workbench views) and creates a box and whisker view of the measurement
  * results of a project, based on internal quality factors.
+ * 
  * @see ViewPart
  * 
  * @author Mariana Azevedo
  * @since 11/04/2017
- *
  */
 public class FactorsView extends ViewPart {
 	
@@ -35,8 +35,10 @@ public class FactorsView extends ViewPart {
 	
 	/**
 	 * Method to plot the box and whisker chart
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
+	 * 
 	 * @param itemMeasured
 	 */
 	public void showFactorChart(ItemMeasured itemMeasured){
@@ -50,8 +52,10 @@ public class FactorsView extends ViewPart {
 	/**
 	 * This is a callback method that will allow us to create the viewer and initialize
 	 * it.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
+	 * 
 	 * @param parent
 	 */
 	@Override
@@ -63,6 +67,7 @@ public class FactorsView extends ViewPart {
 
 	/**
 	 * Passing the focus request to the viewer's control.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
 	 */
@@ -74,6 +79,7 @@ public class FactorsView extends ViewPart {
 	
 	/**
 	 * Method to set a jFreeChart instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
 	 */
@@ -83,11 +89,13 @@ public class FactorsView extends ViewPart {
 	
 	/**
 	 * Method to get a jFreeChart instance.
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 11/04/2017
+	 * 
+	 * @return JFreeChart
 	 */
 	private JFreeChart getFactorsChart(){
 		return jFreeChart;
 	}
-
 }

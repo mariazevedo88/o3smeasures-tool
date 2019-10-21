@@ -1,28 +1,22 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
-import org.apache.log4j.Logger;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.internal.core.SourceMethod;
+import org.eclipse.jdt.core.ICompilationUnit;
 
 import io.github.mariazevedo88.o3smeasures.astvisitors.ClassVisitor;
-import io.github.mariazevedo88.o3smeasures.astvisitors.WeightMethodsPerClassVisitor;
+import io.github.mariazevedo88.o3smeasures.javamodel.DepthOfInheritanceTreeJavaModel;
 import io.github.mariazevedo88.o3smeasures.measures.enumeration.MeasuresEnum;
 import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
- * Class that implement the WMC - Weight methods per class, which is simply 
- * the sum of the complexities of its methods.
+ * Class that implement DIT - Depth of Inheritance Tree measure.
+ * DIT measures how many super-classes can affect a class.
  * @see Measure
  * 
  * @author Mariana Azevedo
  * @since 13/07/2014
  *
  */
-@SuppressWarnings("restriction")
-public class WeightMethodsPerClass extends Measure{
-	
-	private static final Logger logger = Logger.getLogger(WeightMethodsPerClass.class);
+public class DepthOfInheritanceTree extends Measure{
 
 	private double value;
 	private double mean;
@@ -30,16 +24,16 @@ public class WeightMethodsPerClass extends Measure{
 	private double min;
 	private String classWithMaxValue;
 	private boolean isEnable;	
-	
-	public WeightMethodsPerClass(){
+
+	public DepthOfInheritanceTree(){
 		super();
-		this.value = 1d;
-		this.mean = 1d;
-		this.max = 1d;
-		this.min = 1d;
+		this.value = 0d;
+		this.mean = 0d;
+		this.max = 0d;
+		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.METHOD);
+		addApplicableGranularity(GranularityEnum.PACKAGE);
 	}
 	
 	/**
@@ -47,7 +41,7 @@ public class WeightMethodsPerClass extends Measure{
 	 */
 	@Override
 	public String getName() {
-		return MeasuresEnum.WMC.getName();
+		return MeasuresEnum.DIT.getName();
 	}
 
 	/**
@@ -55,7 +49,7 @@ public class WeightMethodsPerClass extends Measure{
 	 */
 	@Override
 	public String getAcronym() {
-		return MeasuresEnum.WMC.getAcronym();
+		return MeasuresEnum.DIT.getAcronym();
 	}
 
 	/**
@@ -63,7 +57,7 @@ public class WeightMethodsPerClass extends Measure{
 	 */
 	@Override
 	public String getDescription() {
-		return "It is the sum of the complexities of all class methods.";
+		return "Provides the position of the class in the inheritance tree.";
 	}
 
 	/**
@@ -95,7 +89,7 @@ public class WeightMethodsPerClass extends Measure{
 	 */
 	@Override
 	public double getRefValue() {
-		return 1d;
+		return 2d;
 	}
 
 	/**
@@ -119,7 +113,7 @@ public class WeightMethodsPerClass extends Measure{
 	 */
 	@Override
 	public String getProperty() {
-		return "Complexity";
+		return "Inheritance";
 	}
 	
 	/**
@@ -143,45 +137,15 @@ public class WeightMethodsPerClass extends Measure{
 	 */
 	@Override
 	public <T> void measure(T unit) {
-
-		try {
-			
-			CompilationUnit parse = parse(unit);
-			WeightMethodsPerClassVisitor visitor = WeightMethodsPerClassVisitor.getInstance();
-			visitor.setMethodName(((SourceMethod)unit).getElementName());
-			visitor.cleanArraysAndVariable();
-			parse.accept(visitor);
-			
-			setCalculatedValue(getWeightMethodsPerClassIndex(visitor));
-			setMeanValue(getCalculatedValue());
-			
-			String elementName = "";
-			
-			if(parse.getJavaElement() == null) {
-				TypeDeclaration clazz = (TypeDeclaration) parse.types().get(0);
-				elementName = clazz.getName().toString();
-			}else{
-				elementName = parse.getJavaElement().getElementName();
-			}
-			
-			setMaxValue(getCalculatedValue(), elementName);
-			setMinValue(getCalculatedValue());
-
-		} catch (ClassCastException e) {
-			setCalculatedValue(0d);
-			logger.error(e);
-		}
-	}
-	
-	/**
-	 * Method to get the WMC value for a class.
-	 * @author Mariana Azevedo
-	 * @since 13/07/2014
-	 * @param visitor
-	 * @return Double
-	 */
-	private Double getWeightMethodsPerClassIndex(WeightMethodsPerClassVisitor visitor){
-		return Math.abs(visitor.getWeightMethodsPerClassIndex());
+		
+		DepthOfInheritanceTreeJavaModel ditJavaModel = DepthOfInheritanceTreeJavaModel.getInstance();
+		ditJavaModel.calculateValue((ICompilationUnit)unit);
+		ditJavaModel.cleanArray();
+		
+		setCalculatedValue(Math.abs(ditJavaModel.getDitValue()));
+		setMeanValue(getCalculatedValue());
+		setMaxValue(getCalculatedValue(), ((ICompilationUnit) unit).getElementName());
+		setMinValue(getCalculatedValue());
 	}
 
 	/**
@@ -219,12 +183,14 @@ public class WeightMethodsPerClass extends Measure{
 	@Override
 	public void setClassWithMaxValue(String value) {
 		this.classWithMaxValue = value;
-		
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
-		if (min > value || min == 1d){
+		if (min > value || min == 0d){
 			this.min = value;
 		}
 	}

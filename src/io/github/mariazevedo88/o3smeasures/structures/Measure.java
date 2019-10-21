@@ -23,13 +23,13 @@ import io.github.mariazevedo88.o3smeasures.main.ASTSession;
  */
 public abstract class Measure {
 	
-	public enum Granularity {
+	public enum GranularityEnum {
 		PROJECT,
 		PACKAGE,
 		CLASS,
 		METHOD;		
 	}
-	private List<Granularity> applicableGranularities;
+	private List<GranularityEnum> applicableGranularities;
 	private ASTParser parser = null;
 	
 	@SuppressWarnings("deprecation")
@@ -45,9 +45,10 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param granularity
 	 */
-	public void addApplicableGranularity(Granularity granularity){
+	public void addApplicableGranularity(GranularityEnum granularity){
 		if (!applicableGranularities.contains(granularity)) {
 			applicableGranularities.add(granularity);
 		}
@@ -58,9 +59,10 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return List
 	 */
-	public List<Granularity> getAllApplicableGranularities(){
+	public List<GranularityEnum> getAllApplicableGranularities(){
 		return applicableGranularities;
 	}
 	
@@ -69,10 +71,12 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param granularity
+	 * 
 	 * @return boolean
 	 */
-	public boolean isApplicableGranularity(Granularity granularity){
+	public boolean isApplicableGranularity(GranularityEnum granularity){
 		return applicableGranularities.contains(granularity);
 	}
 		
@@ -82,8 +86,10 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param <T>
 	 * @param unit 
+	 * 
 	 * @return ITypeRoot or CompilationUnit
 	 */
 	public <T> CompilationUnit parse(T unit) {
@@ -118,6 +124,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return String
 	 */
 	public abstract String getName();
@@ -127,6 +134,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return String
 	 */
 	public abstract String getAcronym();
@@ -136,6 +144,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return String
 	 */
 	public abstract String getDescription();
@@ -145,6 +154,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return String
 	 */
 	public abstract String getProperty();
@@ -154,6 +164,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	public abstract double getMinValue();
@@ -163,6 +174,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	public abstract double getMaxValue();
@@ -172,7 +184,8 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @return double
+	 * 
+	 * @return String
 	 */
 	public abstract String getClassWithMaxValue();
 	
@@ -181,6 +194,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	public abstract double getMeanValue();
@@ -190,6 +204,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	public abstract double getRefValue();
@@ -199,6 +214,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	public abstract double getCalculatedValue();
@@ -208,6 +224,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param value
 	 */
 	public abstract void setCalculatedValue(double value);
@@ -217,15 +234,17 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
-	 * @param value
+	 * 
+	 * @param mean
 	 */
-	public abstract void setMeanValue(double value);
+	public abstract void setMeanValue(double mean);
 	
 	/**
 	 * Method to set the measure's max value.
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param value
 	 * @param className
 	 */
@@ -236,6 +255,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 23/02/2019
+	 * 
 	 * @param value
 	 */
 	public abstract void setMinValue(double value);
@@ -245,6 +265,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param value
 	 */
 	public abstract void setClassWithMaxValue(String value);
@@ -254,6 +275,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return boolean
 	 */
 	public abstract boolean isEnable();
@@ -263,6 +285,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param isEnable
 	 */
 	public abstract void setEnable(boolean isEnable);
@@ -272,6 +295,7 @@ public abstract class Measure {
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 */
 	public abstract <T> void measure(T unit);

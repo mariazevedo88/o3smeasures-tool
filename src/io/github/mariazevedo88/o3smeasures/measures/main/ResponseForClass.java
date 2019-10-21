@@ -1,4 +1,4 @@
-package io.github.mariazevedo88.o3smeasures.measures;
+package io.github.mariazevedo88.o3smeasures.measures.main;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -41,7 +41,7 @@ public class ResponseForClass extends Measure{
 		this.min = 0d;
 		this.classWithMaxValue = "";
 		this.isEnable = true;		
-		addApplicableGranularity(Granularity.CLASS);
+		addApplicableGranularity(GranularityEnum.CLASS);
 	}
 	
 	/**
@@ -234,6 +234,9 @@ public class ResponseForClass extends Measure{
 		this.classWithMaxValue = value;
 	}
 
+	/**
+	 * @see Measure#setMinValue
+	 */
 	@Override
 	public void setMinValue(double value) {
 		if (min > value || min == 0d){

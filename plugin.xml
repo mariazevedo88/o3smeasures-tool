@@ -41,7 +41,12 @@
     
     <extension point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <view id="io.github.mariazevedo88.o3smeasures.plugin.views.SampleView"
+         <view id="io.github.mariazevedo88.o3smeasures.plugin.views.MainMeasuresView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+         <view id="io.github.mariazevedo88.o3smeasures.plugin.views.SecondaryMeasuresView"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
@@ -67,10 +72,16 @@
     <extension point="org.eclipse.ui.views">
     	<category id="o3smeasures" name="o3smeasures"></category>
 	    <view category="o3smeasures"
-              class="io.github.mariazevedo88.o3smeasures.plugin.views.SampleView"
+              class="io.github.mariazevedo88.o3smeasures.plugin.views.MainMeasuresView"
               icon="icons/logo.gif"
-              id="io.github.mariazevedo88.o3smeasures.plugin.views.SampleView"
-              name="o3smeasures Diagnostic View">
+              id="io.github.mariazevedo88.o3smeasures.plugin.views.MainMeasuresView"
+              name="o3smeasures Main Measures Diagnostic View">
+	    </view>
+	    <view category="o3smeasures"
+              class="io.github.mariazevedo88.o3smeasures.plugin.views.SecondaryMeasuresView"
+              icon="icons/logo.gif"
+              id="io.github.mariazevedo88.o3smeasures.plugin.views.SecondaryMeasuresView"
+              name="o3smeasures Secondary Measures Diagnostic View">
 	    </view>
       	<view category="o3smeasures"
               class="io.github.mariazevedo88.o3smeasures.plugin.views.PieChartView"
