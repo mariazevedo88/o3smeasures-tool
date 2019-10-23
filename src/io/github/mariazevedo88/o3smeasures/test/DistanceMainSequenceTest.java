@@ -7,41 +7,41 @@ import java.io.File;
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import io.github.mariazevedo88.o3smeasures.measures.main.CouplingBetweenObjects;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.DistanceMainSequence;
 import io.github.mariazevedo88.o3smeasures.util.JavaParser;
 
 /**
- * A class test that executes CBO measure test calculation 
+ * A class test that executes Distance from the Main Sequence measure test calculation 
  * and asserts the implementation behavior or state.
  * 
  * @author Mariana Azevedo
- * @since 13/07/2014
+ * @since 22/10/2019
  */
-@DisplayName("CouplingBetweenObjectsTest")
+@DisplayName("DistanceMainSequenceTest")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class CouplingBetweenObjectsTest{
-	
-	private static final Logger logger = Logger.getLogger(CouplingBetweenObjectsTest.class.getName());
+public class DistanceMainSequenceTest {
+
+	private static final Logger logger = Logger.getLogger(DistanceMainSequenceTest.class.getName());
 
 	@Test
-	@DisplayName("Measuring CBO")
+	@DisplayName("Measuring Distance from the Main Sequence")
 	public void testMeasure(){
 		
 		String className = "HelloWorld.java";
 		File javaFile = new File("./test/"+className);
 		
-		CouplingBetweenObjects cbo = new CouplingBetweenObjects();
+		DistanceMainSequence dfms = new DistanceMainSequence();
 		ICompilationUnit cUnit = JavaParser.parseJDT(javaFile);
-		cbo.measure(cUnit);
+		dfms.measure(cUnit);
 			
-		assertEquals(0.0, cbo.getCalculatedValue());
-		logger.info(cbo.getAcronym() + ": " + cbo.getCalculatedValue() + "\n");
+		assertEquals(1.0, dfms.getCalculatedValue());
+		logger.info(dfms.getAcronym() + ": " + dfms.getCalculatedValue() + "\n");
 	}
 }

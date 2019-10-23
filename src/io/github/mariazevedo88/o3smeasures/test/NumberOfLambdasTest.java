@@ -7,41 +7,41 @@ import java.io.File;
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import io.github.mariazevedo88.o3smeasures.measures.main.CouplingBetweenObjects;
+import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfLambdas;
 import io.github.mariazevedo88.o3smeasures.util.JavaParser;
 
 /**
- * A class test that executes CBO measure test calculation 
+ * A class test that executes Number of Lambdas measure test calculation 
  * and asserts the implementation behavior or state.
  * 
  * @author Mariana Azevedo
- * @since 13/07/2014
+ * @since 22/10/2019
  */
-@DisplayName("CouplingBetweenObjectsTest")
+@DisplayName("NumberOfLambdasTest")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-public class CouplingBetweenObjectsTest{
-	
-	private static final Logger logger = Logger.getLogger(CouplingBetweenObjectsTest.class.getName());
+public class NumberOfLambdasTest {
+
+	private static final Logger logger = Logger.getLogger(NumberOfLambdasTest.class.getName());
 
 	@Test
-	@DisplayName("Measuring CBO")
+	@DisplayName("Measuring Number of Lambdas")
 	public void testMeasure(){
 		
 		String className = "HelloWorld.java";
 		File javaFile = new File("./test/"+className);
 		
-		CouplingBetweenObjects cbo = new CouplingBetweenObjects();
+		NumberOfLambdas nol = new NumberOfLambdas();
 		ICompilationUnit cUnit = JavaParser.parseJDT(javaFile);
-		cbo.measure(cUnit);
+		nol.measure(cUnit);
 			
-		assertEquals(0.0, cbo.getCalculatedValue());
-		logger.info(cbo.getAcronym() + ": " + cbo.getCalculatedValue() + "\n");
+		assertEquals(0.0, nol.getCalculatedValue());
+		logger.info(nol.getAcronym() + ": " + nol.getCalculatedValue() + "\n");
 	}
 }
