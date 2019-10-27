@@ -56,7 +56,7 @@ public class Indicator implements IStatistics {
 	}
 
 	@Override
-	public Double getStdDeviation() {
+	public double getStdDeviation() {
 	   double sumItems = 0d;
 
 	   for (ItemMeasured item : getItemMeasured().getChildren()) {
@@ -68,12 +68,11 @@ public class Indicator implements IStatistics {
 	}
 
 	@Override
-	public Double getSum() {
+	public double getSum() {
 		double sum = 0d;
 		for (ItemMeasured item : getItemMeasured().getChildren()) {
 			sum+=item.getValue();
 		}
 		return sum;
 	}
-
 }

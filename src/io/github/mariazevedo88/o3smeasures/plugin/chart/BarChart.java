@@ -1,11 +1,11 @@
 package io.github.mariazevedo88.o3smeasures.plugin.chart;
 
 import java.awt.Color;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.collections.api.factory.Maps;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.map.MutableMap;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -25,33 +25,35 @@ import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 import io.github.mariazevedo88.o3smeasures.util.exception.FactorNotFoundException;
 
 /**
- * Class that implements a Bar chart with the results of the items measured in 
- * the plugin, separeted in internal quality indicators. See in http://repositorio.ufla.br/handle/1/10561.
+ * Class that implements a Bar chart with the results of the items measured in the plugin, 
+ * separeted in internal quality indicators. See in http://repositorio.ufla.br/handle/1/10561.
  * 
  * @author Mariana Azevedo
  * @since 16/04/2017
- *
  */
 public class BarChart {
 	
 	static Logger logger = Logger.getLogger(BarChart.class);
 	
-	private Map<String, Factor> factorsMap;
+	private MutableMap<String, Factor> factorsMap;
 	
 	public BarChart(){
-		factorsMap = new HashMap<>();
+		factorsMap = Maps.mutable.empty();
 	}
 	
-	public Map<String, Factor> getFactorsMap() {
+	public MutableMap<String, Factor> getFactorsMap() {
 		return factorsMap;
 	}
 
-	public void setFactorsMap(Map<String, Factor> factorsMap) {
+	public void setFactorsMap(MutableMap<String, Factor> factorsMap) {
 		this.factorsMap = factorsMap;
 	}
 
 	/**
 	 * Method to create a dual axis bar chart
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 16/04/2017
 	 * 
 	 * @param itemsMeasured
 	 * @return
@@ -102,6 +104,10 @@ public class BarChart {
 
 	/**
 	 * Method to populate a bar chart
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 16/04/2017
+	 * 
 	 * @param barDataset
 	 */
 	private void populateProjectDataset(DefaultCategoryDataset barDataset) {
@@ -115,6 +121,9 @@ public class BarChart {
 	
 	/**
 	 * Method to populate a line chart
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 16/04/2017
 	 * 
 	 * @param lineDataset
 	 * @throws FactorNotFoundException 
@@ -133,13 +142,16 @@ public class BarChart {
 	/**
 	 * Method to create the factor's objects
 	 * 
+	 * @author Mariana Azevedo
+	 * @since 16/04/2017
+	 * 
 	 * @param itemsMeasured
 	 * @throws FactorNotFoundException
 	 */
 	private void createFactors(ItemMeasured itemsMeasured) throws FactorNotFoundException {
 		
 		if (itemsMeasured != null) {
-			List<ItemMeasured> items = itemsMeasured.getChildren();
+			MutableList<ItemMeasured> items = itemsMeasured.getChildren();
 			
 			for (ItemMeasured item : items) {
 				

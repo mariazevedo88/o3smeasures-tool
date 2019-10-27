@@ -17,9 +17,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 public class NumberOfModulesVisitor extends ASTVisitor {
 	
 	private static final Logger logger = Logger.getLogger(NumberOfModulesVisitor.class);
-	
 	private static NumberOfModulesVisitor instance;
-	
 	private double numberOfModules;
 	
 	public NumberOfModulesVisitor(){
@@ -62,14 +60,14 @@ public class NumberOfModulesVisitor extends ASTVisitor {
 	 * @author Mariana Azevedo
 	 * @since 19/10/2019
 	 * 
-	 * @return int
+	 * @return double
 	 */
 	public double getNumOfModules() {
 		return numberOfModules;
 	}
 	
 	/**
-	 * Method that clean the variable to calculate number of modules value.
+	 * Method that clean the variable to calculate number of modules value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 20/10/2019
@@ -77,5 +75,4 @@ public class NumberOfModulesVisitor extends ASTVisitor {
 	public void cleanVariables(){
 		this.numberOfModules = 0d;
 	}
-
 }

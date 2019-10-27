@@ -1,8 +1,7 @@
 package io.github.mariazevedo88.o3smeasures.structures;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.MutableList;
 import org.jsefa.xml.annotation.XmlDataType;
 import org.jsefa.xml.annotation.XmlElement;
 
@@ -30,7 +29,7 @@ public class ItemMeasured {
 	@XmlElement(pos = 6)
 	private String classWithMaxValue;
 	private ItemMeasured parent;
-	private List<ItemMeasured> children;
+	private MutableList<ItemMeasured> children;
 	private Measure measure;
 	
 	public ItemMeasured(){}
@@ -38,7 +37,7 @@ public class ItemMeasured {
 	public ItemMeasured(String name, ItemMeasured parent) {
 		this.name     = name;
 		this.parent   = parent;
-		this.children = new ArrayList<>();
+		this.children = Lists.mutable.empty();
 		this.value    = 0d;
 		this.mean     = 0d;
 		this.max      = 0d;
@@ -90,7 +89,7 @@ public class ItemMeasured {
 	 * 
 	 * @return List
 	 */
-	public List<ItemMeasured> getChildren(){
+	public MutableList<ItemMeasured> getChildren(){
 		return children;
 	}
 	

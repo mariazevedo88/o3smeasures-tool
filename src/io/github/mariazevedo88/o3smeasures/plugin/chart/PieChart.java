@@ -1,8 +1,8 @@
 package io.github.mariazevedo88.o3smeasures.plugin.chart;
 
 import java.awt.Font;
-import java.util.List;
 
+import org.eclipse.collections.api.list.MutableList;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
@@ -20,9 +20,11 @@ import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 public class PieChart {
 
 	/**
-	 * Method that creates the pie chart visualization using JFreeChart.
+	 * Method that creates the pie chart visualization using JFreeChart
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param itemsMeasured
 	 * @return JFreeChart object
 	 */
@@ -34,7 +36,7 @@ public class PieChart {
 		String projectName = "";
 		
 		if (itemsMeasured != null) {
-			List<ItemMeasured> items = itemsMeasured.getChildren();
+			MutableList<ItemMeasured> items = itemsMeasured.getChildren();
 			projectName = itemsMeasured.getName();
 			
 			for (ItemMeasured item : items) {

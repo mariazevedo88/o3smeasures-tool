@@ -1,18 +1,17 @@
 package io.github.mariazevedo88.o3smeasures.astvisitors;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
- * A visitor for abstract syntax trees, that visits the given node 
- * to perform the calculation of the FOUT (Fan-out) measure.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the FOUT (Fan-out) measure
  * 
  * @see ASTVisitor
  * 
@@ -21,12 +20,12 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  */
 public class FanOutVisitor extends ASTVisitor{
 
-	private List<TypeDeclaration> typesList;
+	private MutableList<TypeDeclaration> typesList;
 	private static FanOutVisitor instance;
 	
 	public FanOutVisitor(){
 		super();
-		typesList = new ArrayList<>();
+		typesList = Lists.mutable.empty();
 	}
 	
 	/**
@@ -54,8 +53,7 @@ public class FanOutVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to calculate FOUT checking the number of types 
-	 * the class references.
+	 * Method to calculate FOUT checking the number of types the class references
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -71,25 +69,25 @@ public class FanOutVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method that clean the array used to calculate FOUT value.
+	 * Method that clean the array used to calculate FOUT value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
 	public void cleanArray(){
-		this.typesList = new ArrayList<>();
+		this.typesList = Lists.mutable.empty();
 	}
 	
 	/**
-	 * Method to get the FOUT value for a class.
+	 * Method to get the FOUT value for a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @return Double
+	 * @return double
 	 */
-	public Double getFanOutValue(){
+	public double getFanOutValue(){
 		int value = typesList.size();
-		return new BigDecimal(value, new MathContext(2, RoundingMode.UP)).doubleValue();
+		return BigDecimal.valueOf(value).setScale(2, RoundingMode.UP).doubleValue();
 	}
 }

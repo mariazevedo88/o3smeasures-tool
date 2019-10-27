@@ -1,16 +1,14 @@
 package io.github.mariazevedo88.o3smeasures.astvisitors;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 
 /**
- * A visitor for abstract syntax trees, that visits the given node 
- * to perform the calculation of the NOA (Number of Attributes) 
- * measure.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the NOA (Number of Attributes) measure
  * 
  * @see ASTVisitor
  * 
@@ -19,7 +17,7 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
  */
 public class NumberOfAttributesVisitor extends ASTVisitor{
 	
-	private Double numberOfAttributes;
+	private double numberOfAttributes;
 	private static NumberOfAttributesVisitor instance;
 	
 	public NumberOfAttributesVisitor(){
@@ -52,19 +50,19 @@ public class NumberOfAttributesVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * Method to get the number of attributes or fields in a class.
+	 * Method to get the number of attributes or fields in a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @return Double
+	 * @return double
 	 */
-	public Double getNumberOfAttributes(){
-		return new BigDecimal(numberOfAttributes, new MathContext(2, RoundingMode.UP)).doubleValue();
+	public double getNumberOfAttributes(){
+		return BigDecimal.valueOf(this.numberOfAttributes).setScale(2, RoundingMode.UP).doubleValue();
 	}
 	
 	/**
-	 * Method that clean the variable used to calculate NOA value.
+	 * Method that clean the variable used to calculate NOA value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -72,5 +70,4 @@ public class NumberOfAttributesVisitor extends ASTVisitor{
 	public void cleanVariable(){
 		this.numberOfAttributes = 0d;
 	}
-
 }

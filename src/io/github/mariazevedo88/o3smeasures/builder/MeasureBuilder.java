@@ -1,8 +1,7 @@
 package io.github.mariazevedo88.o3smeasures.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
@@ -25,10 +24,10 @@ import io.github.mariazevedo88.o3smeasures.structures.Measure;
 public class MeasureBuilder {
 	
 	private ItemMeasured root;
-	private List<Measure> measures;
+	private MutableList<Measure> measures;
 	
 	public MeasureBuilder(){
-		measures = new ArrayList<>();
+		measures = Lists.mutable.empty();
 	}
 	
 	public void addMeasure(Measure measure){

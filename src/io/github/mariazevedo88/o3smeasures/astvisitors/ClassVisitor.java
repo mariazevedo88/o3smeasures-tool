@@ -8,8 +8,8 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
- * A visitor for abstract syntax trees, that visits the given 
- * node to perform the calculation of the number of classes.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the number of classes
  * 
  * @see ASTVisitor
  * 
@@ -53,8 +53,7 @@ public class ClassVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * Method that calculates the number of classes of
-	 * a specific project.
+	 * Method that calculates the number of classes of a specific project
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -84,23 +83,21 @@ public class ClassVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to get the number of project classes. This method is
-	 * used to other measures to calculate the average value per class
-	 * of all measures in the plug-in.
+	 * Method to get the number of project classes. This method is used to other measures 
+	 * to calculate the average value per class of all measures in the plug-in
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @return static int
+	 * @return int
 	 */
 	public static int getNumOfProjectClasses() {
 		return numOfProjectClasses;
 	}
 	
 	/**
-	 * Method to set the number of project classes. This method is
-	 * used to other measures to calculate the average value per class
-	 * of all measures in the plug-in.
+	 * Method to set the number of project classes. This method is used to other measures
+	 * to calculate the average value per class of all measures in the plug-in
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -122,7 +119,7 @@ public class ClassVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method that clean the variable to calculate Number of Classes value.
+	 * Method that clean the variable to calculate Number of Classes value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014

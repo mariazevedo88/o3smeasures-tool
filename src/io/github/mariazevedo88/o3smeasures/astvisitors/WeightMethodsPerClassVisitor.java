@@ -1,7 +1,6 @@
 package io.github.mariazevedo88.o3smeasures.astvisitors;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Iterator;
 import java.util.List;
@@ -26,9 +25,8 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
 /**
- * A visitor for abstract syntax trees, that visits the given node 
- * to perform the calculation of the WMC (Weight Methods per Class) 
- * measure.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the WMC (Weight Methods per Class) measure
  * 
  * @see ASTVisitor
  * 
@@ -37,11 +35,10 @@ import org.eclipse.jdt.core.dom.WhileStatement;
  */
 public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	
-	private Double wmcIndex;
+	private double wmcIndex;
+	private String methodName;
 	private CyclomaticComplexityVisitor visitor;
 	private static WeightMethodsPerClassVisitor instance;
-	
-	private String methodName;
 	
 	public WeightMethodsPerClassVisitor(){
 		super();
@@ -74,18 +71,18 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to calculate the sum of the complexities of all class methods.
+	 * Method to calculate the sum of the complexities of all class methods
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param node
 	 */
 	@SuppressWarnings("unchecked")
 	private void calculateWeightMethods(CompilationUnit node){
-		
 		for (Object type : node.types()){
-		
 			if ((type instanceof TypeDeclaration)){
-					
+				
 				List<TypeDeclaration> bodyDeclarationsList = ((TypeDeclaration) type).bodyDeclarations();
 				Iterator<TypeDeclaration> itBodyDeclaration = bodyDeclarationsList.iterator();
 				
@@ -95,6 +92,7 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 						checkStatementsInMethodsDeclaration(itItem);
 					}
 				}
+				
 				this.wmcIndex += this.visitor.getCyclomaticComplexityIndex();
 			}
 		}
@@ -102,14 +100,18 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 
 	/**
 	 * Method that check statements like try/catch, while, if/else in method's declaration, 
-	 * where weights are unspecified complexity factors.
+	 * where weights are unspecified complexity factors
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param itItem
 	 */
 	@SuppressWarnings("unchecked")
 	private void checkStatementsInMethodsDeclaration(Object itItem) {
+		
 		Block block = ((MethodDeclaration) itItem).getBody();
+		
 		if (block != null){
 			List<Statement> statementsList = block.statements();
 			Iterator<Statement> itStatements = statementsList.iterator();
@@ -118,9 +120,11 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * Method that run into statements array.
+	 * Method that run into statements array
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param itStatements
 	 */
 	private void coveringStatements(Iterator<Statement> itStatements) {
@@ -131,9 +135,11 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * Method that check statement type.
+	 * Method that check statement type
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param itStatement
 	 */
 	private void getStatementType(Object itStatement) {
@@ -170,18 +176,21 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to get the WMC value.
+	 * Method to get the WMC value
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @return double
 	 */
 	public double getWeightMethodsPerClassIndex(){
 		if(wmcIndex == 0d) wmcIndex++;
-		return new BigDecimal(this.wmcIndex, new MathContext(2, RoundingMode.UP)).doubleValue();
+		return BigDecimal.valueOf(this.wmcIndex).setScale(2, RoundingMode.UP).doubleValue();
 	}
 	
 	/**
-	 * Method that clean the arrays and the variable used to calculate WMC value.
+	 * Method that clean the arrays and the variable used to calculate WMC value
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
@@ -192,7 +201,8 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to set the name of the method evaluated.
+	 * Method to set the name of the method evaluated
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
 	 * 
@@ -203,7 +213,8 @@ public class WeightMethodsPerClassVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * Method to get the name of the method evaluated.
+	 * Method to get the name of the method evaluated
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 07/07/2019
 	 * 

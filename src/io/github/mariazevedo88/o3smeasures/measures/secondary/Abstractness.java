@@ -15,6 +15,7 @@ import io.github.mariazevedo88.o3smeasures.structures.Measure;
 /**
  * Class that implements the A - Abstractness measure, which is the ratio of the number of abstract classes 
  * (and interfaces) in the analyzed package to the total number of classes in the analyzed package. 
+ * 
  * The range for this metric is 0 to 1, with A=0 indicating a completely concrete package and A=1 indicating 
  * a completely abstract package.
  * 

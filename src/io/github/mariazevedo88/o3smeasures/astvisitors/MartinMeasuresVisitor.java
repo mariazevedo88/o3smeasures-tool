@@ -1,8 +1,7 @@
 package io.github.mariazevedo88.o3smeasures.astvisitors;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.eclipse.collections.api.factory.Maps;
+import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -15,7 +14,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 /**
  * A visitor for abstract syntax trees that implements Robert Martin's coupling measures 
  * calculation: Abstractness, Instability, Afferent Coupling, Efferent Coupling, and 
- * Distance from the Main Sequence.
+ * Distance from the Main Sequence
  * 
  * @see ASTVisitor
  * 
@@ -25,24 +24,21 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 public class MartinMeasuresVisitor extends ASTVisitor {
 	
 	private static MartinMeasuresVisitor instance;
-	
 	private double abstractnessIndex;
 	private double efferentIndex;
 	private double afferentIndex;
-	
-	private Map<String, Integer> afferentClasses;
-	private IType[] allTypes;
-	
 	private double numberOfTypes;
+	
+	private MutableMap<String, Integer> afferentClasses;
+	private IType[] allTypes;
 
 	public MartinMeasuresVisitor(){
 		super();
 		this.abstractnessIndex = 0d;
 		this.efferentIndex = 0d;
 		this.afferentIndex = 0d;
-		this.afferentClasses = new HashMap<>();
-		
 		this.numberOfTypes = 0d;
+		this.afferentClasses = Maps.mutable.empty();
 	}
 	
 	/**
@@ -90,6 +86,7 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 	private void calculateAbstractness(TypeDeclaration unit) {
 		if(allTypes != null) {
 			numberOfTypes += allTypes.length;
+			
 			if(unit.isInterface()) {
 				abstractnessIndex++;
 			} else {
@@ -98,6 +95,7 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 					abstractnessIndex++;
 				}
 			}
+			
 		}
 	}
 	
@@ -158,11 +156,13 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 	private void calculateCouplins(String name, String simpleName, String importName, int afferentCouplingIndex) {
 		if(!importName.contains(name)) {
 			efferentIndex++;
+			
 			if(afferentClasses.get(simpleName) != null) {
 				afferentCouplingIndex = afferentClasses.get(simpleName) + 1;
 			}else {
 				afferentCouplingIndex++;
 			}
+			
 			afferentClasses.put(simpleName, afferentCouplingIndex);
 		}
 	}
@@ -254,5 +254,4 @@ public class MartinMeasuresVisitor extends ASTVisitor {
 		this.numberOfTypes = 0d;
 		this.allTypes = null;
 	}
-
 }

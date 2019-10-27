@@ -1,7 +1,6 @@
 package io.github.mariazevedo88.o3smeasures.astvisitors;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -27,9 +26,8 @@ import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
 /**
- * A visitor for abstract syntax trees, that visits the given node 
- * to perform the calculation of the CC (Cyclomatic Complexity) 
- * measure, excluding getters and setters invocation.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the CC (Cyclomatic Complexity) measure, excluding getters and setters invocation
  * 
  * @see ASTVisitor
  * 
@@ -40,10 +38,9 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 
 	private static CyclomaticComplexityVisitor instance;
 
-	private Double cyclomaticComplexityIndex;
-	private Double sumCyclomaticComplexity;
+	private double cyclomaticComplexityIndex;
+	private double sumCyclomaticComplexity;
 	private boolean isFirstVisitingPerMethod;
-	
 	private String methodName;
 	
 	public CyclomaticComplexityVisitor(){
@@ -206,7 +203,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * McCabe CC is computed as method level.
+	 * McCabe CC is computed as method level
 	 * @see ASTVisitor#visit(AnonymousClassDeclaration)
 	 */
 	@Override
@@ -215,7 +212,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * McCabe CC is computed as method level.
+	 * McCabe CC is computed as method level
 	 * @see ASTVisitor#visit(AnnotationTypeDeclaration)
 	 */
 	@Override
@@ -224,7 +221,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * McCabe CC is computed as method level.
+	 * McCabe CC is computed as method level
 	 * @see ASTVisitor#visit(EnumDeclaration)
 	 */
 	@Override
@@ -324,7 +321,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that returns the cyclomatic complexity index in a class. For a single routine 
-	 * in the method, cyclomaticComplexityIndex is always equal to 1.
+	 * in the method, cyclomaticComplexityIndex is always equal to 1
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -333,11 +330,11 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	 */
 	public double getCyclomaticComplexityIndex(){
 		if(cyclomaticComplexityIndex == 0d) cyclomaticComplexityIndex++;
-		return new BigDecimal(cyclomaticComplexityIndex, new MathContext(2, RoundingMode.UP)).doubleValue();
+		return BigDecimal.valueOf(this.cyclomaticComplexityIndex).setScale(2, RoundingMode.UP).doubleValue();
 	}
 	
 	/**
-	 * Method that clean all the variables used to calculate CC value.
+	 * Method that clean all the variables used to calculate CC value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -350,7 +347,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	
 	/**
 	 * Method that returns the sum of all complexities. For a single routine 
-	 * in the method, sumCyclomaticComplexity is always equal to 1.
+	 * in the method, sumCyclomaticComplexity is always equal to 1
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -363,7 +360,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * Method to set the name of the method evaluated.
+	 * Method to set the name of the method evaluated
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
@@ -376,12 +373,12 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to check whether the evaluated Statement is of the 
-	 * same builder method or is of a class.
+	 * same builder method or is of a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
 	 * 
-	 * @param node
+	 * @param node - Statement
 	 * 
 	 * @return boolean
 	 */
@@ -396,12 +393,12 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to check whether the evaluated CatchClause is of the 
-	 * same builder method or is of a class.
+	 * same builder method or is of a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
 	 * 
-	 * @param node
+	 * @param node - CatchClause
 	 * 
 	 * @return boolean
 	 */
@@ -416,12 +413,12 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to check whether the evaluated expression is of the 
-	 * same builder method or is of a class.
+	 * same builder method or is of a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019
 	 * 
-	 * @param node
+	 * @param node - Expression
 	 * 
 	 * @return boolean
 	 */
@@ -434,7 +431,7 @@ public class CyclomaticComplexityVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method that checks whether a TryStatement has a catch clause.
+	 * Method that checks whether a TryStatement has a catch clause
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 06/07/2019

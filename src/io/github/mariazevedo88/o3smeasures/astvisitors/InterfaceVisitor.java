@@ -5,8 +5,8 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
- * A visitor for abstract syntax trees, that visits the given node to perform 
- * the calculation of the number of interfaces.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the number of interfaces
  * 
  * @see ASTVisitor
  * 
@@ -16,7 +16,6 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 public class InterfaceVisitor extends ASTVisitor {
 	
 	private double numberOfInterfaces;
-	
 	private static InterfaceVisitor instance;
 	
 	public InterfaceVisitor(){
@@ -50,7 +49,7 @@ public class InterfaceVisitor extends ASTVisitor {
 	}
 
 	/**
-	 * Method that returns the number of interfaces of a project.
+	 * Method that returns the number of interfaces of a project
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 05/10/2019
@@ -62,7 +61,7 @@ public class InterfaceVisitor extends ASTVisitor {
 	}
 	
 	/**
-	 * Method that clean the variable to calculate Number of Interfaces value.
+	 * Method that clean the variable to calculate Number of Interfaces value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 05/10/2019

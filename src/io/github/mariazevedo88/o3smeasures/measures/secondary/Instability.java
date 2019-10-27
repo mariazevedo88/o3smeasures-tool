@@ -10,9 +10,10 @@ import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
  * Class that implements I - Instability measure. The ratio of efferent coupling (Ce) to total coupling (Ce + Ca) 
- * such that I = Ce / (Ce + Ca). This metric is an indicator of the package's resilience to change. The range for 
- * this metric is 0 to 1, with I=0 indicating a completely stable package and I=1 indicating a completely unstable 
- * package.
+ * such that I = Ce / (Ce + Ca). 
+ * 
+ * This metric is an indicator of the package's resilience to change. The range is 0 to 1, with I=0 indicating 
+ * a completely stable package and I=1 indicating a completely unstable package.
  * 
  * @author Mariana Azevedo
  * @since 14/10/2019
@@ -60,7 +61,7 @@ public class Instability extends Measure {
 	@Override
 	public String getDescription() {
 		return "Ce/(Ca + Ce) - indicates the necessity of performing modifications in an entity due to" + 
-				" updates occurred in other software entities";
+				" updates occurred in other software entities.";
 	}
 
 	/**

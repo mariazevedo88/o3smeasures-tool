@@ -3,10 +3,11 @@ package io.github.mariazevedo88.o3smeasures.astvisitors;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -17,9 +18,8 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 /**
- * A visitor for abstract syntax trees, that visits the given node 
- * to perform the calculation of the LCC (Loose Class Cohesion) 
- * measure.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the LCC (Loose Class Cohesion) measure
  * 
  * @see ASTVisitor
  * 
@@ -28,18 +28,18 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
  */
 public class LooseClassCohesionVisitor extends ASTVisitor{
 	
-	private List<MethodDeclaration> listOfMethods;
-	private List<String> listOfAttributes;
-	private Double numDirectConnections;
-	private Double numIndirectConnections;
+	private MutableList<MethodDeclaration> listOfMethods;
+	private MutableList<String> listOfAttributes;
+	private double numDirectConnections;
+	private double numIndirectConnections;
 	private static LooseClassCohesionVisitor instance;
 	
 	public LooseClassCohesionVisitor(){
 		super();
-		listOfMethods = new ArrayList<>();
-		listOfAttributes = new ArrayList<>();
 		numDirectConnections = 0d;
 		numIndirectConnections = 0d;
+		listOfMethods = Lists.mutable.empty();
+		listOfAttributes = Lists.mutable.empty();
 	}
 	
 	/**
@@ -62,21 +62,18 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	 */
 	@Override
 	public boolean visit(CompilationUnit node) {
-		
 		getClassAttributes(node);
-		
 		calculateNumberOfMethods(node);
-		
 		return false;
 	}
 	
 	/**
-	 * Method to get all attributes or fields of a class.
+	 * Method to get all attributes or fields of a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @param node
+	 * @param node - CompilationUnit
 	 */
 	@SuppressWarnings("unchecked")
 	private void getClassAttributes(CompilationUnit node){
@@ -100,16 +97,16 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	
 	/**
 	 * Method to calculate the number of methods of a class and set lists
-	 * of methods with direct connections and method with indirect connections.
+	 * of methods with direct connections and method with indirect connections
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @param unit
+	 * @param unit - CompilationUnit
 	 */
 	private void calculateNumberOfMethods(CompilationUnit unit){
 		
-		List<MethodDeclaration> methodsWithDirectConn = new ArrayList<>(); 
+		MutableList<MethodDeclaration> methodsWithDirectConn = Lists.mutable.empty(); 
 		
 		for (Object type : unit.types()){
 			if (type instanceof TypeDeclaration){
@@ -123,15 +120,13 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 		}
 		
 		Iterator<MethodDeclaration> itMethods = this.listOfMethods.iterator();
-		
 		methodsWithDirectConn = getNumberOfDirectConnections(methodsWithDirectConn, itMethods);
-			
 		getNumberOfIndirectConnections(methodsWithDirectConn, itMethods);
 		
 	}
 
 	/**
-	 * Method to get the number of methods with direct connections.
+	 * Method to get the number of methods with direct connections
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -141,7 +136,7 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	 * 
 	 * @return List 
 	 */
-	private List<MethodDeclaration> getNumberOfDirectConnections(List<MethodDeclaration> methodsWithDirectConn,
+	private MutableList<MethodDeclaration> getNumberOfDirectConnections(MutableList<MethodDeclaration> methodsWithDirectConn,
 			Iterator<MethodDeclaration> itMethods) {
 		
 		while (itMethods.hasNext()){
@@ -168,7 +163,7 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to get the number of methods with indirect connections.
+	 * Method to get the number of methods with indirect connections
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -198,7 +193,7 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to calculate the LCC value.
+	 * Method to calculate the LCC value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -215,7 +210,7 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to get the LCC value.
+	 * Method to get the LCC value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -225,6 +220,7 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	public double getLCCIndex(){
 		double np = calculateNP();
 		double lccValue = 0d;
+		
 		if (np != 0d){
 			Double value = (numDirectConnections + numIndirectConnections)/np;
 			lccValue = new BigDecimal(value, new MathContext(3, RoundingMode.UP)).doubleValue();
@@ -234,7 +230,7 @@ public class LooseClassCohesionVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method that clean the variable used to calculate LCC value.
+	 * Method that clean the variable used to calculate LCC value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014

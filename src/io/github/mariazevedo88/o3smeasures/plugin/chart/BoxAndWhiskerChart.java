@@ -1,11 +1,12 @@
 package io.github.mariazevedo88.o3smeasures.plugin.chart;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.factory.Maps;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.map.MutableMap;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -20,8 +21,8 @@ import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 import io.github.mariazevedo88.o3smeasures.util.exception.FactorNotFoundException;
 
 /**
- * Class that implements a Box and Whisker chart with the results of the items measured in 
- * the plugin, separeted in internal quality factors. See in http://repositorio.ufla.br/handle/1/10561.
+ * Class that implements a Box and Whisker chart with the results of the items measured in the plugin, 
+ * separeted in internal quality factors. See in http://repositorio.ufla.br/handle/1/10561.
  * 
  * @author Mariana Azevedo
  * @since 16/04/2017
@@ -31,22 +32,25 @@ public class BoxAndWhiskerChart {
 	
 	static Logger logger = Logger.getLogger(BoxAndWhiskerChart.class);
 	
-	private Map<String, Factor> factorsMap;
+	private MutableMap<String, Factor> factorsMap;
 	
 	public BoxAndWhiskerChart(){
-		factorsMap = new HashMap<>();
+		factorsMap = Maps.mutable.empty();
 	}
 	
-	public Map<String, Factor> getFactorsMap() {
+	public MutableMap<String, Factor> getFactorsMap() {
 		return factorsMap;
 	}
 
-	public void setFactorsMap(Map<String, Factor> factorsMap) {
+	public void setFactorsMap(MutableMap<String, Factor> factorsMap) {
 		this.factorsMap = factorsMap;
 	}
 
 	/**
 	 * Method to create a box and whisker chart
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 16/04/2017
 	 * 
 	 * @param itemsMeasured
 	 * @return
@@ -84,6 +88,10 @@ public class BoxAndWhiskerChart {
 
 	/**
 	 * Method to populate box and whisker 
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 16/04/2017
+	 * 
 	 * @param boxDataset
 	 */
 	private void populateDataset(DefaultBoxAndWhiskerCategoryDataset boxDataset) {
@@ -91,7 +99,7 @@ public class BoxAndWhiskerChart {
 			
 			for (Indicator indicator : factor.getIndicators()){
 				ItemMeasured item = indicator.getItemMeasured();
-				List<Double> values = createValueList(0, item.getChildren().size(), item);
+				MutableList<Double> values = createValueList(0, item.getChildren().size(), item);
 				boxDataset.add(values, factor.getName(), factor.getName());
 			}
 		}
@@ -99,6 +107,9 @@ public class BoxAndWhiskerChart {
 	
 	/**
 	 * Method to create the factor's objects
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 16/04/2017
 	 * 
 	 * @param itemsMeasured
 	 * @throws FactorNotFoundException
@@ -122,14 +133,17 @@ public class BoxAndWhiskerChart {
 	/**
 	 * Method to calculate the factor's values
 	 * 
+	 * @author Mariana Azevedo
+	 * @since 16/04/2017
+	 * 
 	 * @param lowerBound
 	 * @param upperBound
 	 * @param item
 	 * @return
 	 */
-	private static List<Double> createValueList(double lowerBound, double upperBound, ItemMeasured item) {
+	private static MutableList<Double> createValueList(double lowerBound, double upperBound, ItemMeasured item) {
 		
-		List<Double> result = new ArrayList<>();
+		MutableList<Double> result = Lists.mutable.empty();
 		
 		for (int i = 0; i < item.getChildren().size(); i++) {
 			double itemValue = item.getChildren().get(i).getValue();

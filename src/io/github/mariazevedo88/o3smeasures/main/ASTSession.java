@@ -1,8 +1,7 @@
 package io.github.mariazevedo88.o3smeasures.main;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.eclipse.collections.api.factory.Maps;
+import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
@@ -17,12 +16,20 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 public class ASTSession {
 
 	private static ASTSession ast;
-	private Map<ITypeRoot, CompilationUnit> units;
+	private MutableMap<ITypeRoot, CompilationUnit> units;
 	
 	private ASTSession() {
-		units = new HashMap<>();
+		units = Maps.mutable.empty();
 	}
 	
+	/**
+	 * Method that creates a ASTSession instance
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 13/07/2014
+	 * 
+	 * @return ASTSession
+	 */
 	public static ASTSession getInstance(){
 		if (ast == null) {
 			ast = new ASTSession();
@@ -31,9 +38,11 @@ public class ASTSession {
 	} 
 	
 	/**
-	 * Method that insert an compilation unit on the map.
+	 * Method that insert an compilation unit on the map
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 */
 	public void save(CompilationUnit unit){
@@ -41,9 +50,11 @@ public class ASTSession {
 	}
 
 	/**
-	 * Method that gets a specific compilation unit on the map. 
+	 * Method that gets a specific compilation unit on the map
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 * @return CompilationUnit
 	 */
@@ -52,10 +63,11 @@ public class ASTSession {
 	}
 	
 	/**
-	 * Method that verifies if an unit it is contained 
-	 * within the units' map
+	 * Method that verifies if an unit it is contained within the units' map
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
+	 * 
 	 * @param unit
 	 * @return boolean
 	 */
@@ -64,12 +76,12 @@ public class ASTSession {
 	}
 	
 	/**
-	 * Method that cleans the units map.
+	 * Method that cleans the units map
+	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 */
 	public void reset(){
 		units.clear();
 	}
-
 }
