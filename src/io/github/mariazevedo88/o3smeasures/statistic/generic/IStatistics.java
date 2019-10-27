@@ -14,9 +14,9 @@ public interface IStatistics {
 	 * @author Mariana Azevedo
 	 * @since 16/04/2017
 	 * 
-	 * @return Double
+	 * @return double
 	 */
-	public Double getStdDeviation();
+	public double getStdDeviation();
 	
 	/**
 	 * Method that calculates the sum of all values of a item
@@ -24,8 +24,8 @@ public interface IStatistics {
 	 * @author Mariana Azevedo
 	 * @since 16/04/2017
 	 * 
-	 * @return Double
+	 * @return double
 	 */
-	public Double getSum();
+	public double getSum();
 	
 }

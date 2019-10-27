@@ -11,5 +11,8 @@
 	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="lib/j2html-1.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/eclipse-collections-10.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/eclipse-collections-api-10.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,9 +4,9 @@ import io.github.mariazevedo88.o3smeasures.util.exception.FactorNotFoundExceptio
 
 /**
  * Enum to describe measure's configurations. See reference here: http://repositorio.ufla.br/handle/1/10561
+ * 
  * @author Mariana Azevedo
  * @since 16/04/2017
- * 
  */
 public enum O3SMeasuresConfigurationEnum {
 	
@@ -69,5 +69,4 @@ public enum O3SMeasuresConfigurationEnum {
 		}
 		throw new FactorNotFoundException("Invalid factor: " + value);
 	}
-
 }

@@ -1,8 +1,7 @@
 package io.github.mariazevedo88.o3smeasures.main;
 
-import java.util.Arrays;
-import java.util.List;
-
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
@@ -46,8 +45,8 @@ import io.github.mariazevedo88.o3smeasures.structures.Measure;
  */
 public class Application {
 
-	private List<Measure> mainMeasures;
-	private List<Measure> secondaryMeasures;
+	private ImmutableList<Measure> mainMeasures;
+	private ImmutableList<Measure> secondaryMeasures;
 	
 	/**
 	 * Method that executes the project's measurement
@@ -91,7 +90,7 @@ public class Application {
 	 * 
 	 * @return mainMeasures
 	 */
-	public List<Measure> getMainMeasures(){
+	public ImmutableList<Measure> getMainMeasures(){
 		return mainMeasures;
 	}
 	
@@ -103,7 +102,7 @@ public class Application {
 	 * 
 	 * @return secondaryMeasures
 	 */
-	public List<Measure> getSecondaryMeasures(){
+	public ImmutableList<Measure> getSecondaryMeasures(){
 		return secondaryMeasures;
 	}
 	
@@ -114,7 +113,7 @@ public class Application {
 	 * @since 13/07/2014
 	 */
 	private void createMainMeasureArray(){
-		mainMeasures = Arrays.asList(new NumberOfClasses(), new LinesOfCode(), new NumberOfMethods(), new NumberOfAttributes(),
+		mainMeasures = Lists.immutable.with(new NumberOfClasses(), new LinesOfCode(), new NumberOfMethods(), new NumberOfAttributes(),
 			new CyclomaticComplexity(), new WeightMethodsPerClass(), new DepthOfInheritanceTree(), new NumberOfChildren(),
 			new CouplingBetweenObjects(), new FanOut(), new ResponseForClass(), new LackCohesionMethods(), 
 			new LackCohesionMethodsTwo(), new LackCohesionMethodsFour(), new TightClassCohesion(), new LooseClassCohesion());
@@ -127,7 +126,7 @@ public class Application {
 	 * @since 29/09/2019
 	 */
 	private void createSecondaryMeasureArray(){
-		secondaryMeasures = Arrays.asList(new NumberOfPackages(), new NumberOfLambdas(), new NumberOfInterfaces(), 
+		secondaryMeasures = Lists.immutable.with(new NumberOfPackages(), new NumberOfLambdas(), new NumberOfInterfaces(), 
 			new NumberOfMethodReference(), new NumberOfModules(), new EfferentCoupling(), new AfferentCoupling(), 
 			new Abstractness(), new Instability(), new DistanceMainSequence());
 	}

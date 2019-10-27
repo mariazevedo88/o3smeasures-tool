@@ -3,14 +3,14 @@ package io.github.mariazevedo88.o3smeasures.util;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.log4j.Logger;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.jsefa.xml.XmlIOFactory;
 import org.jsefa.xml.XmlSerializer;
@@ -33,7 +33,7 @@ import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
  */
 public class FileExport {
 
-	private static final List<String[]> headerItems = new ArrayList<>();
+	private static final MutableList<String[]> headerItems = Lists.mutable.empty();
 	private static String tempFolderPath = "";
 	private static String pathDelimiter = "\\";
 	private static String desktopPath = "\\Desktop\\";
@@ -85,9 +85,9 @@ public class FileExport {
 	 * 
 	 * @return List
 	 */
-	private List<String[]> populateItems(ItemMeasured itemMeasured){
+	private MutableList<String[]> populateItems(ItemMeasured itemMeasured){
 		
-		List<String[]> recordItems = new ArrayList<>();
+		MutableList<String[]> recordItems = Lists.mutable.empty();
 		for (ItemMeasured item : itemMeasured.getChildren()){
 			recordItems.add(new String[] {item.toString(), 
 					String.valueOf(item.getValue()), 
@@ -126,7 +126,7 @@ public class FileExport {
 	    	 CSVPrinter csvOutput = new CSVPrinter(fileWriter, CSVFormat.DEFAULT)) {
 	    	
     		csvOutput.printRecords(headerItems);
-    		List<String[]> it = populateItems(item);
+    		MutableList<String[]> it = populateItems(item);
     		csvOutput.printRecords(it);
     		
     		JOptionPane.showMessageDialog(null, "CSV file was created successfully!");

@@ -14,9 +14,8 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
- * A visitor for abstract syntax trees, that visits the given 
- * node to perform the calculation of the CBO (Coupling between 
- * Objects) measure.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the CBO (Coupling between Objects) measure
  * 
  * @see ASTVisitor
  * 
@@ -62,8 +61,7 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method that calculates the number of classes of 
-	 * a specific project.
+	 * Method that calculates the number of classes of a specific project
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -99,8 +97,7 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * Method that verify how many times a method is referenced
-	 * by another method body declaration 
+	 * Method that verify how many times a method is referenced by another method body declaration 
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -134,7 +131,7 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method that clean the array used to calculate CBO value.
+	 * Method that clean the array used to calculate CBO value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -150,9 +147,9 @@ public class CouplingBetweenObjectsVisitor extends ASTVisitor{
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014 
 	 * 
-	 * @return Double
+	 * @return double
 	 */
-	public Double getCouplingBetweenObjectsIndex(){
+	public double getCouplingBetweenObjectsIndex(){
 		return Double.valueOf(iTypeList.length) + Double.valueOf(numCalls);
 	}
 }

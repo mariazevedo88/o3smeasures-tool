@@ -83,7 +83,7 @@ public class Measurement extends AbstractHandler {
 	    	
     		monitor.subTask("Getting measure values " + (i) + " of "+ size + "...");
     		Display.getDefault().syncExec(update);
-    		monitor.worked(1);
+    		monitor.worked(i);
     		if(checkIfUserCancelledExecution(monitor)) break;
     	}
 		

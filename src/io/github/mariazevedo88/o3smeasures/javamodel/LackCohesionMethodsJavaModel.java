@@ -3,13 +3,14 @@ package io.github.mariazevedo88.o3smeasures.javamodel;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.eclipse.collections.api.factory.Sets;
+import org.eclipse.collections.api.map.MutableMap;
+import org.eclipse.collections.api.set.MutableSet;
+import org.eclipse.collections.impl.factory.Maps;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMethod;
@@ -35,9 +36,9 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 
 	private static final Logger logger = Logger.getLogger(LackCohesionMethodsJavaModel.class);
 	
-	private Map<String, HashSet<String>> sharedAttributesPerMethods;
-	private Map<String, HashSet<String>> nonSharedAttributesPerMethods;
-	private Map<String, HashSet<String>> connectedComponents;
+	private MutableMap<String, MutableSet<String>> sharedAttributesPerMethods;
+	private MutableMap<String, MutableSet<String>> nonSharedAttributesPerMethods;
+	private MutableMap<String, MutableSet<String>> connectedComponents;
 	private Double lcomValue;
 	private Double lcom2Value;
 	private Double lcom4Value;
@@ -52,9 +53,9 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	
 	public LackCohesionMethodsJavaModel(){
 		
-		sharedAttributesPerMethods = new HashMap<>();
-		nonSharedAttributesPerMethods = new HashMap<>();
-		connectedComponents = new HashMap<>();
+		sharedAttributesPerMethods = Maps.mutable.empty();
+		nonSharedAttributesPerMethods = Maps.mutable.empty();
+		connectedComponents = Maps.mutable.empty();
 		
 		this.lcomValue = 0d;
 		this.lcom2Value = 0d;
@@ -94,11 +95,11 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 			
 			if ((iFields != null && iMethods != null) && (iFields.length > 1 && iMethods.length > 1)) {
 				for (IField field: iFields){
-					sharedAttributesPerMethods.put(field.getElementName(), new HashSet<>());
-					nonSharedAttributesPerMethods.put(field.getElementName(), new HashSet<>());
+					sharedAttributesPerMethods.put(field.getElementName(), Sets.mutable.empty());
+					nonSharedAttributesPerMethods.put(field.getElementName(), Sets.mutable.empty());
 				}
 				for (IMethod method: iMethods){
-					connectedComponents.put(method.getElementName(), new HashSet<>());
+					connectedComponents.put(method.getElementName(), Sets.mutable.empty());
 				}
 				checkMethodsWithSharedAttributes(iMethods);
 				
@@ -126,7 +127,7 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	 * @param method
 	 */
 	private void addMethods(String field, String method){
-		Set<String> sharedMethods = null;
+		MutableSet<String> sharedMethods = null;
 		if (LCOMType.LCOM.toString().equals(getLcomType()) || LCOMType.LCOM2.toString().equals(getLcomType())){
 			if(sharedAttributesPerMethods.containsKey(field)){
 				sharedMethods = sharedAttributesPerMethods.get(field);
@@ -168,7 +169,6 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	 */
 	@SuppressWarnings("deprecation")
 	private void checkMethodsWithSharedAttributes(IMethod[] methods){
-		
 		IScanner scanner = null;
 		for (IMethod method : methods) {
 			String methodName = method.getElementName();
@@ -199,16 +199,16 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 	 */
 	private Double calculateLCOMValue(){
 		
-		Set<String> allSharedMethods = new HashSet<>();
-		Set<String> allNonSharedMethods = new HashSet<>();
+		MutableSet<String> allSharedMethods = Sets.mutable.empty();
+		MutableSet<String> allNonSharedMethods = Sets.mutable.empty();
 		
-		for (Iterator<HashSet<String>> it = sharedAttributesPerMethods.values().iterator(); it.hasNext();) {
-			Set<String> methods = it.next();
+		for (Iterator<MutableSet<String>> it = sharedAttributesPerMethods.values().iterator(); it.hasNext();) {
+			MutableSet<String> methods = it.next();
 			allSharedMethods.addAll(methods);
 		}
 		
-		for (Iterator<HashSet<String>> it = nonSharedAttributesPerMethods.values().iterator(); it.hasNext();) {
-			Set<String> methods = it.next();
+		for (Iterator<MutableSet<String>> it = nonSharedAttributesPerMethods.values().iterator(); it.hasNext();) {
+			MutableSet<String> methods = it.next();
 			allNonSharedMethods.addAll(methods);
 		}
 		
@@ -231,10 +231,10 @@ public class LackCohesionMethodsJavaModel implements IJavaModel<ICompilationUnit
 		
 		int sum = 0;
 		int accesses = 0;
-		Set<String> allSharedMethods = new HashSet<>();
+		MutableSet<String> allSharedMethods = Sets.mutable.empty();
 		
-		for (Iterator<HashSet<String>> it = sharedAttributesPerMethods.values().iterator(); it.hasNext(); accesses++) {
-			Set<String> methods = it.next();
+		for (Iterator<MutableSet<String>> it = sharedAttributesPerMethods.values().iterator(); it.hasNext(); accesses++) {
+			MutableSet<String> methods = it.next();
 			allSharedMethods.addAll(methods);
 			sum += methods.size();
 		}

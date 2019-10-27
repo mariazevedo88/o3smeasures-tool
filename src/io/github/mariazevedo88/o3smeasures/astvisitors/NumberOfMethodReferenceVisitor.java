@@ -1,33 +1,30 @@
 package io.github.mariazevedo88.o3smeasures.astvisitors;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.factory.Maps;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionMethodReference;
 
-public class NumberOfMethodReferenceVisitor extends ASTVisitor {
-
 /**
- * A visitor for abstract syntax trees that implements the number of
- * method reference calculation.
+ * A visitor for abstract syntax trees that implements the number of method reference calculation
  * 
  * @see ASTVisitor
  * 
  * @author Mariana Azevedo
  * @since 29/09/2019
  */
-private static NumberOfMethodReferenceVisitor instance;
-	
-	private Map<String, List<String>> referencesMap;
+public class NumberOfMethodReferenceVisitor extends ASTVisitor {
+
+	private static NumberOfMethodReferenceVisitor instance;
+	private MutableMap<String, MutableList<String>> referencesMap;
 	
 	public NumberOfMethodReferenceVisitor(){
 		super();
-		this.referencesMap = new HashMap<>();
+		this.referencesMap = Maps.mutable.empty();
 	}
 	
 	/**
@@ -55,8 +52,7 @@ private static NumberOfMethodReferenceVisitor instance;
 	}
 	
 	/**
-	 * Method to check whether the evaluated expression is of the 
-	 * same builder method or is of a class.
+	 * Method to check whether the evaluated expression is of the same builder method or is of a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 05/10/2019
@@ -67,15 +63,15 @@ private static NumberOfMethodReferenceVisitor instance;
 	private boolean calculateNumberOfMethodRef(Expression node) {
 		String methodClassName = ((CompilationUnit) node.getRoot()).getJavaElement().getElementName();
 		if(!referencesMap.containsKey(methodClassName)) {
-			referencesMap.put(methodClassName, new ArrayList<>());
+			referencesMap.put(methodClassName, Lists.mutable.empty());
 		}
 
-		List<String> referencesList = referencesMap.get(methodClassName);
+		MutableList<String> referencesList = referencesMap.get(methodClassName);
 		if(!referencesList.contains(node.toString())) {
 			referencesList.add(node.toString());
 			return false;
 		}
-
+		
 		return true;
 	}
 	

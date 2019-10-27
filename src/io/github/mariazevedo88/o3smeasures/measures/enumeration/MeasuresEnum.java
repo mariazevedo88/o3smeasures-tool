@@ -1,5 +1,11 @@
 package io.github.mariazevedo88.o3smeasures.measures.enumeration;
 
+/**
+ * Enum to describe the measures name and acronym.
+ * 
+ * @author Mariana Azevedo
+ * @since 16/04/2017
+ */
 public enum MeasuresEnum {
 	
 	CBO("CBO", "Coupling between Objects"),

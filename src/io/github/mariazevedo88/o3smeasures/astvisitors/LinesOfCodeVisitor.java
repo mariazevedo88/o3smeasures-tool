@@ -1,7 +1,6 @@
 package io.github.mariazevedo88.o3smeasures.astvisitors;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
 
@@ -10,8 +9,8 @@ import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 /**
- * A visitor for abstract syntax trees, that visits the given node 
- * to perform the calculation of the LOC (Lines of Code) measure.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the LOC (Lines of Code) measure
  * 
  * @see ASTVisitor
  * 
@@ -20,7 +19,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
  */
 public class LinesOfCodeVisitor extends ASTVisitor{
 
-	private Double numberOfLinesOfCode;
+	private double numberOfLinesOfCode;
 	private static LinesOfCodeVisitor instance;
 	
 	public LinesOfCodeVisitor(){
@@ -58,19 +57,19 @@ public class LinesOfCodeVisitor extends ASTVisitor{
 	}
 
 	/**
-	 * Method to get the number of lines for a class.
+	 * Method to get the number of lines for a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @return Double
+	 * @return double
 	 */
-	public Double getNumberOfLinesOfCode(){
-		return new BigDecimal(this.numberOfLinesOfCode, new MathContext(2, RoundingMode.UP)).doubleValue();
+	public double getNumberOfLinesOfCode(){
+		return BigDecimal.valueOf(this.numberOfLinesOfCode).setScale(2, RoundingMode.UP).doubleValue();
 	}	
 
 	/**
-	 * Method that clean the variable used to calculate LOC value.
+	 * Method that clean the variable used to calculate LOC value
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014

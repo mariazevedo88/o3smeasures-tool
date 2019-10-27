@@ -3,17 +3,17 @@ package io.github.mariazevedo88.o3smeasures.astvisitors;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
- * A visitor for abstract syntax trees, that visits the given node 
- * to perform the calculation of the NOM (Number of Methods) measure.
+ * A visitor for abstract syntax trees, that visits the given node to perform the calculation 
+ * of the NOM (Number of Methods) measure
  * 
  * @see ASTVisitor
  * 
@@ -22,12 +22,12 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  */
 public class NumberOfMethodsVisitor extends ASTVisitor{
 
-	private List<MethodDeclaration> methodsList;
+	private MutableList<MethodDeclaration> methodsList;
 	private static NumberOfMethodsVisitor instance;
 	
 	public NumberOfMethodsVisitor(){
 		super();
-		methodsList = new ArrayList<>();
+		methodsList = Lists.mutable.empty();
 	}
 	
 	/**
@@ -55,7 +55,7 @@ public class NumberOfMethodsVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to calculate the number of methods in a class.
+	 * Method to calculate the number of methods in a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
@@ -76,15 +76,15 @@ public class NumberOfMethodsVisitor extends ASTVisitor{
 	}
 	
 	/**
-	 * Method to get the number of methods in a class.
+	 * Method to get the number of methods in a class
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 13/07/2014
 	 * 
-	 * @return Double
+	 * @return double
 	 */
-	public Double getNumberOfMethods(){
-		return new BigDecimal(methodsList.size(), new MathContext(2, RoundingMode.UP)).doubleValue();
+	public double getNumberOfMethods(){
+		return new BigDecimal(this.methodsList.size(), new MathContext(2, RoundingMode.UP)).doubleValue();
 	}
 	
 	/**

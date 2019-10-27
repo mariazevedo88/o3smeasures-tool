@@ -2,9 +2,9 @@ package io.github.mariazevedo88.o3smeasures.measures.enumeration;
 
 /**
  * Enum to describe internal quality factors. See reference here: http://repositorio.ufla.br/handle/1/10561
+ * 
  * @author Mariana Azevedo
  * @since 16/04/2017
- * 
  */
 public enum FactorsEnum {
 	

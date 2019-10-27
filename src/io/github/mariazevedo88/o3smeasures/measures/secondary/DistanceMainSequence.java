@@ -10,10 +10,12 @@ import io.github.mariazevedo88.o3smeasures.structures.Measure;
 
 /**
  * Class that implements D - Distance from the main sequence measure. The perpendicular distance 
- * of a package from the idealized line A + I = 1. D is calculated as D = | A + I - 1 |. This metric 
- * is an indicator of the package's balance between abstractness and stability. A package squarely on 
- * the main sequence is optimally balanced with respect to its abstractness and stability. Ideal 
- * packages are either completely abstract and stable (I=0, A=1) or completely concrete and unstable 
+ * of a package from the idealized line A + I = 1. D is calculated as D = | A + I - 1 |. 
+ * 
+ * This metric is an indicator of the package's balance between abstractness and stability. A package 
+ * squarely on the main sequence is optimally balanced with respect to its abstractness and stability. 
+ * 
+ * Ideal packages are either completely abstract and stable (I=0, A=1) or completely concrete and unstable 
  * (I=1, A=0). The range for this metric is 0 to 1, with D=0 indicating a package that is coincident 
  * with the main sequence and D=1 indicating a package that is as far from the main sequence as possible.
  * 
