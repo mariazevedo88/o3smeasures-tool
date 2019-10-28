@@ -17,17 +17,18 @@ In the plug-in development, we used the Eclipse IDE (Oxygen), the Java Developme
 
 - Java 8 or higher
 - Eclipse IDE Oxygen or higher
-- jUnit 5 (5.4.0)
-- org.eclipse.ui (3.109.0 or higher)
-- org.eclipse.core.resources (3.12.0 or higher)
-- org.eclipse.jdt.core (3.8.3 or higher)
-- org.eclipse.core.runtime (3.13.0 or higher)
+- jUnit 5 (org.junit.jupiter.api, org.junit.jupiter.engine and org.junit.jupiter.params - 5.4.0)
+- org.eclipse.ui (3.113.0 or higher)
+- org.eclipse.core.resources (3.13.400 or higher)
+- org.eclipse.jdt.core (3.18.0 or higher)
+- org.eclipse.core.runtime (3.15.300 or higher)
+- org.eclipse.jface.text (3.15.200 or higher)
 
 ## How to use as an Eclipse Application
 
 o3smeasures can be used as an Eclipse Application, importing the project into your workspace.
 After import the o3smeasures project, with the right mouse button you need select the option 
-<b>Run as</b> -> <b>Eclipse Application</b>. In the runtime eclipse application, select a Java project to be measured and with the right mouse button, go to <b>O3SMeasures</b> -> <b>Measure</b>.
+<b>Run as</b> -> <b>Eclipse Application</b>. In the runtime eclipse application, select a Java project to be measured and with the right mouse button, go to <b>O3SMeasures</b> -> <b>Analyze Java project</b>.
 
 ## Executing tests
 
@@ -39,7 +40,7 @@ After import the o3smeasures project, with the right mouse button you need selec
 ### On dropins directory 
 
 o3smeasures plug-in is installed in the Eclipse directory. You need to paste the .jar on the <b>dropins</b> directory (<b>eclipse</b> -> <b>dropins</b>).
-After installed the o3smeasures project into your workspace, select a Java project to be measured and with the right mouse button, go to <b>O3SMeasures</b> -> <b>Measure</b>.
+After installed the o3smeasures project into your workspace, select a Java project to be measured and with the right mouse button, go to <b>O3SMeasures</b> -> <b>Analyze Java project</b>.
 
 ### Install new Software interface
 

@@ -8,9 +8,9 @@
                	  mnemonic="O3SMeasures" id="O3SMeasures.menu1">
 		    	  <command commandId="io.github.mariazevedo88.o3smeasures.popup.actions.Measurement"
 			               id="O3SMeasures.newAction"
-			               label="Measure"
+			               label="Analyze Java project"
 			               style="push"
-			               tooltip="Measure this java project">
+			               tooltip="Measure and analyze the quality of this java project">
 		     	  </command>
     			  <visibleWhen>
 			           <with variable="activeMenuSelection">

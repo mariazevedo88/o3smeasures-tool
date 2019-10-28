@@ -77,13 +77,13 @@ public class Measurement extends AbstractHandler {
 	private void controlMonitorProgress(Runnable update, IProgressMonitor monitor) {
 		
 		Integer size = MeasuresEnum.values().length;
-		monitor.beginTask("Measuring internal quality...", size);
+		monitor.beginTask("Analyze project's internal quality...", size);
 		
 		for (int i=1; i < size+1; i++){
 	    	
-    		monitor.subTask("Getting measure values " + (i) + " of "+ size + "...");
+    		monitor.subTask("Getting metrics values " + (i) + " of "+ size + "...");
     		Display.getDefault().syncExec(update);
-    		monitor.worked(i);
+    		monitor.worked(1);
     		if(checkIfUserCancelledExecution(monitor)) break;
     	}
 		
@@ -97,7 +97,8 @@ public class Measurement extends AbstractHandler {
 	 * @since 19/07/2019
 	 * 
 	 * @param monitor
-	 * @return true/false
+	 * 
+	 * @return true if cancellation is requested, and false otherwise
 	 */
 	private boolean checkIfUserCancelledExecution(IProgressMonitor monitor) {
 		
