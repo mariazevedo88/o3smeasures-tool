@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
 	    	<menu label="O3SMeasures"
@@ -12,18 +11,16 @@
 			               style="push"
 			               tooltip="Measure and analyze the quality of this java project">
 		     	  </command>
-    			  <visibleWhen>
-			           <with variable="activeMenuSelection">
-				       <iterate
-	                        ifEmpty="false"
-	                        operator="or">
-	                     <adapt
-	                           type="org.eclipse.jdt.core.IJavaProject">
-	                     </adapt>
-	                  </iterate>
-			        
+    			  <visibleWhen checkEnabled="false">
+			      	   <with variable="activeMenuSelection">
+					      	<count value="1"></count>
+				    		<iterate ifEmpty="false" operator="or">
+	                     		<adapt 
+	                           		type="org.eclipse.jdt.core.IJavaProject">
+	                     		</adapt>
+	                  		</iterate>
 			           </with>
-     			</visibleWhen>
+     			  </visibleWhen>
 		     	  <separator name="additions" visible="true"></separator>
 		    </menu> 
 	  	</menuContribution>
