@@ -9,8 +9,6 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import io.github.mariazevedo88.o3smeasures.measures.main.NumberOfClasses;
@@ -25,7 +23,6 @@ import io.github.mariazevedo88.o3smeasures.util.JavaParser;
  */
 @DisplayName("NumberOfClassesTest")
 @TestInstance(Lifecycle.PER_CLASS)
-@TestMethodOrder(OrderAnnotation.class)
 public class NumberOfClassesTest {
 	
 	private static final Logger logger = Logger.getLogger(NumberOfClassesTest.class.getName());

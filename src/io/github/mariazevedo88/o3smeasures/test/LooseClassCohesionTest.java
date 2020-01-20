@@ -9,8 +9,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -27,7 +25,6 @@ import io.github.mariazevedo88.o3smeasures.util.JavaParser;
  */
 @DisplayName("LooseClassCohesionTest")
 @TestInstance(Lifecycle.PER_CLASS)
-@TestMethodOrder(OrderAnnotation.class)
 public class LooseClassCohesionTest{
 	
 	private static final Logger logger = Logger.getLogger(LooseClassCohesionTest.class.getName());

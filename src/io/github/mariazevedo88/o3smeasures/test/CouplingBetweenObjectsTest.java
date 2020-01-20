@@ -7,11 +7,9 @@ import java.io.File;
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import io.github.mariazevedo88.o3smeasures.measures.main.CouplingBetweenObjects;
 import io.github.mariazevedo88.o3smeasures.util.JavaParser;
@@ -25,7 +23,6 @@ import io.github.mariazevedo88.o3smeasures.util.JavaParser;
  */
 @DisplayName("CouplingBetweenObjectsTest")
 @TestInstance(Lifecycle.PER_CLASS)
-@TestMethodOrder(OrderAnnotation.class)
 public class CouplingBetweenObjectsTest{
 	
 	private static final Logger logger = Logger.getLogger(CouplingBetweenObjectsTest.class.getName());

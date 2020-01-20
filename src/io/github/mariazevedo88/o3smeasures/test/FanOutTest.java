@@ -10,8 +10,6 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import io.github.mariazevedo88.o3smeasures.measures.main.FanOut;
@@ -27,7 +25,6 @@ import io.github.mariazevedo88.o3smeasures.util.JavaParser;
  */
 @DisplayName("FanOutTest")
 @TestInstance(Lifecycle.PER_CLASS)
-@TestMethodOrder(OrderAnnotation.class)
 public class FanOutTest{
 	
 	private static final Logger logger = Logger.getLogger(FanOutTest.class.getName());
