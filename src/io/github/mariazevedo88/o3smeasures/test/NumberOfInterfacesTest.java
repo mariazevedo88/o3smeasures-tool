@@ -12,7 +12,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import io.github.mariazevedo88.o3smeasures.measures.secondary.NumberOfInterfaces;
-import io.github.mariazevedo88.o3smeasures.util.JavaParser;
+import io.github.mariazevedo88.o3smeasures.util.parsers.JavaParser;
 
 /**
  * A class test that executes Number of Interfaces measure test calculation 

@@ -27,8 +27,11 @@ public class ShowPreferencesValues extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		Shell shell = HandlerUtil.getActiveWorkbenchWindowChecked(event).getShell();
-	    String prefPath = Activator.getDefault().getPreferenceStore().getString("PATH");
+	    
+		String prefPath = Activator.getDefault().getPreferenceStore().getString("PATH");
+	    
 	    MessageDialog.openInformation(shell, "Info", prefPath);
+	    
 	    return null;
 	}
 

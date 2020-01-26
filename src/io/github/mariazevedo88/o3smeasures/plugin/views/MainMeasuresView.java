@@ -27,7 +27,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import io.github.mariazevedo88.o3smeasures.main.Application;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
-import io.github.mariazevedo88.o3smeasures.util.FileExport;
+import io.github.mariazevedo88.o3smeasures.util.filehandlers.AWSUpload;
+import io.github.mariazevedo88.o3smeasures.util.filehandlers.FileExport;
 
 /**
  * Class that inherits of the ViewPart abstract class (that implements
@@ -353,6 +354,22 @@ public class MainMeasuresView extends ViewPart {
 		
 		expXml.setText("Export to XML File");
 	    menuManager.add(expXml);
+	    
+	    Action expS3 = new Action() {
+	    	@Override
+	    	public void run() {
+	    		try {
+					new FileExport().createCSVFileToUpload(getProject().getName(), getItemMeasured());
+				} catch (IOException exception) {
+					logger.error(exception);
+				}
+	    		String fileName = getProject().getName() + ".csv";
+				new AWSUpload().upload(fileName);
+	    	}
+		};
+		
+		expS3.setText("Upload to AWS S3 Bucket");
+	    menuManager.add(expS3);
 
 	    // make the viewer selection available
 	    getSite().setSelectionProvider(viewer);

@@ -25,6 +25,17 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault("PATH", getPathFolder());
+		
+		String prefAWSBucket = Activator.getDefault().getPreferenceStore().getString("BUCKET");
+		String prefAWSRegion = Activator.getDefault().getPreferenceStore().getString("REGION");
+		String prefAWSSrc = Activator.getDefault().getPreferenceStore().getString("ACCESSKEY");
+		String prefAWSKey = Activator.getDefault().getPreferenceStore().getString("SECRETKEY");
+		
+		store.setDefault("BUCKET", prefAWSBucket);
+		store.setDefault("REGION", prefAWSRegion);
+		store.setDefault("ACCESSKEY", prefAWSSrc);
+		store.setDefault("SECRETKEY", prefAWSKey);
+		
 		store.addPropertyChangeListener(Activator.getDefault());
 	}
 	
@@ -37,7 +48,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 * 
 	 * @return path in string format
 	 */
-	private String getPathFolder(){
+	private static String getPathFolder(){
 		String path = "";
 		if (!System.getProperty("os.name").toLowerCase().contains("windows")){
 			path = System.getProperty("user.home");

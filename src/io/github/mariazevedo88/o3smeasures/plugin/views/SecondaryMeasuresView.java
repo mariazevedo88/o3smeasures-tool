@@ -23,7 +23,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import io.github.mariazevedo88.o3smeasures.main.Application;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
-import io.github.mariazevedo88.o3smeasures.util.FileExport;
+import io.github.mariazevedo88.o3smeasures.util.filehandlers.FileExport;
 
 /**
  * Class that inherits of the ViewPart abstract class (that implements

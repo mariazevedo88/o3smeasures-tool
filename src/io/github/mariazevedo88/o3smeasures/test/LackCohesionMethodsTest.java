@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import io.github.mariazevedo88.o3smeasures.measures.main.LackCohesionMethods;
-import io.github.mariazevedo88.o3smeasures.util.JavaParser;
+import io.github.mariazevedo88.o3smeasures.util.parsers.JavaParser;
 
 /**
  * A class test that executes LCOM measure test calculation 
