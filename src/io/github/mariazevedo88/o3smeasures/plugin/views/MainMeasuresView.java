@@ -26,8 +26,10 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
 import io.github.mariazevedo88.o3smeasures.main.Application;
+import io.github.mariazevedo88.o3smeasures.plugin.Activator;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
-import io.github.mariazevedo88.o3smeasures.util.FileExport;
+import io.github.mariazevedo88.o3smeasures.util.filehandlers.AWSUpload;
+import io.github.mariazevedo88.o3smeasures.util.filehandlers.FileExport;
 
 /**
  * Class that inherits of the ViewPart abstract class (that implements
@@ -49,6 +51,8 @@ public class MainMeasuresView extends ViewPart {
 	private IProject project;
 	private DecimalFormat formatter;
 	private Application o3smeasuresPlugin;
+	
+	private static final String FILE_FORMAT = Activator.getDefault().getPreferenceStore().getString("FILEFORMAT");
 
 	public MainMeasuresView() {/*Empty Constructor*/}
 
@@ -353,6 +357,27 @@ public class MainMeasuresView extends ViewPart {
 		
 		expXml.setText("Export to XML File");
 	    menuManager.add(expXml);
+	    
+	    Action expS3 = new Action() {
+	    	@Override
+	    	public void run() {
+	    		String fileName = getProject().getName().concat("_main");
+	    		try {
+	    			if(FILE_FORMAT.equals(".csv")) {
+	    				new FileExport().createCSVFileToUpload(fileName, getItemMeasured());
+	    			}else {
+	    				new FileExport().createXMLFileToUpload(fileName, getItemMeasured());
+	    			}
+				} catch (IOException exception) {
+					logger.error(exception);
+				}
+	    		fileName = fileName.concat(FILE_FORMAT);
+				new AWSUpload().upload(fileName);
+	    	}
+		};
+		
+		expS3.setText("Upload to AWS S3 Bucket");
+	    menuManager.add(expS3);
 
 	    // make the viewer selection available
 	    getSite().setSelectionProvider(viewer);
