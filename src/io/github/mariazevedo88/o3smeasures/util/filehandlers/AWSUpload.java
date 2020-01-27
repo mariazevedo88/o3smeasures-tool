@@ -4,6 +4,8 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -30,6 +32,8 @@ public class AWSUpload implements FileUpload {
 	private static final String SECRET_KEY = Activator.getDefault().getPreferenceStore().getString("SECRETKEY");
 	private static final String REGION = Activator.getDefault().getPreferenceStore().getString("REGION");
 	private static final BasicAWSCredentials CREDENTIALS = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
+	
+	private static final Logger logger = Logger.getLogger(AWSUpload.class);
 
 	/**
 	 * @see FileUpload#upload(String)
@@ -60,6 +64,7 @@ public class AWSUpload implements FileUpload {
             PutObjectRequest request = new PutObjectRequest(BUCKET_NAME, fileName, new File(fileAbsolutePath));
             s3Client.putObject(request);
             
+            logger.info("File " + fileName + " was upload successfully to bucket => " + request.getBucketName());
             JOptionPane.showMessageDialog(null, "File was uploaded to AWS S3 successfully!");
             
         } catch (AmazonServiceException e) {

@@ -105,23 +105,92 @@ public class FileExport {
 		return recordItems;
 	}
 	
-	private File createFile(String outputFileName) throws IOException {
+	/**
+	 * Method that creates a CSV file
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 25/01/2019
+	 * 
+	 * @param outputFileName
+	 * @return File
+	 * @throws IOException
+	 */
+	private File createCSVFile(String outputFileName) throws IOException {
 		
 		File file = new File(TEMP_FOLDER_PATH + outputFileName + ".csv");
 		if (!file.exists()){
 			boolean isFileCreated = file.createNewFile();
-			logger.info("File " + file.getName() + " created: " + isFileCreated);
+			logger.info("File " + file.getName() + " created => " + isFileCreated);
 		}
 		
 		return file;
 	}
 	
-	private void createFileContent(ItemMeasured item, CSVPrinter csvOutput) throws IOException {
+	/**
+	 * Method that fill the csv file created
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 25/01/2019
+	 * 
+	 * @param item
+	 * @param csvOutput
+	 * @throws IOException
+	 */
+	private void createCSVFileContent(ItemMeasured item, CSVPrinter csvOutput) throws IOException {
+		
 		csvOutput.printRecords(headerItems);
 		MutableList<String[]> it = populateItems(item);
 		csvOutput.printRecords(it);
+		
 	}
 	
+	/**
+	 * Method that creates a XML file
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 27/01/2019
+	 * 
+	 * @param outputFileName
+	 * @return File
+	 * @throws IOException
+	 */
+	private File createXMLFile(String outputFile) throws IOException {
+		
+		File file = new File(TEMP_FOLDER_PATH + outputFile + ".xml");
+		if (!file.exists()){
+			boolean isFileCreated = file.createNewFile();
+    		logger.info("File " + file.getName() + " created => " + isFileCreated);
+		}
+		
+		return file;
+	}
+	
+	/**
+	 * Method that fill the xml file created
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 27/01/2019
+	 * 
+	 * @param itemMeasured
+	 * @param fileWriter
+	 */
+	private void createXMLFileContent(ItemMeasured itemMeasured, FileWriter fileWriter) {
+		
+		XmlConfiguration config = new XmlConfiguration();
+		config.getSimpleTypeConverterProvider().registerConverterType(Double.class, JSefaConverter.class);
+		XmlSerializer serializer = XmlIOFactory.createFactory(config, ItemMeasured.class).createSerializer();
+		serializer.open(fileWriter);
+		
+		serializer.getLowLevelSerializer().writeXmlDeclaration("1.0", System.getProperty("file.encoding"));
+		serializer.getLowLevelSerializer().writeStartElement(QName.create("measures")); 
+		//calling serializer.write for every measure to serialize  
+		for (ItemMeasured item : itemMeasured.getChildren()){
+			serializer.write(item);
+		}
+		serializer.getLowLevelSerializer().writeEndElement();
+		serializer.close(true);
+	}
+
 	/**
 	 * Method to create a csv file with the measurement result.
 	 * 
@@ -138,12 +207,12 @@ public class FileExport {
 		setFolderPath();		
 		populateHeader();
 		
-		File file = createFile(outputFileName);
+		File file = createCSVFile(outputFileName);
 		
 	    try (FileWriter fileWriter = new FileWriter(file, true);
 	    	CSVPrinter csvOutput = new CSVPrinter(fileWriter, CSVFormat.DEFAULT)) {
 	    	
-    		createFileContent(item, csvOutput);
+    		createCSVFileContent(item, csvOutput);
     		JOptionPane.showMessageDialog(null, "CSV file was created successfully!");
 	        
 	    }catch (IOException exception) {
@@ -168,11 +237,11 @@ public class FileExport {
 		setFolderPath();		
 		populateHeader();
 		
-		File file = createFile(outputFileName);
+		File file = createCSVFile(outputFileName);
 		
 	    try (FileWriter fileWriter = new FileWriter(file, true);
 	    	CSVPrinter csvOutput = new CSVPrinter(fileWriter, CSVFormat.DEFAULT)) {
-    		createFileContent(item, csvOutput);
+    		createCSVFileContent(item, csvOutput);
     		
 	    }catch (IOException exception) {
 	    	logger.error(exception);
@@ -190,35 +259,44 @@ public class FileExport {
 	 * 
 	 * @throws IOException 
 	 */
-	public void createXMLFile (String outputFile, ItemMeasured itemMeasured) throws IOException{
+	public void createXMLFile(String outputFile, ItemMeasured itemMeasured) throws IOException{
 		
 		setFolderPath();
 
-    	File file = new File(TEMP_FOLDER_PATH + outputFile + ".xml");
-		if (!file.exists()){
-			boolean isFileCreated = file.createNewFile();
-    		logger.info("File created " + isFileCreated);
-		}
+    	File file = createXMLFile(outputFile);
+		
 		try (FileWriter fileWriter = new FileWriter(file, true)) {
 			
-			XmlConfiguration config = new XmlConfiguration();
-			config.getSimpleTypeConverterProvider().registerConverterType(Double.class, JSefaConverter.class);
-			XmlSerializer serializer = XmlIOFactory.createFactory(config, ItemMeasured.class).createSerializer();
-			serializer.open(fileWriter);
-			
-			serializer.getLowLevelSerializer().writeXmlDeclaration("1.0", System.getProperty("file.encoding"));
-			serializer.getLowLevelSerializer().writeStartElement(QName.create("measures")); 
-			//calling serializer.write for every measure to serialize  
-			for (ItemMeasured item : itemMeasured.getChildren()){
-				serializer.write(item);
-			}
-			serializer.getLowLevelSerializer().writeEndElement();
-			serializer.close(true);
-			
+			createXMLFileContent(itemMeasured, fileWriter);
 			JOptionPane.showMessageDialog(null, "XML file was created successfully!");
 			
 		}catch (IOException exception) {
 			logger.error(exception);
 		}
 	}
+	
+	/**
+	 * Method to create a xml file with the measurement result to upload to cloud storage.
+	 * 
+	 * @author Mariana Azevedo
+	 * @since 27/01/2020
+	 * 
+	 * @param outputFile
+	 * @param itemMeasured
+	 * 
+	 * @throws IOException 
+	 */
+	public void createXMLFileToUpload(String outputFile, ItemMeasured itemMeasured) throws IOException{
+		
+		setFolderPath();
+
+    	File file = createXMLFile(outputFile);
+		
+		try (FileWriter fileWriter = new FileWriter(file, true)) {
+			createXMLFileContent(itemMeasured, fileWriter);
+		}catch (IOException exception) {
+			logger.error(exception);
+		}
+	}
+	
 }

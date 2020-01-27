@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
 import io.github.mariazevedo88.o3smeasures.main.Application;
+import io.github.mariazevedo88.o3smeasures.plugin.Activator;
 import io.github.mariazevedo88.o3smeasures.structures.ItemMeasured;
 import io.github.mariazevedo88.o3smeasures.util.filehandlers.AWSUpload;
 import io.github.mariazevedo88.o3smeasures.util.filehandlers.FileExport;
@@ -50,6 +51,8 @@ public class MainMeasuresView extends ViewPart {
 	private IProject project;
 	private DecimalFormat formatter;
 	private Application o3smeasuresPlugin;
+	
+	private static final String FILE_FORMAT = Activator.getDefault().getPreferenceStore().getString("FILEFORMAT");
 
 	public MainMeasuresView() {/*Empty Constructor*/}
 
@@ -358,12 +361,17 @@ public class MainMeasuresView extends ViewPart {
 	    Action expS3 = new Action() {
 	    	@Override
 	    	public void run() {
+	    		String fileName = getProject().getName().concat("_main");
 	    		try {
-					new FileExport().createCSVFileToUpload(getProject().getName(), getItemMeasured());
+	    			if(FILE_FORMAT.equals(".csv")) {
+	    				new FileExport().createCSVFileToUpload(fileName, getItemMeasured());
+	    			}else {
+	    				new FileExport().createXMLFileToUpload(fileName, getItemMeasured());
+	    			}
 				} catch (IOException exception) {
 					logger.error(exception);
 				}
-	    		String fileName = getProject().getName() + ".csv";
+	    		fileName = fileName.concat(FILE_FORMAT);
 				new AWSUpload().upload(fileName);
 	    	}
 		};
