@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -375,6 +376,10 @@ public class MainMeasuresView extends ViewPart {
 				new AWSUpload().upload(fileName);
 	    	}
 		};
+		
+		Separator separator = new Separator("Upload Options");
+		separator.setVisible(true);
+		menuManager.add(separator);
 		
 		expS3.setText("Upload to AWS S3 Bucket");
 	    menuManager.add(expS3);
