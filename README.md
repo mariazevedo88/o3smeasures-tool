@@ -52,14 +52,24 @@ Run Eclipse, go to <b>Help menu</b> -> <b>Eclipse Marketplace...</b> On the open
 ## Displaying the views
 
 The o3smeasures views can be enabled by the eclipse menu <b>Window</b> -> <b>Show View</b> -> <b>Other ...</b> -> <b>o3smeasures</b>.
+
+<p align="center"><img align="center" style="width:400px" src="icons/views.png"/></p><br/>
  
 ## Exporting files
 
 To export the measurement results in the <b>O3SMeasures Diagnostic view</b>, with the right mouse button in the view, select the option <b>Export to CSV file</b> to export in the `.csv` format or <b>Export to XML file</b> to export in the `.xml` format.
 
+<p align="center"><img align="center" style="width:700px" src="icons/export.png"/></p><br/>
+
 ## Uploading files
 
-In version 2.1.0 or above, it is possible to upload measurement diagnostic reports to an s3 bucket on Amazon (AWS). You need to select the option <b>Upload to AWS S3 Bucket</b> to export in the `.csv` or `.xml` format. The formating options and the bucket configurations has to be defined on the Preferences Page.
+In version 2.1.0 or above, it is possible to upload measurement diagnostic reports to an s3 bucket on Amazon (AWS). With the right mouse button in the view, select the option <b>Upload to AWS S3 Bucket</b> to export in the `.csv` or `.xml` format. 
+
+<p align="center"><img align="center" style="width:700px" src="icons/upload.png"/></p><br/>
+
+The formating options and the bucket configurations has to be defined on the Preferences Page, that can be access by the eclipse menu <b>Window</b> -> <b>Preferences</b> -> <b>o3smeasures Preferences</b>.
+
+<p align="center"><img align="center" style="width:400px" src="icons/prefs.png"/></p><br/>
 
 ## Contributing
 
