@@ -35,11 +35,12 @@ import io.github.mariazevedo88.o3smeasures.util.parsers.JSefaConverter;
 public class FileExport {
 
 	private static final MutableList<String[]> headerItems = Lists.mutable.empty();
-	private static String TEMP_FOLDER_PATH = "";
 	private static final String PATH_DELIMITER = "\\";
 	private static final String DESKTOP_PATH = "\\Desktop\\";
 	
 	private static final Logger logger = Logger.getLogger(FileExport.class);
+	
+	private String tempPath;
 	
 	/**
 	 * Method to set the path of the file (csv or xml) created.
@@ -49,7 +50,7 @@ public class FileExport {
 	 * 
 	 * @return String
 	 */
-	public static String setFolderPath(){
+	public String setFolderPath(){
 		
 		IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
 		String preferenceValue = prefStore.getString("PATH");
@@ -57,15 +58,15 @@ public class FileExport {
 		if (preferenceValue.equals("")){
 			//Treatment to export the file in Unix and Windows OS.
 			if (System.getProperty("os.name").toLowerCase().contains("windows")){
-				TEMP_FOLDER_PATH = System.getProperty("user.home").concat(DESKTOP_PATH);
+				tempPath = System.getProperty("user.home").concat(DESKTOP_PATH);
 			}else{
-				TEMP_FOLDER_PATH = System.getProperty("user.home");
+				tempPath = System.getProperty("user.home");
 			}
 		}else{
-			TEMP_FOLDER_PATH = preferenceValue.concat(PATH_DELIMITER);
+			tempPath = preferenceValue.concat(PATH_DELIMITER);
 		}
 		
-		return TEMP_FOLDER_PATH;
+		return tempPath;
 	}
 	
 	/**
@@ -117,7 +118,7 @@ public class FileExport {
 	 */
 	private File createCSVFile(String outputFileName) throws IOException {
 		
-		File file = new File(TEMP_FOLDER_PATH + outputFileName + ".csv");
+		File file = new File(tempPath + outputFileName + ".csv");
 		if (!file.exists()){
 			boolean isFileCreated = file.createNewFile();
 			logger.info("File " + file.getName() + " created => " + isFileCreated);
@@ -156,7 +157,7 @@ public class FileExport {
 	 */
 	private File createXMLFile(String outputFile) throws IOException {
 		
-		File file = new File(TEMP_FOLDER_PATH + outputFile + ".xml");
+		File file = new File(tempPath + outputFile + ".xml");
 		if (!file.exists()){
 			boolean isFileCreated = file.createNewFile();
     		logger.info("File " + file.getName() + " created => " + isFileCreated);

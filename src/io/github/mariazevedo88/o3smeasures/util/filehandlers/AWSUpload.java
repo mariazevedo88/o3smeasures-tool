@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -41,7 +40,7 @@ public class AWSUpload implements FileUpload {
 	@Override
 	public void upload(String fileName) {
 		
-		if(BUCKET_NAME == "" || ACCESS_KEY == "" || SECRET_KEY == "" || REGION == "") {
+		if(BUCKET_NAME.equals("") || ACCESS_KEY.equals("") || SECRET_KEY.equals("") || REGION.equals("")) {
 			JOptionPane.showMessageDialog(null, "AWS credentials to access S3 bucket aren't defined. "
 				+ "Go to preference's page to set the values correctly.");
 			throw new AmazonS3Exception("AWS credentials to access S3 bucket aren't defined. Go to preference's page "
@@ -50,7 +49,7 @@ public class AWSUpload implements FileUpload {
 		}
 
 		Regions clientRegion = Regions.fromName(REGION);
-        String path = FileExport.setFolderPath();
+        String path = new FileExport().setFolderPath();
         String fileAbsolutePath = path + fileName;
 
         try {
@@ -71,12 +70,7 @@ public class AWSUpload implements FileUpload {
             // The call was transmitted successfully, but Amazon S3 couldn't process 
             // it, so it returned an error response.
         	JOptionPane.showMessageDialog(null, "Error on upload file to AWS S3!");
-            e.printStackTrace();
-        } catch (SdkClientException e) {
-            // Amazon S3 couldn't be contacted for a response, or the client
-            // couldn't parse the response from Amazon S3.
-        	JOptionPane.showMessageDialog(null, "Error on upload file to AWS S3!");
-            e.printStackTrace();
+            logger.error(e);
         }
 	}
 
